@@ -1624,7 +1624,6 @@
     invariant "^2.2.4"
     nullthrows "^1.1.1"
 
-<<<<<<< HEAD
 "@react-native/virtualized-lists@0.78.0":
   version "0.78.0"
   resolved "https://registry.yarnpkg.com/@react-native/virtualized-lists/-/virtualized-lists-0.78.0.tgz#c4ac146688bcc2133a5ac4feb6c632c548eba04f"
@@ -1632,7 +1631,7 @@
   dependencies:
     invariant "^2.2.4"
     nullthrows "^1.1.1"
-=======
+
 "@react-navigation/bottom-tabs@6":
   version "6.6.1"
   resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-6.6.1.tgz#589edc9c8fbf652c485b3c37d344faafe3cd4cc4"
@@ -1683,7 +1682,6 @@
   integrity sha512-lTM8gSFHSfkJvQkxacGM6VJtBt61ip2XO54aNfswD+KMw6eeZ4oehl7m0me3CR9hnDE4+60iAZR8sAhvCiI3NA==
   dependencies:
     nanoid "^3.1.23"
->>>>>>> 544927898f6a72a7892a40763f9d393166f34656
 
 "@segment/loosely-validate-event@^2.0.0":
   version "2.0.0"
@@ -5060,7 +5058,6 @@ react-devtools-core@^5.3.1:
     shell-quote "^1.6.1"
     ws "^7"
 
-<<<<<<< HEAD
 react-devtools-core@^6.0.1:
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-6.1.1.tgz#7dac74773d039273134c360f8b65cf4f6c795c49"
@@ -5069,15 +5066,12 @@ react-devtools-core@^6.0.1:
     shell-quote "^1.6.1"
     ws "^7"
 
-react-is@^16.13.1:
-=======
 react-freeze@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/react-freeze/-/react-freeze-1.0.4.tgz#cbbea2762b0368b05cbe407ddc9d518c57c6f3ad"
   integrity sha512-r4F0Sec0BLxWicc7HEyo2x3/2icUTrRmDjaaRyzzn+7aDyFZliszMDOgLVwSnQnYENOlL1o569Ze2HZefk8clA==
 
 react-is@^16.13.0, react-is@^16.13.1:
->>>>>>> 544927898f6a72a7892a40763f9d393166f34656
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
