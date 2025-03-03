@@ -40,7 +40,7 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView className="h-screen w-full bg-white">
+    <SafeAreaView className="h-screen w-full bg-navy_blue">
       <Text className="font-nu text-lg text-black">Nunito ExtraLight</Text>
       <Text className="font-nunitoLight text-lg text-black">Nunito Light</Text>
       <Text className="font-nunitoRegular text-lg text-black">
