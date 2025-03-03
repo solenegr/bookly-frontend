@@ -14,6 +14,7 @@ import {
 } from "@expo-google-fonts/nunito";
 import * as SplashScreen from "expo-splash-screen";
 import "./global.css";
+import ScanScreen from './screens/ScanScreen'
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
@@ -41,7 +42,8 @@ export default function App() {
 
   return (
     <SafeAreaView className="h-screen w-full bg-white">
-      <Text className="font-nu text-lg text-black">Nunito ExtraLight</Text>
+      <ScanScreen></ScanScreen>
+      {/* <Text className="font-nu text-lg text-black">Nunito ExtraLight</Text>
       <Text className="font-nunitoLight text-lg text-black">Nunito Light</Text>
       <Text className="font-nunitoRegular text-lg text-black">
         Nunito Regular
@@ -56,7 +58,7 @@ export default function App() {
       <Text className="font-nunitoExtraBold text-lg text-black">
         Nunito ExtraBold
       </Text>
-      <Text className="font-nunitoBlack text-lg text-black">Nunito Black</Text>
+      <Text className="font-nunitoBlack text-lg text-black">Nunito Black</Text> */}
     </SafeAreaView>
   );
 }
