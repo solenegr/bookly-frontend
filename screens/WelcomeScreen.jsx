@@ -1,15 +1,14 @@
 import { Button, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
-export default function ConnectionScreen({ navigation }) {
+export default function WelcomeScreen({ navigation }) {
  return (
     <SafeAreaView>
         <View>
-            <Text>Connection page</Text>
+            <Text>Welcome</Text>
             <Button
-            title="Sign in or Google Connect"
-            onPress={() => navigation.navigate('SignUp')}
+            title="Start with Bookly"
+            onPress={() => navigation.navigate('Connection')}
             />
         </View>
     </SafeAreaView>
