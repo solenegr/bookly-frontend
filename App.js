@@ -1,3 +1,4 @@
+import "./global.css";
 import React, { useEffect } from "react";
 import { Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -16,10 +17,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/nunito";
 import * as SplashScreen from "expo-splash-screen";
-import "./global.css";
-<<<<<<< HEAD
-import { BookDetailScreen } from "./screens";
-=======
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import {
   ConnectionScreen,
@@ -31,7 +29,6 @@ import {
   SignUpScreen,
   WelcomeScreen,
 } from "./screens";
->>>>>>> 544927898f6a72a7892a40763f9d393166f34656
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
@@ -98,11 +95,6 @@ export default function App() {
   }
 
   return (
-<<<<<<< HEAD
-    <SafeAreaView className="">
-      <BookDetailScreen />
-    </SafeAreaView>
-=======
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
@@ -133,6 +125,5 @@ export default function App() {
         </Text>
       </SafeAreaView> */}
     </NavigationContainer>
->>>>>>> 544927898f6a72a7892a40763f9d393166f34656
   );
 }
