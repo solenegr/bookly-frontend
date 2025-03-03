@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Linking, AppState ,Image} from 'react-native';
 import { Overlay } from 'react-native-elements';
@@ -182,3 +183,16 @@ const styles = StyleSheet.create({
 //   }
 });
 
+=======
+import { Text, View } from 'react-native';
+import { SafeAreaView } from "react-native-safe-area-context";
+
+export default function ScanScreen({ navigation }) {
+ return (
+    <SafeAreaView><View>
+    <Text>Scan Page</Text>
+    
+  </View></SafeAreaView>
+ );
+}
+>>>>>>> 544927898f6a72a7892a40763f9d393166f34656

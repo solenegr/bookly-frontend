@@ -1,10 +1,10 @@
 import { Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function LibraryScreen({ navigation }) {
+export default function MessagesScreen({ navigation }) {
  return (
     <SafeAreaView><View>
-    <Text>Biblio</Text>
+    <Text>Messages</Text>
     
   </View></SafeAreaView>
  );
