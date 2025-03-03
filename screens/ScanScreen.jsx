@@ -13,7 +13,7 @@ export default function ScanScreen() {
   const cameraRef = useRef(null); // Utilisation de CameraView
   const [facing, setFacing] = useState('back'); // Type pour la caméra
   const [flash, setFlash] = useState('off'); // Type pour le flash
-
+  
   // Gestion de l'état de l'application
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
@@ -64,24 +64,25 @@ export default function ScanScreen() {
     setScanned(!scanned);
   };
 
-  // Ouvrir le lien scanné
-  const handleFollowLink = () => {
-      
-      if(scanned){
-        Linking.openURL(dataScanned);
+  // Ajouter un book
+  const handleAddBook = () => {
+    console.log("ok");
+      if(dataScanned){
+        console.log("code:",dataScanned);
+        // Linking.openURL(dataScanned);
       }
     
   };
 
   return (
     <View style={styles.container}>
-      
-      <View style={styles.containerCamera}>
       <TouchableOpacity style={styles.button} onPress={handleRescan}>
-          <Text style={styles.buttonText}>Scan again</Text>
-        </TouchableOpacity>
-        <CameraView
-          style={{ width: 250, height: 250 }}
+          <Text className="text-gray-800 font-nunitoRegular text-2xl">Scan again</Text>
+      </TouchableOpacity>
+      <View style={styles.containerCamera}>
+        {/* {!scanned &&( */}
+          <CameraView
+          style={{ width: 400, height : scanned ?200:700}}
           ref={(ref) => (cameraRef.current = ref)} // Référence de CameraView
           enableTorch={scanned}
           facing={facing}
@@ -94,64 +95,60 @@ export default function ScanScreen() {
             }, 500);
           }}
         />
+        {/* )} */}
       </View>
-
-      <Overlay isVisible={scanned} onBackdropPress={() => setScanned(false)}>
-        <Text> Successuful scan!: {dataScanned}</Text>
-      </Overlay>
       
 
-      {/* {scanned&& ( */}
-        <View style={styles.containerBook}>
+      {/* <Overlay isVisible={scanned} onBackdropPress={() => setScanned(false)}>
+        <Text> Successuful scan!: {dataScanned}</Text>
+      </Overlay> */}
+      
+
+      {scanned&& (
+        <View style={styles.containerBook} className="bg-light_purple ">
      
             <Image  style = {styles.imageBook} source={require('../assets/icon.png')} />
-            <Text className="font-nunitoExtraBold text-lg text-black">title</Text>
-            <Text >Auteur</Text>
-            <Text >4.5/5</Text>
-            <TouchableOpacity style={styles.buttonAdd} onPress={handleFollowLink}>
+            <Text className="font-nunitoExtraBold text-lg text-black ml-10">title</Text>
+            <Text className="font- nunitoRegular text-lg text-black ml-10">Auteur</Text>
+            <Text className="font-nunitoBlack text-lg text-black ml-10">4.5/5</Text>
+            <TouchableOpacity style={styles.buttonAdd} className=" bg-button_purple" onPress={handleAddBook}>
             <Text style={styles.buttonTextAdd}>Add book</Text>
             </TouchableOpacity>
-      
-        {/* <TouchableOpacity style={styles.buttonAdd} onPress={handleFollowLink}>
-          <Text style={styles.buttonText}>Follow link</Text>
-        </TouchableOpacity> */}
-        
+
       </View>
-    {/* )} */}
+    )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-between',
-    paddingTop: 70,
-    gap: 30,
+    justifyContent: 'flex-start',
+    
   },
   containerCamera: {
     flexDirection: 'colunm',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    gap: 10,
-    flex: 6,
   },
   button: {
     backgroundColor: 'transparent',
-    width: 150,
-    height: 70,
+    width: '100%',
+    height: 50,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonAdd:{
-    backgroundColor: 'green',
-    width:'100%',
+    width:'90%',
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    marginLeft:20,
   },
   buttonTextAdd: {
     margin: 10,
@@ -162,19 +159,18 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   containerBook: {
-    borderColor:'red',
-    borderWidth:2,
-    flex: 8,
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: 2,
-    padding: 10,
-    margin: 10,
+    with:'100%',
+    borderRadius:20,
+    flexDirection: 'flex',
+    alignItems: 'flex-start',
+    gap: 10,
+    height:500,
   },
   cameraIcon: {
     paddingLeft: 150,
   },
   imageBook:{
+    marginLeft:100,
     resizeMode:'cover',
     width:160,
     height:230,
