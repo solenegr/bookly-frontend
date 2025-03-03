@@ -123,7 +123,7 @@ export default function ScanScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    
+    paddingTop:70,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
