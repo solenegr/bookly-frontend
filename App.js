@@ -17,9 +17,6 @@ import {
 } from "@expo-google-fonts/nunito";
 import * as SplashScreen from "expo-splash-screen";
 import "./global.css";
-<<<<<<< HEAD
-import ScanScreen from './screens/ScanScreen'
-=======
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import {
   ConnectionScreen,
@@ -31,7 +28,6 @@ import {
   SignUpScreen,
   WelcomeScreen,
 } from "./screens";
->>>>>>> 544927898f6a72a7892a40763f9d393166f34656
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
@@ -98,27 +94,6 @@ export default function App() {
   }
 
   return (
-<<<<<<< HEAD
-    <SafeAreaView className="h-screen w-full bg-white">
-      <ScanScreen></ScanScreen>
-      {/* <Text className="font-nu text-lg text-black">Nunito ExtraLight</Text>
-      <Text className="font-nunitoLight text-lg text-black">Nunito Light</Text>
-      <Text className="font-nunitoRegular text-lg text-black">
-        Nunito Regular
-      </Text>
-      <Text className="font-nunitoMedium text-lg text-black">
-        Nunito Medium
-      </Text>
-      <Text className="font-nunitoSemiBold text-lg text-black">
-        Nunito SemiBold
-      </Text>
-      <Text className="font-nunitoBold text-lg text-black">Nunito Bold</Text>
-      <Text className="font-nunitoExtraBold text-lg text-black">
-        Nunito ExtraBold
-      </Text>
-      <Text className="font-nunitoBlack text-lg text-black">Nunito Black</Text> */}
-    </SafeAreaView>
-=======
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
@@ -149,6 +124,5 @@ export default function App() {
         </Text>
       </SafeAreaView> */}
     </NavigationContainer>
->>>>>>> 544927898f6a72a7892a40763f9d393166f34656
   );
 }
