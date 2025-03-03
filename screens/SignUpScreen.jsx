@@ -4,10 +4,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function SignUpScreen({ navigation }) {
  return (
     <SafeAreaView><View>
-    <Text>Welcome</Text>
+    <Text>Sign Up page</Text>
     <Button
       title="Sign-up"
-      onPress={() => navigation.navigate('Home')}
+      onPress={() => navigation.navigate('TabNavigator')}
     />
   </View></SafeAreaView>
  );
