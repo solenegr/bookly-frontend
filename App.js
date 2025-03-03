@@ -41,9 +41,14 @@ export default function App() {
   }
 
   return (
+<<<<<<< HEAD
     <SafeAreaView className="h-screen w-full bg-white">
       <ScanScreen></ScanScreen>
       {/* <Text className="font-nu text-lg text-black">Nunito ExtraLight</Text>
+=======
+    <SafeAreaView className="h-screen w-full bg-navy_blue">
+      <Text className="font-nu text-lg text-black">Nunito ExtraLight</Text>
+>>>>>>> e3af0ae618b57c45039cf3039f30a7ed96148c48
       <Text className="font-nunitoLight text-lg text-black">Nunito Light</Text>
       <Text className="font-nunitoRegular text-lg text-black">
         Nunito Regular
