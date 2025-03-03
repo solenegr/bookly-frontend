@@ -6,7 +6,7 @@ export default function ConnectionScreen({ navigation }) {
  return (
     <SafeAreaView>
         <View>
-            <Text>Welcome</Text>
+            <Text>Connection page</Text>
             <Button
             title="Sign in or Google Connect"
             onPress={() => navigation.navigate('SignUp')}

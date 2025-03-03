@@ -17,14 +17,17 @@ import {
 } from "@expo-google-fonts/nunito";
 import * as SplashScreen from "expo-splash-screen";
 import "./global.css";
-import WelcomeScreen from "./screens/WelcomeScreen";
-import ConnectionScreen from "./screens/SignUpScreen";
-import SignUpScreen from "./screens/SignUpScreen";
-import ScanScreen from "./screens/ScanScreen";
-import LibraryScreen from "./screens/LibraryScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import HomeScreen from "./screens/HomeScreen.jsx";
-import MessagesScreen from "./screens/MessagesScreen.jsx";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import {
+  ConnectionScreen,
+  HomeScreen,
+  LibraryScreen,
+  MessagesScreen,
+  ProfileScreen,
+  ScanScreen,
+  SignUpScreen,
+  WelcomeScreen,
+} from "./screens";
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
@@ -32,19 +35,43 @@ export default function App() {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
 
+  //Menu du bas et choix couleurs icônes
   const TabNavigator = () => {
     return (
-      <Tab.Navigator screenOptions={{ headerShown: false }}>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color, size }) => {
+            let iconName = "";
+
+            if (route.name === "Home") {
+              iconName = "home";
+            } else if (route.name === "Library") {
+              iconName = "book";
+            } else if (route.name === "Search") {
+              iconName = "search";
+            } else if (route.name === "Messages") {
+              iconName = "envelope";
+            } else if (route.name === "Profile") {
+              iconName = "user";
+            }
+
+            return <FontAwesome name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: "#9F5DD8",
+          tabBarInactiveTintColor: "grey",
+          headerShown: false,
+        })}
+      >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Library" component={LibraryScreen} />
-        <Tab.Screen name="Scan" component={ScanScreen} />
-        <Tab.Screen name="Scan" component={ScanScreen} />
+        <Tab.Screen name="Search" component={ScanScreen} />
         <Tab.Screen name="Messages" component={MessagesScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
     );
   };
 
+  //Gestion font nunito
   const [fontsLoaded] = useFonts({
     Nunito_200ExtraLight,
     Nunito_300Light,
@@ -72,8 +99,9 @@ export default function App() {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Connection" component={ConnectionScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
+        <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
-      {/* <SafeAreaView className="h-screen w-full bg-white">
+      {/* <SafeAreaView className="h-screen w-full bg-navy_blue">
         <Text className="font-nu text-lg text-black">Nunito ExtraLight</Text>
         <Text className="font-nunitoLight text-lg text-black">
           Nunito Light
