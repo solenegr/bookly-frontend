@@ -13,8 +13,8 @@ export default function WelcomeScreen({ navigation }) {
             <TouchableOpacity
             onPress={() => navigation.navigate('Connection')}
             activeOpacity={0.6}
-            className="w-56 h-12 bg-button_purple border-button_purple border rounded-3xl items-center content-center  pt-2.5"
-            ><Text className="font-nunitoBold  text-white items-center content-center text-xl" >Start with Bookly</Text>
+            className="w-56 h-12 bg-button_purple rounded-3xl items-center content-center  pt-2.5"
+            ><Text className="font-nunitoRegular  text-white items-center content-center text-xl" >Start with Bookly</Text>
             </TouchableOpacity>
         </View>
     </SafeAreaView>
