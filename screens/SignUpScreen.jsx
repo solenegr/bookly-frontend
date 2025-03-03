@@ -1,6 +1,6 @@
 import { Button, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-
+ 
 export default function SignUpScreen({ navigation }) {
  return (
     <SafeAreaView><View>
