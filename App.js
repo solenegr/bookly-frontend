@@ -28,8 +28,9 @@ import {
   ScanScreen,
   SignUpScreen,
   WelcomeScreen,
+  BookDetailsScreen,
+  ChatScreen,
 } from "./screens";
-import BookDetailScreen from "./screens/BookDetailsScreen";
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
@@ -58,6 +59,7 @@ export default function App() {
     return null;
   }
 
+  //Menu du bas et choix couleurs icônes
   const TabNavigator = () => {
     return (
       <Tab.Navigator
@@ -91,7 +93,7 @@ export default function App() {
         <Tab.Screen name="Profile" component={ProfileScreen} />
         <Tab.Screen
           name="Details"
-          component={BookDetailScreen}
+          component={BookDetailsScreen}
           options={{ tabBarButton: () => null }} // 🔥 Cache l’icône de `DetailsScreen`
         />
       </Tab.Navigator>
@@ -110,6 +112,8 @@ export default function App() {
         <Stack.Screen name="Connection" component={ConnectionScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="BookDetails" component={BookDetailsScreen} />
+        <Stack.Screen name="Chat" component={ChatScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

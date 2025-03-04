@@ -4,7 +4,7 @@ import { Overlay } from 'react-native-elements';
 import { CameraView, CameraType, FlashMode ,Camera} from 'expo-camera';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function ScanScreen() {
+export default function ScanScreen({ navigation }) {
   const qrLock = useRef(false);
   const appState = useRef(AppState.currentState);
   const [dataScanned, setDataScanned] = useState('');
@@ -13,7 +13,7 @@ export default function ScanScreen() {
   const cameraRef = useRef(null); // Utilisation de CameraView
   const [facing, setFacing] = useState('back'); // Type pour la caméra
   const [flash, setFlash] = useState('off'); // Type pour le flash
-  
+  const [isVisible, setIsVisible] = useState(false);
   // Gestion de l'état de l'application
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
@@ -61,24 +61,33 @@ export default function ScanScreen() {
   // Gérer un nouveau scan
   const handleRescan = () => {
     setDataScanned('');
-    setScanned(!scanned);
+    setScanned(false);
+    setIsVisible(false);
   };
-
+const handleclickOver =()=>{
+setIsVisible(false);
+setScanned(true);
+}
   // Ajouter un book
   const handleAddBook = () => {
-    console.log("ok");
-      if(dataScanned){
-        console.log("code:",dataScanned);
-        // Linking.openURL(dataScanned);
-      }
+    console.log("yeeeeessss");
+    console.log("code:", dataScanned);
     
+    if (dataScanned) {
+        console.log("Scanned data is available, navigating...");
+        // navigation.navigate("BookDetails"); // Naviguer vers l'écran "Search"
+    } else {
+        console.log("No data scanned");
+    }
   };
 
   return (
     <View style={styles.container}>
+      
       <TouchableOpacity style={styles.button} onPress={handleRescan}>
           <Text className="text-gray-800 font-nunitoRegular text-2xl">Scan again</Text>
       </TouchableOpacity>
+      
       <View style={styles.containerCamera}>
         {/* {!scanned &&( */}
           <CameraView
@@ -90,24 +99,31 @@ export default function ScanScreen() {
           onBarcodeScanned={({ data }) => {
             setTimeout(() => {
               setDataScanned(data);
-              setScanned(true);
-              console.log('data', data);
-            }, 500);
+              setIsVisible(true);
+            },500);
           }}
         />
-        {/* )} */}
+        
       </View>
       
-
-      {/* <Overlay isVisible={scanned} onBackdropPress={() => setScanned(false)}>
-        <Text> Successuful scan!: {dataScanned}</Text>
-      </Overlay> */}
+      <Overlay
+        isVisible={dataScanned.length!=0 && isVisible}
+        onBackdropPress={() =>  handleclickOver()}
+        overlayStyle={styles.overlay} // Application du style personnalisé pour positionner l'Overlay
+      >
+        <Text> code ISBN: {dataScanned}</Text>
+      </Overlay>
+      
       
 
       {scanned&& (
         <View style={styles.containerBook} className="bg-light_purple ">
      
-            <Image  style = {styles.imageBook} source={require('../assets/icon.png')} />
+            <Image
+              style={styles.imageBook}
+              source={require('../assets/temp/terremer.webp')}
+              onTouchEnd={() => { navigation.navigate("BookDetails") }}
+            />            
             <Text className="font-nunitoExtraBold text-lg text-black ml-10">title</Text>
             <Text className="font- nunitoRegular text-lg text-black ml-10">Auteur</Text>
             <Text className="font-nunitoBlack text-lg text-black ml-10">4.5/5</Text>
@@ -170,10 +186,24 @@ const styles = StyleSheet.create({
     paddingLeft: 150,
   },
   imageBook:{
+    marginTop:30,
     marginLeft:100,
     resizeMode:'cover',
     width:160,
     height:230,
+  },
+  overlay: {
+    position: 'absolute',
+    top: 200, // Décalage du haut
+    left: 0,
+    right: 0,
+   
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Pour rendre l'overlay légèrement transparent
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    zIndex: 1, // S'assurer que l'overlay est au-dessus des autres éléments
   },
 //   detailsBook:{
 //     flexDirection: 'column',
@@ -181,4 +211,3 @@ const styles = StyleSheet.create({
 //     alignItems:'center',
 //   }
 });
-
