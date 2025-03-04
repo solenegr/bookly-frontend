@@ -1,10 +1,28 @@
 import "./global.css";
 import React, { useEffect } from "react";
 import { Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+//components imports
+import {
+  BookDetailsScreen,
+  ConnectionScreen,
+  HomeScreen,
+  LibraryScreen,
+  MessagesScreen,
+  ProfileScreen,
+  ScanScreen,
+  SignUpScreen,
+  WelcomeScreen,
+} from "./screens";
+//navigate imoports
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { SafeAreaView } from "react-native-safe-area-context";
+//redux imports
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import user from "./reducers/user";
+//design imports
 import {
   Nunito_200ExtraLight,
   Nunito_300Light,
@@ -17,21 +35,14 @@ import {
   useFonts,
 } from "@expo-google-fonts/nunito";
 import * as SplashScreen from "expo-splash-screen";
-
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import {
-  ConnectionScreen,
-  HomeScreen,
-  LibraryScreen,
-  MessagesScreen,
-  ProfileScreen,
-  ScanScreen,
-  SignUpScreen,
-  WelcomeScreen,
-} from "./screens";
-import BookDetailScreen from "./screens/BookDetailsScreen";
+
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
+
+const store = configureStore({
+  reducer: {user},
+ });
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -101,6 +112,7 @@ export default function App() {
   // }
 
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
@@ -130,5 +142,6 @@ export default function App() {
         </Text>
       </SafeAreaView> */}
     </NavigationContainer>
+    </Provider>
   );
 }
