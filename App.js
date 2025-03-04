@@ -19,6 +19,7 @@ import * as SplashScreen from "expo-splash-screen";
 import "./global.css";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import {
+  BookDetailsScreen,
   ConnectionScreen,
   HomeScreen,
   LibraryScreen,
@@ -100,6 +101,7 @@ export default function App() {
         <Stack.Screen name="Connection" component={ConnectionScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="DetailsBook" component={BookDetailsScreen} />
       </Stack.Navigator>
       {/* <SafeAreaView className="h-screen w-full bg-navy_blue">
         <Text className="font-nu text-lg text-black">Nunito ExtraLight</Text>
