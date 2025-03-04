@@ -45,7 +45,7 @@ export default function ConnectionScreen({ navigation }) {
         >
           <Text className="font-nunitoRegular  text-white items-center content-center text-xl">
             New here ? Sign-up !
-          </Text>{" "}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
