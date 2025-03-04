@@ -11,6 +11,8 @@ import {
   Synopsis,
   Commentaires,
 } from "../components/book_details";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
+
 import avis from "../data/avis.json";
 const BookDetailsScreen = () => {
   const [isLike, setIsLike] = useState([]);
@@ -34,7 +36,12 @@ const BookDetailsScreen = () => {
                 <Tome />
                 <Bookmark />
               </View>
-
+              <MaterialIcons
+                name="keyboard-backspace"
+                color="gray"
+                size={35}
+                onPress={() => navigation.goBack()}
+              />
               <Genres />
               <Synopsis />
               <Text className="text-gray-800 font-nunitoExtraBold text-xl mt-6">
