@@ -4,18 +4,18 @@ import { useState } from 'react';
 
 // Table de correspondance des images
 const imageMap = {
-  book1: require('../assets/icon.png'),
-  book2: require('../assets/icon.png'),
-  book3: require('../assets/icon.png'),
-  book4: require('../assets/icon.png'),
-  book5: require('../assets/icon.png'),
-  book6: require('../assets/icon.png'),
-  book7: require('../assets/icon.png'),
-  book8: require('../assets/icon.png'),
-  book9: require('../assets/icon.png'),
-  book10: require('../assets/icon.png'),
-  book11: require('../assets/icon.png'),
-  book12: require('../assets/icon.png'),
+  book1: require('../assets/temp/terremer.webp'),
+  book2: require('../assets/temp/terremer.webp'),
+  book3: require('../assets/temp/terremer.webp'),
+  book4: require('../assets/temp/terremer.webp'),
+  book5: require('../assets/temp/terremer.webp'),
+  book6: require('../assets/temp/terremer.webp'),
+  book7: require('../assets/temp/terremer.webp'),
+  book8: require('../assets/temp/terremer.webp'),
+  book9: require('../assets/temp/terremer.webp'),
+  book10: require('../assets/temp/terremer.webp'),
+  book11: require('../assets/temp/terremer.webp'),
+  book12: require('../assets/temp/terremer.webp'),
 };
 
 export default function LibraryScreen({ navigation }) {
