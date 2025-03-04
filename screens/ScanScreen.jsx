@@ -75,7 +75,7 @@ setScanned(true);
     
     if (dataScanned) {
         console.log("Scanned data is available, navigating...");
-        navigation.navigate("DetailsBook"); // Naviguer vers l'écran "Search"
+        // navigation.navigate("BookDetails"); // Naviguer vers l'écran "Search"
     } else {
         console.log("No data scanned");
     }
@@ -100,10 +100,6 @@ setScanned(true);
             setTimeout(() => {
               setDataScanned(data);
               setIsVisible(true);
-              // setScanned(true);
-              console.log('data', data);
-              console.log(isVisible);
-              console.log(dataScanned.length!=0);
             },500);
           }}
         />
@@ -123,7 +119,11 @@ setScanned(true);
       {scanned&& (
         <View style={styles.containerBook} className="bg-light_purple ">
      
-            <Image  style = {styles.imageBook} source={require('../assets/icon.png')} />
+            <Image
+              style={styles.imageBook}
+              source={require('../assets/temp/terremer.webp')}
+              onTouchEnd={() => { navigation.navigate("BookDetails") }}
+            />            
             <Text className="font-nunitoExtraBold text-lg text-black ml-10">title</Text>
             <Text className="font- nunitoRegular text-lg text-black ml-10">Auteur</Text>
             <Text className="font-nunitoBlack text-lg text-black ml-10">4.5/5</Text>
@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
     paddingLeft: 150,
   },
   imageBook:{
+    marginTop:30,
     marginLeft:100,
     resizeMode:'cover',
     width:160,
