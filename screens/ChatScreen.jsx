@@ -146,7 +146,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.banner}>
-        <MaterialIcons name="keyboard-backspace" color="#ffffff" size={24} onPress={() => navigation.goBack()} />
+        <MaterialIcons name="keyboard-backspace" color="gray" size={24} onPress={() => navigation.goBack()} />
         <Text style={styles.greetingText}>Welcome {params.username} 👋</Text>
       </View>
 
@@ -186,7 +186,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
           onPress={recording ? stopRecording : startRecording}>
             <MaterialIcons name="mic" color="#ffffff" size={24} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleSendMessage()} style={styles.sendButton}>
+          <TouchableOpacity onPress={() => handleSendMessage()} className="bg-button_purple" style={styles.sendButton}>
             <MaterialIcons name="send" color="#ffffff" size={24} />
           </TouchableOpacity>
         </View>
@@ -206,13 +206,13 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'white',
     width: '100%',
     paddingTop: 20,
     position: 'relative',
-    borderTopColor: '#ffe099',
-    borderLeftColor: '#ffe099',
-    borderRightColor: '#ffe099',
+    borderTopColor: '#B59DD0',
+    borderLeftColor: '#B59DD0',
+    borderRightColor: '#B59DD0',
     borderTopWidth: 4,
     borderRightWidth: 0.1,
     borderLeftWidth: 0.1,
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   greetingText: {
-    color: '#fff',
+    color: 'gray',
     fontWeight: 'bold',
     fontSize: 18,
     marginLeft: 15,
@@ -263,13 +263,13 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start'
   },
   messageSentBg: {
-    backgroundColor: '#ffad99',
+    backgroundColor: '#B59DD0',
   },
   messageRecievedBg: {
     backgroundColor: '#d6fff9'
   },
   messageText: {
-    color: '#506568',
+    color: 'black',
     fontWeight: '400',
   },
   timeText: {
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
   recordButton: {
     borderRadius: 50,
     padding: 16,
-    backgroundColor: '#ff5c5c',
+    backgroundColor: '#FF85A2',
     marginLeft: 12,
     alignItems: 'center',
     justifyContent: 'center',
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
   sendButton: {
     borderRadius: 50,
     padding: 16,
-    backgroundColor: '#ffe099',
+    
     marginLeft: 12,
     alignItems: 'center',
     justifyContent: 'center',
