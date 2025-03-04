@@ -28,8 +28,9 @@ import {
   ScanScreen,
   SignUpScreen,
   WelcomeScreen,
+  BookDetailsScreen,
 } from "./screens";
-import BookDetailScreen from "./screens/BookDetailsScreen";
+
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
@@ -69,6 +70,7 @@ export default function App() {
         <Tab.Screen name="Search" component={ScanScreen} />
         <Tab.Screen name="Messages" component={MessagesScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
+        <Tab.Screen name="BookDetails" component={BookDetailsScreen} />
       </Tab.Navigator>
     );
   };
