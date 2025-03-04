@@ -37,7 +37,6 @@ export default function App() {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
 
-  //Gestion font nunito
   const [fontsLoaded] = useFonts({
     Nunito_200ExtraLight,
     Nunito_300Light,
@@ -56,7 +55,7 @@ export default function App() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return null; // Empêche le rendu tant que la police n'est pas chargée
+    return null;
   }
 
   const TabNavigator = () => {
@@ -105,20 +104,11 @@ export default function App() {
   // }
 
   return (
-    // <NavigationContainer>
-    //   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    //     <Stack.Screen name="Welcome" component={WelcomeScreen} />
-    //     <Stack.Screen name="Connection" component={ConnectionScreen} />
-    //     <Stack.Screen name="SignUp" component={SignUpScreen} />
-    //     <Stack.Screen name="TabNavigator" component={TabNavigator} />
-    //     <Stack.Screen name="Details" component={BookDetailScreen} />
-    //   </Stack.Navigator>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Connection" component={ConnectionScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
-        {/* ✅ `TabNavigator` est maintenant le principal */}
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
