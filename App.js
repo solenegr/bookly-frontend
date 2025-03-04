@@ -29,15 +29,16 @@ import {
   SignUpScreen,
   WelcomeScreen,
   BookDetailsScreen,
+  ChatScreen,
 } from "./screens";
+
 
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
 export default function App() {
   const Stack = createNativeStackNavigator();
-  const Tab = createBottomTabNavigator();
-
+  const Tab = createBottomTabNavigator(); 
   //Menu du bas et choix couleurs icônes
   const TabNavigator = () => {
     return (
@@ -71,6 +72,7 @@ export default function App() {
         <Tab.Screen name="Messages" component={MessagesScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
         <Tab.Screen name="BookDetails" component={BookDetailsScreen} />
+        <Tab.Screen name="Chat" component={ChatScreen} />
       </Tab.Navigator>
     );
   };
