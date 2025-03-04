@@ -71,8 +71,6 @@ export default function App() {
         <Tab.Screen name="Search" component={ScanScreen} />
         <Tab.Screen name="Messages" component={MessagesScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="BookDetails" component={BookDetailsScreen} />
-        <Tab.Screen name="Chat" component={ChatScreen} />
       </Tab.Navigator>
     );
   };
@@ -111,6 +109,8 @@ export default function App() {
         <Stack.Screen name="Connection" component={ConnectionScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="BookDetails" component={BookDetailsScreen} />
+        <Stack.Screen name="Chat" component={ChatScreen} />
       </Stack.Navigator>
       {/* <SafeAreaView className="h-screen w-full bg-navy_blue">
         <Text className="font-nu text-lg text-black">Nunito ExtraLight</Text>
