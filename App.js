@@ -29,6 +29,7 @@ import {
   SignUpScreen,
   WelcomeScreen,
 } from "./screens";
+import BookDetailScreen from "./screens/BookDetailsScreen";
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
@@ -94,6 +95,11 @@ export default function App() {
     return null; // Empêche le rendu tant que la police n'est pas chargée
   }
 
+  // let environment = "DEV";
+  // if (environment === "DEV") {
+  //   return <BookDetailScreen />;
+  // }
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -108,8 +114,7 @@ export default function App() {
           Nunito Light
         </Text>
         <Text className="font-nunitoRegular text-lg text-black">
-          Nunito Regular
-        </Text>
+          Nunito Regularr
         <Text className="font-nunitoMedium text-lg text-black">
           Nunito Medium
         </Text>
