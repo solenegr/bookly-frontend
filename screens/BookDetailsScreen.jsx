@@ -22,6 +22,59 @@ const genres = [
   { name: "Mythologie", color: "#FFD700" },
 ];
 
+const avis = [
+  {
+    name: "Léo",
+    note: 4.5,
+    commentaire: "Un chef-d'œuvre, je le relirai sans hésiter !",
+  },
+  {
+    name: "Sophie",
+    note: 3.8,
+    commentaire: "Quelques longueurs, mais dans l'ensemble un bon livre.",
+  },
+  {
+    name: "Maxime",
+    note: 5.0,
+    commentaire: "Très immersif, difficile à lâcher une fois commencé.",
+  },
+  {
+    name: "Emma",
+    note: 2.7,
+    commentaire: "Pas à la hauteur de mes attentes, mais correct.",
+  },
+  {
+    name: "Nathan",
+    note: 1.9,
+    commentaire: "Décevant, trop prévisible.",
+  },
+  {
+    name: "Alice",
+    note: 4.2,
+    commentaire: "L'histoire était intéressante mais un peu longue.",
+  },
+  {
+    name: "Lucas",
+    note: 3.0,
+    commentaire: "J'ai adoré le style de l'auteur.",
+  },
+  {
+    name: "Manon",
+    note: 4.8,
+    commentaire: "Un livre fascinant, je recommande !",
+  },
+  {
+    name: "Hugo",
+    note: 2.3,
+    commentaire: "Un bon livre pour passer le temps.",
+  },
+  {
+    name: "Camille",
+    note: 3.6,
+    commentaire: "Des personnages attachants et une intrigue bien ficelée.",
+  },
+];
+
 const BookDetailsScreen = () => {
   return (
     <SafeAreaView className="flex-1">
@@ -119,7 +172,7 @@ const BookDetailsScreen = () => {
             <Text className="text-gray-800 font-nunitoExtraBold text-xl">
               Synopsis
             </Text>
-            <Text className="text-gray-700 text-sm mt-2 leading-relaxed">
+            <Text className="text-gray-700 text-sm mt-2 leading-relaxed font-nunitoMedium">
               Dans l'archipel magique de Terremer, les noms véritables ont un
               pouvoir immense, et ceux qui les connaissent peuvent modeler la
               réalité. Ged, un jeune garçon aux talents exceptionnels, grandit
@@ -130,19 +183,39 @@ const BookDetailsScreen = () => {
           </View>
 
           {/* Commentaire */}
-          <View className="mt-6">
+          <View className="mt-6 gap-3">
             <Text className="text-gray-800 font-nunitoExtraBold text-xl">
               Commentaires
             </Text>
-            <Text className="text-gray-700 text-sm mt-2 leading-relaxed">
-              Dans l'archipel magique de Terremer, les noms véritables ont un
-              pouvoir immense, et ceux qui les connaissent peuvent modeler la
-              réalité. Ged, un jeune garçon aux talents exceptionnels, grandit
-              sur l'île de Gont et attire l’attention d’un puissant mage qui
-              l’initie à l’art de la magie. Mais l’ambition et l’orgueil de Ged
-              le poussent à défier les limites de son savoir...
-            </Text>
+            {avis.map((user, i) => (
+              <View key={i} className={"bg-light_gray py-3 px-3.5 rounded-lg"}>
+                <View className={"flex flex-row items-center gap-3"}>
+                  <FontAwesome name="user-circle" color={"#2960A1"} size={28} />
+                  <Text className="text-blue-950 font-nunitoExtraBold text-base flex-1 ">
+                    {user.name}
+                  </Text>
+                  <View className="flex flex-row gap-0.5 pr-2">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <FontAwesome
+                        key={i}
+                        name={"star"}
+                        size={15}
+                        color={"#fed330"}
+                      />
+                    ))}
+                  </View>
+                </View>
+                <Text
+                  className={
+                    "text-gray-700 text-[1rem] mt-2 leading-relaxed font-nunitoMedium pl-10"
+                  }
+                >
+                  lorem
+                </Text>
+              </View>
+            ))}
           </View>
+
           {/* Espacement pour éviter la coupure en bas */}
           <View className="h-4" />
         </View>
