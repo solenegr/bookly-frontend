@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const { height } = Dimensions.get("window");
 
 const genres = [
@@ -22,9 +22,10 @@ const genres = [
   { name: "Mythologie", color: "#FFD700" },
 ];
 
-const BookDetailsScreen = () => {
+const BookDetailsScreen = ({navigation}) => {
   return (
     <SafeAreaView className="flex-1">
+
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
@@ -35,6 +36,8 @@ const BookDetailsScreen = () => {
           blurRadius={25}
           resizeMode="cover"
         >
+          <MaterialIcons name="keyboard-backspace" color="gray" size={35} onPress={() => navigation.goBack()} />
+
           <View className="items-center justify-center flex-1">
             <Image
               source={require("../assets/temp/terremer.webp")}
