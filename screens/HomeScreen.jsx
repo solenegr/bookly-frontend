@@ -5,7 +5,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
+import { useSelector } from 'react-redux';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faSquareCheck } from '@fortawesome/free-solid-svg-icons'; 
 const imageMap = {
@@ -25,6 +25,7 @@ const genres = [
 ];
 
 export default function HomeScreen({ navigation }) {
+  const user = useSelector((state) => state.user.value);
   const totalPages = 300; // Nombre total de pages du livre
   const [pagesRead, setPagesRead] = useState(50); // Pages déjà lues
   const [progress, setProgress] = useState(pagesRead / totalPages);
@@ -46,7 +47,7 @@ export default function HomeScreen({ navigation }) {
     <SafeAreaView className="flex-1 flex-col justify-start mt-5 gap-4">
       {/* Header */}
       <View className="flex-row justify-evenly">
-        <Text className="font-nunitoBold text-lg">Hello User</Text>
+        <Text className="font-nunitoBold text-lg">Hello {user.username}</Text>
         <Text className="font-nunitoBold text-lg bg-light_purple">Livre en cours</Text>
       </View>
 
@@ -77,7 +78,7 @@ export default function HomeScreen({ navigation }) {
               keyboardType="numeric"
               onChangeText={(value) => setPagesReadToDay(parseInt(value) || 0)}
               value={pagesReadToDay.toString()}
-              className="border-button_purple border w-20 h-8  rounded-md p-2 "
+              className="border-navy_blue border w-20 h-8  rounded-md p-2 "
             />
           <TouchableOpacity onPress={() => handleClick()}>
               <MaterialIcons 
