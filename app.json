@@ -27,9 +27,6 @@
     },
     "plugins": [
       "expo-font"
-    ],
-    "extra": {
-      "IP_ADDRESS": "10.0.0.82"
-    }
+    ]
   }
 }
