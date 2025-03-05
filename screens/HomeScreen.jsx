@@ -2,6 +2,10 @@ import { Text, View, Button ,TouchableOpacity,ScrollView,Image, TextInput} from 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState,useEffect } from "react";
 import * as Progress from 'react-native-progress';
+import {
+  TitleAuthorBook,
+  Genres,
+} from "../components/book_details";
 const imageMap = {
   book1: require('../assets/temp/terremer.webp'),
   book2: require('../assets/temp/terremer.webp'),
@@ -138,6 +142,15 @@ export default function HomeScreen({ navigation}) {
               <Text className="text-white">Add Book</Text>
           </TouchableOpacity>
           </View>
+                  
+        </View>
+        
+          <TouchableOpacity  
+              className="w-64 h-12 bg-button_purple rounded-3xl items-center justify-center ml-20"
+              onPress={() => navigation.navigate("Search")}>
+              <Text className="text-white">Add Book</Text>
+          </TouchableOpacity>
+          
         
         <Button
           title="Voir les détails du livre"
