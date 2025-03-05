@@ -7,6 +7,7 @@ import {
   Note,
   Tome,
   Bookmark,
+  Status,
   Genres,
   Synopsis,
   Commentaires,
@@ -39,17 +40,8 @@ const BookDetailsScreen = () => {
             <Background />
             <View className="w-full bg-white rounded-t-[2rem] p-5 -mt-10 gap-5">
               <TitleAuthorBook />
-              <View className={"flex-1 items-center mt-2"}>
-                <Text
-                  className={
-                    " py-1.5 px-4 bg-light_purple text-[#5D3A9B] font-nunitoBold rounded-lg"
-                  }
-                >
-                  En cours de lecture
-                </Text>
-              </View>
-              <View></View>
-              <View className="flex flex-row items-center justify-center gap-2">
+              <Status />
+              <View className="flex flex-row items-center justify-center gap-2 mt-3">
                 <Note averageNote={averageNote} />
                 <Tome />
                 <Bookmark
@@ -60,8 +52,8 @@ const BookDetailsScreen = () => {
                   genre={"Fantasy"}
                   tome={1}
                   pages={992}
+                  status={"reading"}
                 />
-                {/* reading", "completed", "want to read */}
               </View>
               <Genres />
               <Synopsis />
