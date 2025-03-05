@@ -122,7 +122,7 @@ setScanned(true);
             <Image
               style={styles.imageBook}
               source={require('../assets/temp/terremer.webp')}
-              onTouchEnd={() => { navigation.navigate("BookDetails") }}
+              onTouchEnd={() => { navigation.navigate("Details", { id: "456" }) }}
             />            
             <Text className="font-nunitoExtraBold text-lg text-black ml-10">title</Text>
             <Text className="font- nunitoRegular text-lg text-black ml-10">Auteur</Text>
