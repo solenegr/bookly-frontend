@@ -5,11 +5,11 @@ const Background = () => {
   return (
     <ImageBackground
       source={require("../../assets/temp/terremer.webp")}
-      className="w-full h-[400px]"
+      className="w-full h-[27rem]"
       blurRadius={25}
       resizeMode="cover"
     >
-      <View className="items-center justify-center flex-1">
+      <View className="items-center justify-center flex-1 border -mt-9">
         <Image
           source={require("../../assets/temp/terremer.webp")}
           className="w-48 h-72 rounded-lg border-white border"

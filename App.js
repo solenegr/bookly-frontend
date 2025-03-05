@@ -20,9 +20,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 //redux imports
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
+import books from "./reducers/books";
 //design imports
 import {
   Nunito_200ExtraLight,
@@ -37,14 +38,13 @@ import {
 } from "@expo-google-fonts/nunito";
 import * as SplashScreen from "expo-splash-screen";
 
-import FontAwesome from "react-native-vector-icons/FontAwesome"
-
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
 const store = configureStore({
-  reducer: {user},
- });
+  reducer: { user, books },
+});
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -112,23 +112,18 @@ export default function App() {
     );
   };
 
-  // let environment = "DEV";
-  // if (environment === "DEV") {
-  //   return <BookDetailScreen />;
-  // }
-
   return (
     <Provider store={store}>
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Connection" component={ConnectionScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        <Stack.Screen name="BookDetails" component={BookDetailsScreen} />
-        <Stack.Screen name="Chat" component={ChatScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          <Stack.Screen name="Connection" component={ConnectionScreen} />
+          <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="BookDetails" component={BookDetailsScreen} />
+          <Stack.Screen name="Chat" component={ChatScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 }

@@ -12,7 +12,7 @@ const genres = [
 
 const Genres = () => {
   return (
-    <View className="flex-row flex-wrap gap-2 justify-center -mt-2">
+    <View className="flex-row flex-wrap gap-2 justify-center -mt-1">
       {genres.map((genre, index) => (
         <TouchableOpacity
           activeOpacity={0.7}
