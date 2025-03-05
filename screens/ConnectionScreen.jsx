@@ -22,7 +22,7 @@ export default function ConnectionScreen({ navigation }) {
 
 
   const [emailError, setEmailError] = useState(false);
-
+  
   const handleConnection = () => {
     if (EMAIL_REGEX.test(email)) {
       console.log("test env", IpAdress);
