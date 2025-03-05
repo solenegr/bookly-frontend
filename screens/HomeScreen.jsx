@@ -142,16 +142,7 @@ export default function HomeScreen({ navigation}) {
               <Text className="text-white">Add Book</Text>
           </TouchableOpacity>
           </View>
-                  
-        </View>
-        
-          <TouchableOpacity  
-              className="w-64 h-12 bg-button_purple rounded-3xl items-center justify-center ml-20"
-              onPress={() => navigation.navigate("Search")}>
-              <Text className="text-white">Add Book</Text>
-          </TouchableOpacity>
-          
-        
+                
         <Button
           title="Voir les détails du livre"
           onPress={() => navigation.navigate("Details", { id: "456" })}
