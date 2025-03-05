@@ -8,13 +8,12 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
  // Grabbed from emailregex.com
 const EMAIL_REGEX= /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-//pour modifier l'adresse IP et mettre la votre -> créer fichier .env
+//pour modifier l'adresse IP et mettre la votre -> créer fichier .env.local
 const IpAdress = process.env.IP_ADDRESS
 
 export default function SignUpScreen({ navigation }) {
 
   const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +28,6 @@ export default function SignUpScreen({ navigation }) {
       headers: { "Content-Type": "application/json"},
       body: JSON.stringify({
         firstname,
-        lastname,
         username,
         email,
         password
@@ -57,14 +55,6 @@ export default function SignUpScreen({ navigation }) {
           autoCapitalize="none"
           onChangeText={(value) => setFirstname(value)}
           value={firstname}
-          className="border-button_purple border w-64 h-12 m-3 rounded-md"
-
-        ></TextInput>
-        <TextInput
-          placeholder="Lastname"
-          autoCapitalize="none"
-          onChangeText={(value) => setLastname(value)}
-          value={lastname}
           className="border-button_purple border w-64 h-12 m-3 rounded-md"
 
         ></TextInput>

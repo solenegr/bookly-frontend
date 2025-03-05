@@ -5,12 +5,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import {IP_ADDRESS} from "@env";
 
 // Grabbed from emailregex.com
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-//pour modifier l'adresse IP et mettre la votre -> app.json tout en bas
+//pour modifier l'adresse IP et mettre la votre -> créer fichier .env.local
 const IpAdress = process.env.IP_ADDRESS;
 
 export default function ConnectionScreen({ navigation }) {
@@ -22,8 +23,8 @@ export default function ConnectionScreen({ navigation }) {
 
   const handleConnection = () => {
     if (EMAIL_REGEX.test(email)) {
-      console.log("test env");
-      fetch(`http://192.168.245.77:3000/users/signin`, {
+      console.log("test env", IpAdress);
+      fetch(`http://${IpAdress}:3000/users/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
