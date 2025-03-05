@@ -30,14 +30,23 @@ export default function HomeScreen({ navigation }) {
   const [pagesRead, setPagesRead] = useState(50); // Pages déjà lues
   const [progress, setProgress] = useState(pagesRead / totalPages);
   const [pagesReadToDay, setPagesReadToDay] = useState(0);
+  const[firstname,setFirstname]=useState('');
   const [plusClicked, setPlusClicked] = useState(false);
   const [sauvegardeNumberPage, setSauvegardeNumberPage] = useState(false);
   const plusAjoutes = [{ title: "Les plus ajoutés", images: ["book1", "book2", "book3"] }];
-
+  const IpAdress = process.env.IP_ADDRESS;
   useEffect(() => {
     setProgress(pagesRead / totalPages);
-    console.log("srore",user);
+    fetch(`http://${IpAdress}:3000/users/${user.token}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.result) {
+        setFirstname(data.user.firstname);
+      }
+    });
   }, [pagesRead]);
+
+  
   const handleClick =() =>{
     setPagesRead((prev) => Math.min(pagesReadToDay, totalPages));
     setSauvegardeNumberPage(true);
@@ -48,7 +57,7 @@ export default function HomeScreen({ navigation }) {
     <SafeAreaView className="flex-1 flex-col justify-start mt-5 gap-4">
       {/* Header */}
       <View className="flex-row justify-evenly">
-        <Text className="font-nunitoBold text-lg">Hello {user.username}</Text>
+        <Text className="font-nunitoBold text-lg">Hello {firstname}</Text>
         <Text className="font-nunitoBold text-lg bg-light_purple">Livre en cours</Text>
       </View>
 
