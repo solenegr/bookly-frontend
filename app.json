@@ -25,9 +25,6 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "plugins": ["expo-font"],
-    "extra": {
-      "IP_ADDRESS": "192.168.245.77"
-    }
+    "plugins": ["expo-font"]
   }
 }

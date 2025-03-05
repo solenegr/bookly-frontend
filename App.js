@@ -3,7 +3,18 @@ import React, { useEffect } from "react";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 //components imports
-
+import {
+  BookDetailsScreen,
+  ConnectionScreen,
+  HomeScreen,
+  LibraryScreen,
+  MessagesScreen,
+  ProfileScreen,
+  ScanScreen,
+  SignUpScreen,
+  WelcomeScreen,
+  ChatScreen,
+} from "./screens";
 //navigate imoports
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -26,19 +37,8 @@ import {
   useFonts,
 } from "@expo-google-fonts/nunito";
 import * as SplashScreen from "expo-splash-screen";
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import {
-  ConnectionScreen,
-  HomeScreen,
-  LibraryScreen,
-  MessagesScreen,
-  ProfileScreen,
-  ScanScreen,
-  SignUpScreen,
-  WelcomeScreen,
-  BookDetailsScreen,
-  ChatScreen,
-} from "./screens";
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
