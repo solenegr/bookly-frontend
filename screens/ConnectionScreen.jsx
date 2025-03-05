@@ -4,23 +4,14 @@ useState;
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
-<<<<<<< HEAD
-// import Constants from 'expo-constants';
-=======
->>>>>>> page/connection
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 // Grabbed from emailregex.com
 const EMAIL_REGEX= /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 //pour modifier l'adresse IP et mettre la votre -> app.json tout en bas
-<<<<<<< HEAD
-// const IpAdress = Constants.expoConfig.extra.IP_ADDRESS
-// ${IpAdress}
-=======
 const IpAdress = process.env.IP_ADDRESS
 
->>>>>>> page/connection
 
 export default function ConnectionScreen({ navigation }) {
   const [password, setPassword] = useState("");
@@ -33,7 +24,7 @@ export default function ConnectionScreen({ navigation }) {
     
     if (EMAIL_REGEX.test(email)) {
       console.log("test env")
-      fetch(`http://10.0.0.82:3000/users/signin`, {
+      fetch(`http://${IpAdress}:3000/users/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
