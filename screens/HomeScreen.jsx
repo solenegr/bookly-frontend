@@ -25,7 +25,7 @@ export default function HomeScreen({ navigation }) {
   const totalPages = 300; // Nombre total de pages du livre
   const [pagesRead, setPagesRead] = useState(50); // Pages déjà lues
   const [progress, setProgress] = useState(pagesRead / totalPages);
-  const [pagesReadToDay, setPagesReadToDay] = useState(20);
+  const [pagesReadToDay, setPagesReadToDay] = useState(0);
   const [plusClicked, setPlusClicked] = useState(false);
 
   const plusAjoutes = [{ title: "Les plus ajoutés", images: ["book1", "book2", "book3"] }];
