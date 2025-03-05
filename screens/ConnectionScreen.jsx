@@ -20,7 +20,6 @@ export default function ConnectionScreen({ navigation }) {
   const dispatch = useDispatch();
   
   const user = useSelector((state) => state.user.value)
-  console.log("useeeeeeeeeeeeeeer",user);
 
   const [emailError, setEmailError] = useState(false);
   
@@ -40,7 +39,6 @@ export default function ConnectionScreen({ navigation }) {
         .then((response) => response.json())
         .then((data) => {
           if (data.result) {
-            console.log("okkk",data.user.firstname)
             dispatch(
               login({
                 email: data.user.email,

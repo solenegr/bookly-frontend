@@ -14,7 +14,7 @@ export default function MessageScreen({ navigation }) {
         .then(response => response.json())
         .then(data => {
           if (data.result) {
-            setUsername(data.user.username);
+            setUsername(prev => data.user.username);
           }
         });
         navigation.navigate('Chat', { username });
