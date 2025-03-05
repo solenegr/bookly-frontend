@@ -1,21 +1,13 @@
-import { Text, View, Button ,TouchableOpacity,ScrollView,Image} from "react-native";
+import { Text, View, Button ,TouchableOpacity,ScrollView,Image, TextInput} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-<<<<<<< HEAD
 import { useState,useEffect } from "react";
 import * as Progress from 'react-native-progress';
-import {
-  TitleAuthorBook,
-  Genres,
-} from "../components/book_details";
-=======
->>>>>>> 2fff80d3be5695355f6b360a9fc028fb6d627f85
 const imageMap = {
   book1: require('../assets/temp/terremer.webp'),
   book2: require('../assets/temp/terremer.webp'),
   book3: require('../assets/temp/terremer.webp'),
   book4: require('../assets/temp/terremer.webp'),
 };
-<<<<<<< HEAD
 const genres = [
   { name: "Fantasy", color: "#74C0FC" },
   { name: "Aventure", color: "#FFB347" },
@@ -25,16 +17,12 @@ const genres = [
   { name: "Mythologie", color: "#FFD700" },
 ];
 export default function HomeScreen({ navigation}) {
-  const [progress, setProgress] = useState(0);
   const plusAjoutes =[{ title: "Les plus ajoutés", images: ['book1', 'book2', 'book3'] }];
   const [plusClicked, setPlusClicked] = useState(false);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => (prev < 1 ? prev + 0.1 : 1));
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, []);
+  const totalPages = 100;
+  const [pagesRead,setPagesRead] = useState(50);
+  const [pagesReadToDay,setPagesReadToDay] = useState(50);
+  const progress = pagesRead / totalPages;
   const handelPlus=() =>{
     setPlusClicked(!plusClicked);
   }
@@ -42,7 +30,7 @@ export default function HomeScreen({ navigation}) {
     <SafeAreaView className="flex-1 flex-col justify-start mt-5 gap-4">
      
         <View className="flex-row justify-evenly">
-          <Text  className={"font-nunitoBold text-lg"}>Hello User</Text>
+          <Text  className={"font-nunitoBold text-lg text-navy_blue"}>Hello User</Text>
           <Text  className={"font-nunitoBold text-lg bg-light_purple"}>Livre en cours</Text>
         </View>
         <View className="flex-row gap-4 pt-4 bg-light_purple rounded-xl">
@@ -57,10 +45,25 @@ export default function HomeScreen({ navigation}) {
                               Terremer (Edition intégrale)
               </Text>
               <Text className={"font-medium text-sm "}>Ursula Le Guin</Text>
-              <View className="justify-center">
-                  <Text>Progression : {(progress * 100).toFixed(0)}%</Text>
-                  <Progress.Bar progress={progress} width={200} />
-              </View>
+              <View >
+                  <Text style={{ fontSize: 18, marginBottom: 10 }}>
+                    Pages lues : {pagesRead} / {totalPages}
+                  </Text>
+                  <Progress.Bar progress={progress} width={220} height={15} color="#2960A1" />
+                  <TextInput
+                            placeholder="number of pages reading today"
+                            autoCapitalize="none"
+                            autoComplete="number of pages reading today"
+                            textContentType="number of pages reading todayilAddress"
+                            onChangeText={(value) => setPagesReadToDay(value)}
+                            value={pagesReadToDay}
+                            className="border-button_purple border w-64 h-12 m-3 rounded-md"
+                          ></TextInput>
+                  <Button
+                      title={`Lire ${pagesReadToDay} pages`}
+                      onPress={() => setPagesRead((prev) => Math.min(prev + pagesReadToDay, totalPages))}
+                    />
+                </View>
             </View>
 
         </View>
@@ -116,21 +119,6 @@ export default function HomeScreen({ navigation}) {
           {plusAjoutes.map((section, index) => (
                       <View key={index} className="flex flex-col gap-4 ">
                         <Text className={"font-nunitoBold text-lg"}>{section.title}</Text>
-=======
-export default function HomeScreen({ navigation }) {
-  return (
-    <SafeAreaView className="flex-1 flex-col justify-start">
-      
-
-
-        <View></View>
-        <View></View>
-        <View></View>
-        <View>
-          {[{ title: "En cours", images: ['book1', 'book2', 'book3'] }].map((section, index) => (
-                      <View key={index} className="flex flex-col gap-4 ">
-                        <Text className="text-gray-800 font-nunitoRegular text-lg">{section.title}</Text>
->>>>>>> 2fff80d3be5695355f6b360a9fc028fb6d627f85
                         <ScrollView horizontal={true} className="flex-row">
                           {section.images.map((img, imgIndex) => (
                             <Image
@@ -142,36 +130,21 @@ export default function HomeScreen({ navigation }) {
                         </ScrollView>
                       </View>
                     ))}
-<<<<<<< HEAD
-                  
-        </View>
-        
-          <TouchableOpacity  
-              className="w-64 h-12 bg-button_purple rounded-3xl items-center justify-center ml-20"
-              onPress={() => navigation.navigate("Search")}>
-              <Text className="text-white">Add Book</Text>
-          </TouchableOpacity>
-          
-=======
         </View>
         <View>
           <TouchableOpacity  
-              className="p-4 rounded-xl items-center bg-button_purple w-96" 
+              className="p-4 ml-32 rounded-xl items-center bg-button_purple w-52" 
               onPress={() => navigation.navigate("Search")}>
               <Text className="text-white">Add Book</Text>
           </TouchableOpacity>
           </View>
->>>>>>> 2fff80d3be5695355f6b360a9fc028fb6d627f85
         
         <Button
           title="Voir les détails du livre"
           onPress={() => navigation.navigate("Details", { id: "456" })}
         />
-<<<<<<< HEAD
      
-=======
       
->>>>>>> 2fff80d3be5695355f6b360a9fc028fb6d627f85
     </SafeAreaView>
   );
 }
