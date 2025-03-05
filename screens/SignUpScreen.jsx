@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform} from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch } from 'react-redux';
 import { signup } from '../reducers/user';
@@ -49,6 +49,7 @@ export default function SignUpScreen({ navigation }) {
  return (
     <SafeAreaView>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 80} >
+        <ScrollView className="grow" >
       <View className="items-center justify-center mt-24" >
        <Text className="text-center text-button_purple font-nunitoBold text-5xl pt-2 mb-12" >BOOKLY<FontAwesome name="book" size="34" color="#9F5DD8" /> </Text>
    <TextInput
@@ -106,6 +107,7 @@ export default function SignUpScreen({ navigation }) {
           </Text>
     </TouchableOpacity>
   </View>
+  </ScrollView>
   </KeyboardAvoidingView>
   </SafeAreaView>
  );
