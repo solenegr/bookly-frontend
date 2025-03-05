@@ -19,11 +19,11 @@ export default function ConnectionScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const [emailError, setEmailError] = useState(false);
-
+  
   const handleConnection = () => {
     if (EMAIL_REGEX.test(email)) {
       console.log("test env");
-      fetch(`http://192.168.245.77:3000/users/signin`, {
+      fetch(`http://${IpAdress}:3000/users/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

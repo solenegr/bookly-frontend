@@ -36,6 +36,7 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     setProgress(pagesRead / totalPages);
+    console.log("srore",user);
   }, [pagesRead]);
   const handleClick =() =>{
     setPagesRead((prev) => Math.min(pagesReadToDay, totalPages));
