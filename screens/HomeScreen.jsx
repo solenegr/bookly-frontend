@@ -1,17 +1,21 @@
 import { Text, View, Button ,TouchableOpacity,ScrollView,Image} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+<<<<<<< HEAD
 import { useState,useEffect } from "react";
 import * as Progress from 'react-native-progress';
 import {
   TitleAuthorBook,
   Genres,
 } from "../components/book_details";
+=======
+>>>>>>> 2fff80d3be5695355f6b360a9fc028fb6d627f85
 const imageMap = {
   book1: require('../assets/temp/terremer.webp'),
   book2: require('../assets/temp/terremer.webp'),
   book3: require('../assets/temp/terremer.webp'),
   book4: require('../assets/temp/terremer.webp'),
 };
+<<<<<<< HEAD
 const genres = [
   { name: "Fantasy", color: "#74C0FC" },
   { name: "Aventure", color: "#FFB347" },
@@ -112,6 +116,21 @@ export default function HomeScreen({ navigation}) {
           {plusAjoutes.map((section, index) => (
                       <View key={index} className="flex flex-col gap-4 ">
                         <Text className={"font-nunitoBold text-lg"}>{section.title}</Text>
+=======
+export default function HomeScreen({ navigation }) {
+  return (
+    <SafeAreaView className="flex-1 flex-col justify-start">
+      
+
+
+        <View></View>
+        <View></View>
+        <View></View>
+        <View>
+          {[{ title: "En cours", images: ['book1', 'book2', 'book3'] }].map((section, index) => (
+                      <View key={index} className="flex flex-col gap-4 ">
+                        <Text className="text-gray-800 font-nunitoRegular text-lg">{section.title}</Text>
+>>>>>>> 2fff80d3be5695355f6b360a9fc028fb6d627f85
                         <ScrollView horizontal={true} className="flex-row">
                           {section.images.map((img, imgIndex) => (
                             <Image
@@ -123,6 +142,7 @@ export default function HomeScreen({ navigation}) {
                         </ScrollView>
                       </View>
                     ))}
+<<<<<<< HEAD
                   
         </View>
         
@@ -132,12 +152,26 @@ export default function HomeScreen({ navigation}) {
               <Text className="text-white">Add Book</Text>
           </TouchableOpacity>
           
+=======
+        </View>
+        <View>
+          <TouchableOpacity  
+              className="p-4 rounded-xl items-center bg-button_purple w-96" 
+              onPress={() => navigation.navigate("Search")}>
+              <Text className="text-white">Add Book</Text>
+          </TouchableOpacity>
+          </View>
+>>>>>>> 2fff80d3be5695355f6b360a9fc028fb6d627f85
         
         <Button
           title="Voir les détails du livre"
           onPress={() => navigation.navigate("Details", { id: "456" })}
         />
+<<<<<<< HEAD
      
+=======
+      
+>>>>>>> 2fff80d3be5695355f6b360a9fc028fb6d627f85
     </SafeAreaView>
   );
 }
