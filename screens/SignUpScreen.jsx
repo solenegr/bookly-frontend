@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import { Button, Text, View, TextInput, TouchableOpacity} from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform} from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch } from 'react-redux';
 import { signup } from '../reducers/user';
-import  Constants from 'expo-constants';
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
  // Grabbed from emailregex.com
 const EMAIL_REGEX= /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-//pour modifier l'adresse IP et mettre la votre -> app.json tout en bas
-const IpAdress = Constants.expoConfig.extra.IP_ADDRESS
+//pour modifier l'adresse IP et mettre la votre -> créer fichier .env
+const IpAdress = process.env.IP_ADDRESS
 
 export default function SignUpScreen({ navigation }) {
 
@@ -48,7 +47,9 @@ export default function SignUpScreen({ navigation }) {
 
 
  return (
-    <SafeAreaView><View className="items-center justify-center mt-24" >
+    <SafeAreaView>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 80} >
+      <View className="items-center justify-center mt-24" >
        <Text className="text-center text-button_purple font-nunitoBold text-5xl pt-2 mb-12" >BOOKLY<FontAwesome name="book" size="34" color="#9F5DD8" /> </Text>
    <TextInput
           placeholder="Firstname"
@@ -104,7 +105,8 @@ export default function SignUpScreen({ navigation }) {
             Sign-up
           </Text>
     </TouchableOpacity>
-    
-  </View></SafeAreaView>
+  </View>
+  </KeyboardAvoidingView>
+  </SafeAreaView>
  );
 }
