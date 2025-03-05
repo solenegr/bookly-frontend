@@ -41,7 +41,7 @@ export default function HomeScreen({ navigation }) {
     .then(response => response.json())
     .then(data => {
       if (data.result) {
-        setFirstname(data.user.firstname);
+        setFirstname(data.user.firstname.charAt(0).toUpperCase() + data.user.firstname.slice(1));
       }
     });
   }, [pagesRead]);
