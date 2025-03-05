@@ -33,7 +33,7 @@ const BookDetailsScreen = () => {
     );
   };
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <FlatList
         ListHeaderComponent={
           <View className={"flex-1"}>
