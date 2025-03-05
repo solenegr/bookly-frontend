@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../reducers/user';
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -18,6 +18,7 @@ export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value)
 
   const [emailError, setEmailError] = useState(false);
 
@@ -35,9 +36,10 @@ export default function SignUpScreen({ navigation }) {
     })
     .then((response) => response.json())
     .then((data) => {
-      dispatch(signup({firstname: data.firstname, lastname: data.lastname, username: data.username, email: data.username, password: data.password}));
+      dispatch(signup({firstname: data.user.firstname, username: data.user.username, email: data.user.email, password: data.user.password}));
       navigation.navigate("TabNavigator", {screen: 'Home'})
     })
+    console.log("reducer", user)
   } else {
     setEmailError(true);
   }

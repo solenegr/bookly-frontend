@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Text, View, TextInput, TouchableOpacity, Image } from "react-native";
 useState;
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import {IP_ADDRESS} from "@env";
@@ -18,6 +18,8 @@ export default function ConnectionScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value)
+
 
   const [emailError, setEmailError] = useState(false);
 
@@ -36,16 +38,15 @@ export default function ConnectionScreen({ navigation }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("data fecth signin", data);
           if (data.result) {
             dispatch(
               login({
-                email: data.email,
-                password: data.password,
-                token: data.token,
+                email: data.user.email,
+                password: data.user.password,
+                token: data.user.token,
               })
             );
-            console.log("reducer", login);
+            console.log("reducer", user);
             setPassword("");
             setEmail("");
             navigation.navigate("TabNavigator", { screen: "Home" });
