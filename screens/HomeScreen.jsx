@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { 
-  Text, View, Button, TouchableOpacity, ScrollView, Image, TextInput
+  Text, View, Button, TouchableOpacity, ScrollView, Image, TextInput,Keyboard
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faSquareCheck } from '@fortawesome/free-solid-svg-icons'; 
 const imageMap = {
   book1: require("../assets/temp/terremer.webp"),
   book2: require("../assets/temp/terremer.webp"),
@@ -27,12 +30,17 @@ export default function HomeScreen({ navigation }) {
   const [progress, setProgress] = useState(pagesRead / totalPages);
   const [pagesReadToDay, setPagesReadToDay] = useState(0);
   const [plusClicked, setPlusClicked] = useState(false);
-
+  const [sauvegardeNumberPage, setSauvegardeNumberPage] = useState(false);
   const plusAjoutes = [{ title: "Les plus ajoutés", images: ["book1", "book2", "book3"] }];
 
   useEffect(() => {
     setProgress(pagesRead / totalPages);
   }, [pagesRead]);
+  const handleClick =() =>{
+    setPagesRead((prev) => Math.min(pagesReadToDay, totalPages));
+    setSauvegardeNumberPage(true);
+    Keyboard.dismiss();
+  }
 
   return (
     <SafeAreaView className="flex-1 flex-col justify-start mt-5 gap-4">
@@ -56,10 +64,12 @@ export default function HomeScreen({ navigation }) {
 
           {/* Barre de progression */}
           <Text >
-            Pages lues : {pagesRead} / {totalPages}
+            Pages lues : {pagesRead}/ {totalPages}
           </Text>
           <Progress.Bar progress={progress} width={220} height={15} color="#2960A1" />
-
+          <Text >
+            Ajouter un marque-page
+          </Text>
           {/* Input et bouton de mise à jour */}
           <View className="flex-row justify-start items-center">
           <TextInput
@@ -67,13 +77,15 @@ export default function HomeScreen({ navigation }) {
               keyboardType="numeric"
               onChangeText={(value) => setPagesReadToDay(parseInt(value) || 0)}
               value={pagesReadToDay.toString()}
-              className="border-button_purple border w-20 h-12  rounded-md p-2 "
+              className="border-button_purple border w-20 h-8  rounded-md p-2 "
             />
-            <Button
-            className="font-nunitoBold text-lg" 
-              title={`Ajouter ${pagesReadToDay} pages`}
-              onPress={() => setPagesRead((prev) => Math.min(prev + pagesReadToDay, totalPages))}
-            />
+          <TouchableOpacity onPress={() => handleClick()}>
+              <MaterialIcons 
+                name={"check"} 
+                color={sauvegardeNumberPage && pagesReadToDay != 0? "green" : "gray"} 
+                size={24} 
+              />
+          </TouchableOpacity>
           </View>
         </View>
       </View>
