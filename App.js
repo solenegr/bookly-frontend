@@ -13,7 +13,7 @@ import {
   ScanScreen,
   SignUpScreen,
   WelcomeScreen,
-  ChatScreen
+  ChatScreen,
 } from "./screens";
 //navigate imoports
 import { NavigationContainer } from "@react-navigation/native";
