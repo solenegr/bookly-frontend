@@ -17,6 +17,15 @@ const BookDetailsScreen = () => {
   const [isLike, setIsLike] = useState([]);
   const [hideComment, setHideComment] = useState([]);
 
+  const calculateAverageNote = () => {
+    if (avis.length < 0) return;
+
+    const total = avis.reduce((acc, item) => (acc += item.note), 0);
+    return (total / avis.length).toFixed(1);
+  };
+
+  const averageNote = calculateAverageNote();
+
   const toggleState = (id, state, setState) => {
     setState((prev) =>
       prev.includes(id) ? prev.filter((pId) => pId !== id) : [...prev, id]
@@ -28,12 +37,31 @@ const BookDetailsScreen = () => {
         ListHeaderComponent={
           <View className={"flex-1"}>
             <Background />
-            <View className="w-full bg-white rounded-t-[2rem] p-5 -mt-10 gap-8">
+            <View className="w-full bg-white rounded-t-[2rem] p-5 -mt-10 gap-5">
               <TitleAuthorBook />
-              <View className="flex flex-row items-center justify-center gap-2 mt-2">
-                <Note />
+              <View className={"flex-1 items-center mt-2"}>
+                <Text
+                  className={
+                    " py-1.5 px-4 bg-light_purple text-[#5D3A9B] font-nunitoBold rounded-lg"
+                  }
+                >
+                  En cours de lecture
+                </Text>
+              </View>
+              <View></View>
+              <View className="flex flex-row items-center justify-center gap-2">
+                <Note averageNote={averageNote} />
                 <Tome />
-                <Bookmark />
+                <Bookmark
+                  id={1}
+                  title={"Terremer (Édition intégrale)"}
+                  author={"Ursula K. Le Guin"}
+                  year={2017}
+                  genre={"Fantasy"}
+                  tome={1}
+                  pages={992}
+                />
+                {/* reading", "completed", "want to read */}
               </View>
               <Genres />
               <Synopsis />

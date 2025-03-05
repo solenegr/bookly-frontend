@@ -4,15 +4,15 @@ useState;
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 // Grabbed from emailregex.com
-const EMAIL_REGEX= /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const EMAIL_REGEX =
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 //pour modifier l'adresse IP et mettre la votre -> app.json tout en bas
-const IpAdress = Constants.expoConfig.extra.IP_ADDRESS
-
+const IpAdress = Constants.expoConfig.extra.IP_ADDRESS;
 
 export default function ConnectionScreen({ navigation }) {
   const [password, setPassword] = useState("");
@@ -22,38 +22,46 @@ export default function ConnectionScreen({ navigation }) {
   const [emailError, setEmailError] = useState(false);
 
   const handleConnection = () => {
-    
     if (EMAIL_REGEX.test(email)) {
-      console.log("test env")
-      fetch(`http://${IpAdress}:3000/users/signin`, {
+      console.log("test env");
+      fetch(`http://192.168.245.77:3000/users/signin`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: email,
-          password: password
-        })
+          password: password,
+        }),
       })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data fecth signin", data)
-        if (data.result) {
-          dispatch(login({ email: data.email, password: data.password, token: data.token }));
-          console.log('reducer', login)
-          setPassword("");
-          setEmail("");
-          navigation.navigate('TabNavigator', { screen: 'Home' });
-        }
-      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("data fecth signin", data);
+          if (data.result) {
+            dispatch(
+              login({
+                email: data.email,
+                password: data.password,
+                token: data.token,
+              })
+            );
+            console.log("reducer", login);
+            setPassword("");
+            setEmail("");
+            navigation.navigate("TabNavigator", { screen: "Home" });
+          }
+        });
     } else {
       setEmailError(true);
-  }
+    }
   };
   return (
-    <SafeAreaView className="flex" >
+    <SafeAreaView className="flex">
       <View className="items-center justify-center mt-24">
-        <Text className="text-center text-button_purple font-nunitoBold text-5xl pt-2 mb-12" >BOOKLY<FontAwesome name="book" size="34" color="#9F5DD8" /> </Text>
+        <Text className="text-center text-button_purple font-nunitoBold text-5xl pt-2 mb-12">
+          BOOKLY
+          <FontAwesome name="book" size="34" color="#9F5DD8" />{" "}
+        </Text>
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
@@ -64,7 +72,7 @@ export default function ConnectionScreen({ navigation }) {
           value={email}
           className="border-button_purple border w-64 h-12 m-3 rounded-md"
         ></TextInput>
-          <TextInput
+        <TextInput
           placeholder="Password"
           autoCapitalize="none"
           autoComplete="none"
@@ -73,9 +81,10 @@ export default function ConnectionScreen({ navigation }) {
           onChangeText={(value) => setPassword(value)}
           value={password}
           className="border-button_purple border w-64 h-12 m-3 rounded-md"
-
         ></TextInput>
-        {emailError && <Text className="mt-3 text-red-500" >Invalid email adress</Text>}
+        {emailError && (
+          <Text className="mt-3 text-red-500">Invalid email adress</Text>
+        )}
         <TouchableOpacity
           onPress={() => handleConnection()}
           activeOpacity={0.6}
@@ -95,14 +104,14 @@ export default function ConnectionScreen({ navigation }) {
           </Text>
         </TouchableOpacity>
       </View>
-      <View className="w-4/5 self-center h-0.5 bg-button_purple shadow-md shadow-gray-500 my-4" ></View>
+      <View className="w-4/5 self-center h-0.5 bg-button_purple shadow-md shadow-gray-500 my-4"></View>
       <View className="items-center justify-center">
-      <TouchableOpacity
+        <TouchableOpacity
           onPress={() => navigation.navigate("TabNavigator")}
           activeOpacity={0.6}
           className="w-64 h-12 border-button_purple border rounded-3xl items-center content-center  pt-2.5 m-3 mt-8"
         >
-          <Text className="font-nunitoRegular  text-gray-500 items-center justify-center text-xl" >
+          <Text className="font-nunitoRegular  text-gray-500 items-center justify-center text-xl">
             Connect with Google
           </Text>
           {/* <Image className="w-8 h-8 items-center" source={require("../assets/google-icon.png")}></Image> */}
