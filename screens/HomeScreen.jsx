@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Text, View, Button, TouchableOpacity, ScrollView, Image, TextInput,Keyboard
-} from "react-native";
+import { Text, View, Button, TouchableOpacity, ScrollView, Image, TextInput,Keyboard} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -30,11 +28,12 @@ export default function HomeScreen({ navigation }) {
   const [pagesRead, setPagesRead] = useState(50); // Pages déjà lues
   const [progress, setProgress] = useState(pagesRead / totalPages);
   const [pagesReadToDay, setPagesReadToDay] = useState(0);
-  const[firstname,setFirstname]=useState('');
+  const [firstname,setFirstname]=useState('');
   const [plusClicked, setPlusClicked] = useState(false);
   const [sauvegardeNumberPage, setSauvegardeNumberPage] = useState(false);
   const plusAjoutes = [{ title: "Les plus ajoutés", images: ["book1", "book2", "book3"] }];
   const IpAdress = process.env.IP_ADDRESS;
+  
   useEffect(() => {
     setProgress(pagesRead / totalPages);
     fetch(`http://${IpAdress}:3000/users/${user.token}`)
@@ -70,9 +69,10 @@ export default function HomeScreen({ navigation }) {
           onTouchEnd={() => navigation.navigate("Details", { id: "456" })}
         />
         <View className="flex-col gap-1 pt-7">
-          <Text className="font-nunitoBold text-lg">Terremer (Edition intégrale)</Text>
+          <Text className="font-nunitoBold text-lg">
+            Terremer (Edition intégrale)
+          </Text>
           <Text className="font-medium text-sm">Ursula Le Guin</Text>
-
           {/* Barre de progression */}
           <Text >
             Pages lues : {pagesRead}/ {totalPages}
@@ -81,14 +81,14 @@ export default function HomeScreen({ navigation }) {
           <Text >
             Ajouter un marque-page
           </Text>
-          {/* Input et bouton de mise à jour */}
+          {/*>>>>>> Input et bouton de mise à jour */}
           <View className="flex-row justify-start items-center">
-          <TextInput
+            <TextInput
               placeholder="Nombre de pages lues aujourd'hui"
               keyboardType="numeric"
               onChangeText={(value) => setPagesReadToDay(parseInt(value) || 0)}
               value={pagesReadToDay.toString()}
-              className="border-navy_blue border w-20 h-8  rounded-md p-2 "
+              className="border-navy_blue border w-20 h-8 rounded-md p-2 "
             />
           <TouchableOpacity onPress={() => handleClick()}>
               <MaterialIcons 
@@ -103,8 +103,13 @@ export default function HomeScreen({ navigation }) {
 
       {/* Genres */}
       <View className="flex-row justify-between px-5">
-        <Text className="text-navy_blue text-[1rem] font-nunitoBold">Genres</Text>
-        <TouchableOpacity activeOpacity={0.8} onPress={() => setPlusClicked(!plusClicked)}>
+        <Text className="text-navy_blue text-[1rem] font-nunitoBold">
+          Genres
+        </Text>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setPlusClicked(!plusClicked)}
+        >
           <Text className="text-navy_blue text-[1rem] font-nunitoBold">
             {plusClicked ? "Voir Moins" : "Voir Plus"}
           </Text>
@@ -112,23 +117,27 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       <View className="flex-row flex-wrap gap-2 justify-center -mt-2">
-        {genres.slice(0, plusClicked ? genres.length : 4).map((genre, index) => (
-          <TouchableOpacity
-            activeOpacity={0.7}
-            key={index}
-            className="px-3.5 py-1 rounded-full"
-            style={{
-              backgroundColor: genre.color,
-              shadowColor: genre.color,
-              shadowOpacity: 0.5,
-              shadowRadius: 2.62,
-              shadowOffset: { width: 500, height: 3 },
-              elevation: 4,
-            }}
-          >
-            <Text className="text-gray-800 text-base font-nunitoBold">{genre.name}</Text>
-          </TouchableOpacity>
-        ))}
+        {genres
+          .slice(0, plusClicked ? genres.length : 4)
+          .map((genre, index) => (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              key={index}
+              className="px-3.5 py-1 rounded-full"
+              style={{
+                backgroundColor: genre.color,
+                shadowColor: genre.color,
+                shadowOpacity: 0.5,
+                shadowRadius: 2.62,
+                shadowOffset: { width: 500, height: 3 },
+                elevation: 4,
+              }}
+            >
+              <Text className="text-gray-800 text-base font-nunitoBold">
+                {genre.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
       </View>
 
       {/* Les plus ajoutés */}
@@ -158,7 +167,6 @@ export default function HomeScreen({ navigation }) {
       </TouchableOpacity>
 
       {/* Bouton pour voir les détails */}
-      <Button title="Voir les détails du livre" onPress={() => navigation.navigate("Details", { id: "456" })} />
     </SafeAreaView>
   );
 }
