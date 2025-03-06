@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, TouchableOpacity,Text ,SafeAreaView,Image} from 'react-native';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
+import { addUserConversation, removeUserConversation } from "../reducers/conversations";
 export default function MessageScreen({ navigation }) {
   const IpAdress = process.env.IP_ADDRESS;
   const[username,setUsername] = useState('');
@@ -15,6 +16,7 @@ export default function MessageScreen({ navigation }) {
         .then(data => {
           if (data.result) {
             setUsername(data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1));
+            //useDispatch(addUserConversation(data.user._id));
           }
         });
         navigation.navigate('Chat', { username });

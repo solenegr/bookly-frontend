@@ -1,5 +1,7 @@
 
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { addMessageConversation, removeMessageConversation } from "../reducers/conversations";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,7 +16,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Pusher from 'pusher-js/react-native';
 import { Audio } from 'expo-av';
 const pusher = new Pusher('PUSHER_KEY', { cluster: 'PUSHER_CLUSTER' });
-const BACKEND_ADDRESS = 'http://10.0.2.146:3000';
+
+ const BACKEND_ADDRESS = 'http://10.0.2.146:3000';
 
 export default function ChatScreen({ navigation, route: { params } }) {
   const [recording, setRecording] = useState();
@@ -22,10 +25,10 @@ export default function ChatScreen({ navigation, route: { params } }) {
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState('');
   const [audioText, setAudioText] = useState('');
-
+  const user = useSelector((state) => state.user.value);
   useEffect(() => {
     (() => {
-      fetch(`${BACKEND_ADDRESS}/users/${params.username}`, { method: 'PUT' });
+      fetch(`${BACKEND_ADDRESS}/conversations/users/${params.username}`, { method: 'PUT' });
 
       const subscription = pusher.subscribe('chat');
       subscription.bind('pusher:subscription_succeeded', () => {
@@ -33,7 +36,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
       });
     })();
 
-    return () => fetch(`${BACKEND_ADDRESS}/users/${params.username}`, { method: 'DELETE' });
+    return () => fetch(`${BACKEND_ADDRESS}/conversations/users/${params.username}`, { method: 'DELETE' });
   }, [params.username]);
 
   const handleReceiveMessage = (data) => {
@@ -48,6 +51,8 @@ export default function ChatScreen({ navigation, route: { params } }) {
     }
     let payload;
     if (audioText.includes('file://')) {
+      //dispatch(addMessageConversation({ audioText,user.id }));
+
       payload = {
         url: audioText,
         type: 'audio',
@@ -68,7 +73,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
     
     
     handleReceiveMessage(payload);
-    fetch(`${BACKEND_ADDRESS}/message`, {
+    fetch(`${BACKEND_ADDRESS}/messages/message`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
