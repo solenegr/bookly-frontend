@@ -1,11 +1,22 @@
 import React from 'react';
 import { View, TouchableOpacity,Text ,SafeAreaView,Image} from 'react-native';
-
-
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 export default function MessageScreen({ navigation }) {
+  const IpAdress = process.env.IP_ADDRESS;
+  const[username,setUsername] = useState('');
+  const user = useSelector((state) => state.user.value);
+  
     const handleNavigation = () => {
-        const randomUsernames = ['Solène', 'Rania', 'Antony', 'Patrice']; // Déclarer ici
-        const username = randomUsernames[Math.floor(Math.random() * randomUsernames.length)];
+        // const randomUsernames = ['Solène', 'Rania', 'Antony', 'Patrice']; // Déclarer ici
+        // const username = randomUsernames[Math.floor(Math.random() * randomUsernames.length)];
+        fetch(`http://${IpAdress}:3000/users/${user.token}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.result) {
+            setUsername(data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1));
+          }
+        });
         navigation.navigate('Chat', { username });
       };
 

@@ -1,24 +1,24 @@
 import { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform} from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../reducers/user';
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
  // Grabbed from emailregex.com
 const EMAIL_REGEX= /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-//pour modifier l'adresse IP et mettre la votre -> créer fichier .env
+//pour modifier l'adresse IP et mettre la votre -> créer fichier .env.local
 const IpAdress = process.env.IP_ADDRESS
 
 export default function SignUpScreen({ navigation }) {
 
   const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value)
 
   const [emailError, setEmailError] = useState(false);
 
@@ -29,7 +29,6 @@ export default function SignUpScreen({ navigation }) {
       headers: { "Content-Type": "application/json"},
       body: JSON.stringify({
         firstname,
-        lastname,
         username,
         email,
         password
@@ -37,9 +36,10 @@ export default function SignUpScreen({ navigation }) {
     })
     .then((response) => response.json())
     .then((data) => {
-      dispatch(signup({firstname: data.firstname, lastname: data.lastname, username: data.username, email: data.username, password: data.password}));
+      dispatch(signup({firstname: data.user.firstname, username: data.user.username, email: data.user.email, password: data.user.password}));
       navigation.navigate("TabNavigator", {screen: 'Home'})
     })
+    console.log("reducer", user)
   } else {
     setEmailError(true);
   }
@@ -49,6 +49,7 @@ export default function SignUpScreen({ navigation }) {
  return (
     <SafeAreaView>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 80} >
+        <ScrollView className="grow" >
       <View className="items-center justify-center mt-24" >
        <Text className="text-center text-button_purple font-nunitoBold text-5xl pt-2 mb-12" >BOOKLY<FontAwesome name="book" size="34" color="#9F5DD8" /> </Text>
    <TextInput
@@ -56,14 +57,6 @@ export default function SignUpScreen({ navigation }) {
           autoCapitalize="none"
           onChangeText={(value) => setFirstname(value)}
           value={firstname}
-          className="border-button_purple border w-64 h-12 m-3 rounded-md"
-
-        ></TextInput>
-        <TextInput
-          placeholder="Lastname"
-          autoCapitalize="none"
-          onChangeText={(value) => setLastname(value)}
-          value={lastname}
           className="border-button_purple border w-64 h-12 m-3 rounded-md"
 
         ></TextInput>
@@ -106,6 +99,7 @@ export default function SignUpScreen({ navigation }) {
           </Text>
     </TouchableOpacity>
   </View>
+  </ScrollView>
   </KeyboardAvoidingView>
   </SafeAreaView>
  );

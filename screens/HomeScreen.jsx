@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Button,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  TextInput,
-} from "react-native";
+import { Text, View, Button, TouchableOpacity, ScrollView, Image, TextInput,Keyboard} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useSelector } from 'react-redux';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faSquareCheck } from '@fortawesome/free-solid-svg-icons'; 
 const imageMap = {
   book1: require("../assets/temp/terremer.webp"),
   book2: require("../assets/temp/terremer.webp"),
@@ -28,28 +23,41 @@ const genres = [
 ];
 
 export default function HomeScreen({ navigation }) {
+  const user = useSelector((state) => state.user.value);
   const totalPages = 300; // Nombre total de pages du livre
   const [pagesRead, setPagesRead] = useState(50); // Pages déjà lues
   const [progress, setProgress] = useState(pagesRead / totalPages);
   const [pagesReadToDay, setPagesReadToDay] = useState(0);
+  const [firstname,setFirstname]=useState('');
   const [plusClicked, setPlusClicked] = useState(false);
-
-  const plusAjoutes = [
-    { title: "Les plus ajoutés", images: ["book1", "book2", "book3"] },
-  ];
-
+  const [sauvegardeNumberPage, setSauvegardeNumberPage] = useState(false);
+  const plusAjoutes = [{ title: "Les plus ajoutés", images: ["book1", "book2", "book3"] }];
+  const IpAdress = process.env.IP_ADDRESS;
+  
   useEffect(() => {
     setProgress(pagesRead / totalPages);
+    fetch(`http://${IpAdress}:3000/users/${user.token}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.result) {
+        setFirstname(data.user.firstname.charAt(0).toUpperCase() + data.user.firstname.slice(1));
+      }
+    });
   }, [pagesRead]);
+
+  
+  const handleClick =() =>{
+    setPagesRead((prev) => Math.min(pagesReadToDay, totalPages));
+    setSauvegardeNumberPage(true);
+    Keyboard.dismiss();
+  }
 
   return (
     <SafeAreaView className="flex-1 flex-col justify-start mt-5 gap-4">
       {/* Header */}
       <View className="flex-row justify-evenly">
-        <Text className="font-nunitoBold text-lg">Hello User</Text>
-        <Text className="font-nunitoBold text-lg bg-light_purple">
-          Livre en cours
-        </Text>
+        <Text className="font-nunitoBold text-lg">Hello {firstname}</Text>
+        <Text className="font-nunitoBold text-lg bg-light_purple">Livre en cours</Text>
       </View>
 
       {/* Livre en cours de lecture */}
@@ -65,36 +73,30 @@ export default function HomeScreen({ navigation }) {
             Terremer (Edition intégrale)
           </Text>
           <Text className="font-medium text-sm">Ursula Le Guin</Text>
-
           {/* Barre de progression */}
-          <Text>
-            Pages lues : {pagesRead} / {totalPages}
+          <Text >
+            Pages lues : {pagesRead}/ {totalPages}
           </Text>
-          <Progress.Bar
-            progress={progress}
-            width={220}
-            height={15}
-            color="#2960A1"
-          />
-
-          {/* Input et bouton de mise à jour */}
+          <Progress.Bar progress={progress} width={220} height={15} color="#2960A1" />
+          <Text >
+            Ajouter un marque-page
+          </Text>
+          {/*>>>>>> Input et bouton de mise à jour */}
           <View className="flex-row justify-start items-center">
             <TextInput
               placeholder="Nombre de pages lues aujourd'hui"
               keyboardType="numeric"
               onChangeText={(value) => setPagesReadToDay(parseInt(value) || 0)}
               value={pagesReadToDay.toString()}
-              className="border-button_purple border w-20 h-12  rounded-md p-2 "
+              className="border-navy_blue border w-20 h-8 rounded-md p-2 "
             />
-            <Button
-              className="font-nunitoBold text-lg"
-              title={`Ajouter ${pagesReadToDay} pages`}
-              onPress={() =>
-                setPagesRead((prev) =>
-                  Math.min(prev + pagesReadToDay, totalPages)
-                )
-              }
-            />
+          <TouchableOpacity onPress={() => handleClick()}>
+              <MaterialIcons 
+                name={"check"} 
+                color={sauvegardeNumberPage && pagesReadToDay != 0? "green" : "gray"} 
+                size={24} 
+              />
+          </TouchableOpacity>
           </View>
         </View>
       </View>
