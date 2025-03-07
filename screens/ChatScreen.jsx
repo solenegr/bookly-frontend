@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+
 import { addMessageConversation, removeMessageConversation } from "../reducers/conversations";
 import {
   KeyboardAvoidingView,
@@ -18,7 +19,6 @@ import { Audio } from 'expo-av';
 const pusher = new Pusher('PUSHER_KEY', { cluster: 'PUSHER_CLUSTER' });
 
  const BACKEND_ADDRESS = 'http://10.0.2.146:3000';
-
 export default function ChatScreen({ navigation, route: { params } }) {
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
@@ -28,7 +28,9 @@ export default function ChatScreen({ navigation, route: { params } }) {
   const user = useSelector((state) => state.user.value);
   useEffect(() => {
     (() => {
-      fetch(`${BACKEND_ADDRESS}/conversations/users/${params.username}`, { method: 'PUT' });
+      
+      fetch(`${BACKEND_ADDRESS}/conversations/${params.conversationId}/add-user/${params.userId}`, { method: 'PUT' });
+      // fetch(`${BACKEND_ADDRESS}/conversations/users/${params.username}`, { method: 'PUT' });
 
       const subscription = pusher.subscribe('chat');
       subscription.bind('pusher:subscription_succeeded', () => {
@@ -36,7 +38,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
       });
     })();
 
-    return () => fetch(`${BACKEND_ADDRESS}/conversations/users/${params.username}`, { method: 'DELETE' });
+    return () => fetch(`${BACKEND_ADDRESS}/conversations/${params.conversationId}/remove-user/${params.userId}`, { method: 'DELETE' });
   }, [params.username]);
 
   const handleReceiveMessage = (data) => {
@@ -54,30 +56,33 @@ export default function ChatScreen({ navigation, route: { params } }) {
       //dispatch(addMessageConversation({ audioText,user.id }));
 
       payload = {
-        url: audioText,
+        content: audioText,
         type: 'audio',
         username: params.username,
-        createdAt: new Date(),
-        id: Math.floor(Math.random() * 100000),
       };
     }else{
       payload = {
-        text: messageText,
+        content: messageText,
         type: 'text',
         username: params.username,
-        createdAt: new Date(),
-        id: Math.floor(Math.random() * 100000),
       };
 
     }
     
     
     handleReceiveMessage(payload);
-    fetch(`${BACKEND_ADDRESS}/messages/message`, {
+    
+    fetch(`${BACKEND_ADDRESS}/messages/${params.userId}/conv/${params.conversationId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ payload,content:payload.content , user : params.userId}),
     });
+
+    // fetch(`${BACKEND_ADDRESS}/messages/message`, {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(payload),
+    // });
     setAudioText('');
     setMessageText('');
   };
@@ -152,7 +157,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.banner}>
         <MaterialIcons name="keyboard-backspace" color="gray" size={24} onPress={() => navigation.goBack()} />
-        <Text style={styles.greetingText}>Welcome {params.username} 👋</Text>
+        <Text style={styles.greetingText}>Welcome {user.username.charAt(0).toUpperCase() + user.username.slice(1)} 👋</Text>
       </View>
 
       <View style={styles.inset}>
@@ -163,7 +168,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
                 <View style={[styles.message, { ...(message.username === params.username ? styles.messageSentBg : styles.messageRecievedBg) }]}>
                   
                 {message.type === 'audio' ? (
-          <TouchableOpacity onPress={() => playAudio(message.url)}>
+          <TouchableOpacity onPress={() => playAudio(message.content)}>
           <MaterialIcons 
             name={currentSound ? "stop-circle" : "play-circle-fill"} 
             color="#506568" 
@@ -171,7 +176,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
           />
         </TouchableOpacity>
           ) : (
-            <Text style={styles.messageText}> {message.text}</Text>
+            <Text style={styles.messageText}> {message.content}</Text>
           )}
                   
                   

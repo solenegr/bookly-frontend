@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from 'react-redux';
-import { signup } from '../reducers/user';
+import { login, logout } from '../reducers/user';
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
  // Grabbed from emailregex.com
@@ -36,7 +36,7 @@ export default function SignUpScreen({ navigation }) {
     })
     .then((response) => response.json())
     .then((data) => {
-      dispatch(signup({firstname: data.user.firstname, username: data.user.username, email: data.user.email, password: data.user.password}));
+      dispatch(login({firstname: data.user.firstname, username: data.user.username, email: data.user.email, password: data.user.password}));
       navigation.navigate("TabNavigator", {screen: 'Home'})
     })
     console.log("reducer", user)
