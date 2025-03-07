@@ -18,6 +18,7 @@ const BookDetailsScreen = () => {
   const [isLike, setIsLike] = useState([]);
   const [hideComment, setHideComment] = useState([]);
 
+  //calcul moyenne avis
   const calculateAverageNote = () => {
     if (avis.length < 0) return;
 
