@@ -30,15 +30,15 @@ const Commentaires = ({
         </View>
       </View>
 
-      <Text className="text-gray-700 text-[1rem] mt-2 leading-relaxed font-nunitoMedium pl-10">
-        {item.commentaire.length > 134 && !hideComment.includes(item.id)
-          ? item.commentaire.slice(0, 134) + "..."
+      <Text  onPress={() => toggleState(item.id, hideComment, setHideComment)} className="text-gray-700 text-[1rem] mt-2 leading-relaxed font-nunitoMedium pl-10">
+        {item.commentaire.length > 125 && !hideComment.includes(item.id)
+          ? item.commentaire.slice(0, 125) + "..."
           : item.commentaire}
       </Text>
 
-      {item.commentaire.length > 134 && (
+      {/* {item.commentaire.length > 125 && (
         <TouchableOpacity
-          className="w-40 py-3"
+          className="w-40 py-1"
           activeOpacity={0.8}
           onPress={() => toggleState(item.id, hideComment, setHideComment)}
         >
@@ -46,7 +46,7 @@ const Commentaires = ({
             {!hideComment.includes(item.id) ? "Voir plus" : "Voir Moins"}
           </Text>
         </TouchableOpacity>
-      )}
+      )} */}
 
       <View className="w-full items-end pr-2 mt-1">
         <TouchableOpacity
@@ -57,7 +57,7 @@ const Commentaires = ({
           <FontAwesome
             name={`${isLike.includes(item.id) ? "heart" : "heart-o"}`}
             color={"#9F5DD8"}
-            size={20}
+            size={18}
           />
         </TouchableOpacity>
       </View>
