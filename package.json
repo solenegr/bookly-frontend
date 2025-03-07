@@ -47,7 +47,8 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react-native": "^0.73.0",
-    "prettier": "^3.5.3"
+    "supertest": "^7.0.0"
+
   },
   "private": true
 }

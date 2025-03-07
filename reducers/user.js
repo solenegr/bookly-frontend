@@ -11,14 +11,9 @@ export const userSlice = createSlice({
       login: (state, action) => {
         state.value.token = action.payload.token;
         state.value.email = action.payload.email;
-        state.value.password = action.payload.password
-      },
-      signup: (state, action) => {
+        state.value.password = action.payload.password;
         state.value.username = action.payload.username;
         state.value.firstname = action.payload.firstname;
-        state.value.email = action.payload.email;
-        state.value.password = action.payload.password;
-        state.value.token = action.payload.token
       },
       logout: (state, action) => {
         state.value = { username: null, firstname: null, email: null, token: null };
@@ -26,5 +21,5 @@ export const userSlice = createSlice({
     },
   });
   
-  export const { login, signup, logout } = userSlice.actions;
+  export const { login, logout } = userSlice.actions;
   export default userSlice.reducer;
