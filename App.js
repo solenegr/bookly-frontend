@@ -14,6 +14,7 @@ import {
   SignUpScreen,
   WelcomeScreen,
   ChatScreen,
+  Challenge,
 } from "./screens";
 //navigate imoports
 import { NavigationContainer } from "@react-navigation/native";
@@ -24,6 +25,8 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 import books from "./reducers/books";
+import challenge from "./reducers/challenge";
+
 //design imports
 import {
   Nunito_200ExtraLight,
@@ -43,7 +46,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
 const store = configureStore({
-  reducer: { user, books },
+  reducer: { user, books, challenge },
 });
 
 export default function App() {
