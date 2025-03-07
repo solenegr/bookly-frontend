@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "book": "Terremer",
+    "author": "Ursula Le Guin",
+    "couv": "../../assets/temp/terremer.webp",
+    "note": 4.5,
+    "commentaire": "Un chef-d'œuvre absolu ! L'écriture est fluide et captivante, et les personnages sont incroyablement bien développés. Je le relirai sans hésiter tant il m'a transporté dans un autre monde."
+  },
+  {
+    "id": 2,
+    "book": "Terremer",
+    "author": "Ursula Le Guin",
+    "couv": "terremer.webp",
+    "note": 2.5,
+    "commentaire": "Un chef-d'œuvre absolu ! L'écriture est fluide et captivante, et les personnages sont incroyablement bien développés. Je le relirai sans hésiter tant il m'a transporté dans un autre monde."
+  },
+  {
+    "id": 3,
+    "book": "Terremer",
+    "author": "Ursula Le Guin",
+    "couv": "terremer.webp",
+    "note": 3,
+    "commentaire": "Un chef-d'œuvre absolu ! L'écriture est fluide et captivante, et les personnages sont incroyablement bien développés. Je le relirai sans hésiter tant il m'a transporté dans un autre monde."
+  },
+  {
+    "id": 4,
+    "book": "Terremer",
+    "author": "Ursula Le Guin",
+    "couv": "terremer.webp",
+    "note": 1,
+    "commentaire": "Un chef-d'œuvre absolu ! L'écriture est fluide et captivante, et les personnages sont incroyablement bien développés. Je le relirai sans hésiter tant il m'a transporté dans un autre monde."
+  },
+  {
+    "id": 5,
+    "book": "Terremer",
+    "author": "Ursula Le Guin",
+    "couv": "terremer.webp",
+    "note": 1.25,
+    "commentaire": "Un chef-d'œuvre absolu ! L'écriture est fluide et captivante, et les personnages sont incroyablement bien développés. Je le relirai sans hésiter tant il m'a transporté dans un autre monde."
+  },
+  {
+    "id": 6,
+    "book": "Terremer",
+    "author": "Ursula Le Guin",
+    "couv": "terremer.webp",
+    "note": 3.75,
+    "commentaire": "Un chef-d'œuvre absolu ! L'écriture est fluide et captivante, et les personnages sont incroyablement bien développés. Je le relirai sans hésiter tant il m'a transporté dans un autre monde."
+  },
+  {
+    "id": 7,
+    "book": "Terremer",
+    "author": "Ursula Le Guin",
+    "couv": "terremer.webp",
+    "note": 4.5,
+    "commentaire": "Un chef-d'œuvre absolu ! L'écriture est fluide et captivante, et les personnages sont incroyablement bien développés. Je le relirai sans hésiter tant il m'a transporté dans un autre monde."
+  },
+  {
+    "id": 8,
+    "book": "Terremer",
+    "author": "Ursula Le Guin",
+    "couv": "terremer.webp",
+    "note": 4.5,
+    "commentaire": "Un chef-d'œuvre absolu ! L'écriture est fluide et captivante, et les personnages sont incroyablement bien développés. Je le relirai sans hésiter tant il m'a transporté dans un autre monde."
+  }
+]

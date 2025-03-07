@@ -1,14 +1,21 @@
 import { Text, View, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Identity, GrayBlock, Bio } from "../components/profile_details";
+import {
+  Identity,
+  GrayBlock,
+  Bio,
+  UserReview,
+} from "../components/profile_details";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+
+import userAvis from "../data/userAvis.json";
 
 export default function ProfileScreen({ navigation }) {
   return (
     <SafeAreaView edges={["top"]} className="bg-white flex-1 w-full h-full">
       <FlatList
         ListHeaderComponent={
-          <View className="bg-light_purple flex w-full h-full">
+          <View className="bg-light_purple flex">
             <View className="absolute top-0 right-0 p-4">
               <FontAwesome name="gear" size={24} color="#1f2937" />
             </View>
@@ -35,9 +42,13 @@ export default function ProfileScreen({ navigation }) {
             </View>
           </View>
         }
-        // data={}
-        // renderItem={}
-        // keyExtractor={}
+        data={userAvis}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        renderItem={({ item }) => {
+          // console.log(item)
+          return <UserReview {...item} />; //<UserReview book={item.book}... />
+        }}
       />
     </SafeAreaView>
   );
