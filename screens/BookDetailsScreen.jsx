@@ -22,7 +22,7 @@ const BookDetailsScreen = () => {
   const [isLike, setIsLike] = useState([]);
   const [hideComment, setHideComment] = useState([]);
   const [avis, setAvis] = useState([]);
-  const bookId = "67cef04710c8cdf4ae0941ee";//à modifier pour dynamique(avis.length > 0 ? avis[0].book : null)
+  const bookId = "67cef04710c8cdf4ae0941ee"; //à modifier pour dynamique(avis.length > 0 ? avis[0].book : null)
 
   useEffect(() => {
     (async () => {

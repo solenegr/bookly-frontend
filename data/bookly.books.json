@@ -1,0 +1,140 @@
+[{
+  "_id": {
+    "$oid": "67cef04710c8cdf4ae0941ee"
+  },
+  "title": "Terremer (Edition intégrale)",
+  "author": "Ursula Le Guin",
+  "summary": "Illustré par Charles Vess Terremer est un lieu magique et ensorcelé. Une mer immense recouverte d’un chapelet d’îles où les sorciers pratiquent la magie selon des règles très strictes. On y suit les aventures de Ged, un éleveur de chèvres qui, au terme d’une longue initiation, deviendra l’Archimage le plus puissant de Terremer, mais aussi celles de Tenar, haute prêtresse du temple des Innommables de l’île d'Atuan, de Tehanu, la fille-dragon, et de Aulne le sorcier qui refait chaque nuit le même rêve terrifiant. Autour de la grande histoire gravitent des contes qui enrichissent et explorent ce monde où enchanteurs et dragons se côtoient. Cette édition intégrale et illustrée de Terremer réunit les romans qui ont fait le succès de ce cycle mythique et emblématique de l’œuvre d’Ursula K. Le Guin, ainsi que deux nouvelles inédites en France et une introduction de l’auteur écrite spécialement pour cette édition. Nul doute que, par son imaginaire, Ursula K. Le Guin a éveillé les plus nobles qualités de ses lecteurs. Xavier Mauméjean, Le Monde. Un monument de la fantasy. ActuSF. Ursula K. Le Guin est l’une des figures les plus importantes de l’imaginaire. LePointPop. Une icône de la littérature. Stephen King. Traduit de l’anglais (États-Unis) par Isabelle Delord-Philippe, Pierre-Paul Durastanti, Patrick Dusoulier, Sébastien Guillot, Philippe R. Hupp, Françoise Maillet.",
+  "pages": 2088,
+  "cover": "http://books.google.com/books/content?id=LjRjDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+  "publicationYear": {
+    "$date": "2018-01-01T00:00:00.000Z"
+  },
+  "genres": [
+    "Fantasy",
+    "Horreur",
+    "Science-fiction"
+  ],
+  "rating": 0,
+  "reviewCount": 0,
+  "isbn": "9782253236948",
+  "createdAt": {
+    "$date": "2025-03-10T13:59:35.047Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-10T13:59:35.047Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67cef04710c8cdf4ae0941f0"
+  },
+  "title": "Contes de Terremer (Le Livre de Terremer, Tome 3)",
+  "author": "Ursula Le Guin",
+  "summary": "Terremer est un nom magique, mais Terremer est d’abord un lieu magique, ensorcelé, un chapelet d’îles. La plus étrange et la plus puissante est l’île de Roke, qui abrite l’école des sorciers. Car, dans le monde de Terremer, la sorcellerie est une science qui se pratique selon des règles strictes. Ursula Le Guin est revenue explorer sa création dans ces contes qui se situent avant, entre ou après les événements décrits dans Terremer, publié dans la même collection. Terremer a été porté à l’écran par Goro Miyazaki.",
+  "pages": 237,
+  "cover": "http://books.google.com/books/content?id=kYIYEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+  "publicationYear": {
+    "$date": "2024-01-01T00:00:00.000Z"
+  },
+  "genres": [
+    "Aventure",
+    "Drame",
+    "Développement personnel"
+  ],
+  "rating": 0,
+  "reviewCount": 0,
+  "isbn": "9782253246121",
+  "createdAt": {
+    "$date": "2025-03-10T13:59:35.055Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-10T13:59:35.055Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67cef04710c8cdf4ae0941f4"
+  },
+  "title": "Le Vent d'ailleurs (Le Livre de Terremer, Tome 4)",
+  "author": "Ursula Le Guin",
+  "summary": "Collection dirigée par gérard klein Aulne le sorcier fait chaque nuit le même rêve terrifiant qui le conduit le long du muret de pierres sèches qui borde le pays des morts. Et, alors qu’il espère y retrouver sa femme défunte, les morts viennent à lui. A l’ouest de Terremer, les dragons incendient maisons et récoltes, mettant fin à la trêve qu’ils observaient depuis le retour du roi Lebannen. C’est un temps de changements. Mais Ged, l’Archimage, ayant abandonné ses pouvoirs, Tenar son épouse, le roi Lebannen et tous les sorciers de Roke seront-ils assez puissants pour affronter ce temps des changements ? Et quel sera le rôle de Tehanu, la fille dragon ? Le Vent d’ailleurs est le quatrième tome du cycle de Terremer, après Terremer, Tehanu et les Contes de Terremer. La notoriété de ce cycle ne le cède en rien à celle des œuvres de J.R.R. Tolkien.",
+  "pages": 176,
+  "cover": "http://books.google.com/books/content?id=-pokEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+  "publicationYear": {
+    "$date": "2024-01-01T00:00:00.000Z"
+  },
+  "genres": [
+    "Fantasy",
+    "Historique",
+    "Drame"
+  ],
+  "rating": 0,
+  "reviewCount": 0,
+  "isbn": "9782253246176",
+  "createdAt": {
+    "$date": "2025-03-10T13:59:35.057Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-10T13:59:35.057Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67cef04710c8cdf4ae0941f2"
+  },
+  "title": "Terremer (Le Livre de Terremer, Tome 1)",
+  "author": "Ursula Le Guin",
+  "summary": "Ici, il y a des dragons. Il y a des enchanteurs, une mer immense et des îles. Ged, simple gardien de chèvres sur l’île de Gont, a le don. Il va devenir au terme d’une longue initiation, en traversant nombre d’épreuves redoutables, le plus grand sorcier de Terremer, l’Archimage. Ce volume réunit les trois premiers livres de Terremer, Le Sorcier de Terremer, Les Tombeaux d’Atuan et L’Ultime Rivage, dans une traduction soigneusement révisée et complétée par Patrick Dusoulier.Le cycle de Terremer a inspiré le splendide film d’animation de Goro Miyazaki, Les Contes de Terremer. Ursula Le Guin est l’un des plus célèbres auteurs de fantasy et de science-fiction. On a pu lire d’elle dans la même collection La Main gauche de la nuit, Les Dépossédés, qui ont obtenu tous les deux le prix Hugo, et Le Dit d’Aka suivi de Le nom du monde est forêt, également couronné par le prix Hugo.",
+  "pages": 658,
+  "cover": "http://books.google.com/books/content?id=RKHMDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+  "publicationYear": {
+    "$date": "2020-01-01T00:00:00.000Z"
+  },
+  "genres": [
+    "Fantasy",
+    "Historique",
+    "Horreur"
+  ],
+  "rating": 0,
+  "reviewCount": 0,
+  "isbn": "9782253193913",
+  "createdAt": {
+    "$date": "2025-03-10T13:59:35.056Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-10T13:59:35.056Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67cef04710c8cdf4ae0941f7"
+  },
+  "title": "Les Contes de Terremer",
+  "author": "Goro Miyazaki, Ursula Kroeber Le Guin",
+  "summary": "Résumé non disponible",
+  "pages": 142,
+  "cover": "Pas de couverture",
+  "publicationYear": {
+    "$date": "2007-01-01T00:00:00.000Z"
+  },
+  "genres": [
+    "Biographie",
+    "Thriller",
+    "Science-fiction"
+  ],
+  "rating": 0,
+  "reviewCount": 0,
+  "isbn": "2723458385",
+  "createdAt": {
+    "$date": "2025-03-10T13:59:35.399Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-10T13:59:35.399Z"
+  },
+  "__v": 0
+}]
