@@ -26,6 +26,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
   const [messageText, setMessageText] = useState('');
   const [audioText, setAudioText] = useState('');
   const user = useSelector((state) => state.user.value);
+  const [tabMessages, setTabMessages] = useState([])
   useEffect(() => {
     (() => {
       
@@ -36,7 +37,20 @@ export default function ChatScreen({ navigation, route: { params } }) {
       subscription.bind('pusher:subscription_succeeded', () => {
         subscription.bind('message', handleReceiveMessage);
       });
-    })();
+      
+      fetch(`${BACKEND_ADDRESS}/challenges/${params.challengeId}/messages`)
+    .then(response => response.json()).then(data => {
+      if(data.result){
+        console.log(data.messages);
+          setTabMessages(data.messages);
+          
+      }
+
+    })
+    }
+  
+    
+  )();
 
     return () => fetch(`${BACKEND_ADDRESS}/conversations/${params.conversationId}/remove-user/${params.userId}`, { method: 'DELETE' });
   }, [params.username]);
@@ -47,6 +61,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
   };
 
   const handleSendMessage = () => {
+
     
     if (!messageText && !audioText) {
       return;
@@ -59,12 +74,16 @@ export default function ChatScreen({ navigation, route: { params } }) {
         content: audioText,
         type: 'audio',
         username: params.username,
+        createdAt: new Date(),
+        id: Math.floor(Math.random() * 100000),
       };
     }else{
       payload = {
         content: messageText,
         type: 'text',
         username: params.username,
+        createdAt: new Date(),
+        id: Math.floor(Math.random() * 100000),
       };
 
     }
@@ -162,27 +181,47 @@ export default function ChatScreen({ navigation, route: { params } }) {
 
       <View style={styles.inset}>
         <ScrollView style={styles.scroller}>
-          {
+            {tabMessages.map((message, i) => (
+              <View key={i} style={[styles.messageWrapper, { ...(message.user.username === user.username ? styles.messageSent : styles.messageRecieved) }]}>
+                <View style={[styles.message, { ...(message.user.username === user.username ? styles.messageSentBg : styles.messageRecievedBg) }]}>
+                <Text  style={styles.usernameText}>{message.user.username}</Text>
+
+                {message.content.includes('file://') ? (
+                <TouchableOpacity onPress={() => playAudio(message.content)}>
+                <MaterialIcons 
+                  name={currentSound ? "stop-circle" : "play-circle-fill"} 
+                  color="#506568" 
+                  size={24} 
+                />
+                </TouchableOpacity>
+                ) : (
+                <Text style={styles.messageText}> {message.content}</Text>
+                )}
+                </View>
+              
+                <Text style={styles.timeText}>{new Date(message.createdAt).getHours()}:{String(new Date(message.createdAt).getMinutes()).padStart(2, '0')}</Text>
+                
+
+              </View>             
+            ))}
+          {  
+           
             messages.map((message, i) => (
               <View key={i} style={[styles.messageWrapper, { ...(message.username === params.username ? styles.messageSent : styles.messageRecieved) }]}>
                 <View style={[styles.message, { ...(message.username === params.username ? styles.messageSentBg : styles.messageRecievedBg) }]}>
                   
                 {message.type === 'audio' ? (
-          <TouchableOpacity onPress={() => playAudio(message.content)}>
-          <MaterialIcons 
-            name={currentSound ? "stop-circle" : "play-circle-fill"} 
-            color="#506568" 
-            size={24} 
-          />
-        </TouchableOpacity>
-          ) : (
-            <Text style={styles.messageText}> {message.content}</Text>
-          )}
-                  
-                  
-                  
-                  
-                </View>
+                <TouchableOpacity onPress={() => playAudio(message.content)}>
+                <MaterialIcons 
+                  name={currentSound ? "stop-circle" : "play-circle-fill"} 
+                  color="#506568" 
+                  size={24} 
+                />
+                </TouchableOpacity>
+                ) : (
+                <Text style={styles.messageText}> {message.content}</Text>
+                )}
+               </View>
                 <Text style={styles.timeText}>{new Date(message.createdAt).getHours()}:{String(new Date(message.createdAt).getMinutes()).padStart(2, '0')}</Text>
               </View>
             ))
@@ -354,5 +393,12 @@ const styles = StyleSheet.create({
   scroller: {
     paddingLeft: 20,
     paddingRight: 20,
+  },
+  usernameText: {
+    
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333', // Pour afficher le nom de l'utilisateur
+    
   },
 });

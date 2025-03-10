@@ -22,7 +22,7 @@ const BookDetailsScreen = () => {
   const [isLike, setIsLike] = useState([]);
   const [hideComment, setHideComment] = useState([]);
   const [avis, setAvis] = useState([]);
-  const bookId = "67cef04710c8cdf4ae0941ee";
+  const bookId = "67cef04710c8cdf4ae0941ee"; //à modifier pour dynamique(avis.length > 0 ? avis[0].book : null)
 
   useEffect(() => {
     (async () => {
@@ -58,7 +58,7 @@ const BookDetailsScreen = () => {
 
     // 🔥 Initialisation de Pusher (une seule fois)
     const pusher = new Pusher(process.env.PUSHER_KEY, {
-      cluster: process.env.PUSHER_CLUSTER,
+      cluster: "eu", // Remplace par ton vrai cluster
     });
     const channel = pusher.subscribe("book-reviews");
 
@@ -77,7 +77,7 @@ const BookDetailsScreen = () => {
 
   useEffect(() => {
     const pusher = new Pusher(process.env.PUSHER_KEY, {
-      cluster: process.env.PUSHER_CLUSTER,
+      cluster: "eu", // Remplace par ton vrai cluster
     });
     const channel = pusher.subscribe("book-reviews");
 
