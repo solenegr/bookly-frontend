@@ -30,7 +30,7 @@ export default function SignUpScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
   const [emailError, setEmailError] = useState(false);
-  const IpAdress = process.env.IP_ADDRESS
+
 
   const handleRegister = () => {
     if (EMAIL_REGEX.test(email)) {
