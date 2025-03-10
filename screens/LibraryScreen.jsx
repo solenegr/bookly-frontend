@@ -2,6 +2,8 @@ import { Text, View, TouchableOpacity, TextInput, ScrollView, Image } from 'reac
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from 'react';
 
+
+import {useSelector } from "react-redux";
 // Table de correspondance des images
 const imageMap = {
   book1: require('../assets/temp/terremer.webp'),
@@ -22,6 +24,11 @@ export default function LibraryScreen({ navigation }) {
   const [search, setSearch] = useState('');
   const [genreCliked, setGenreCliked] = useState(false);
   const [statusCliked, setStatusCliked] = useState(true);
+  const [readingBooks, setReadingBooks] = useState([]);
+  const [completedBooks, setCompletedBooks] = useState([]);
+  const [wantToReadBooks, setWantToReadBooks] = useState([]);
+  const books = useSelector((state) => state.books.value);
+  console.log("ok",books);
   const handleClickGenre = () =>{
     setGenreCliked(true);
     setStatusCliked(false);
