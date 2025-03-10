@@ -1,6 +1,6 @@
 import { Text, View, TouchableOpacity, TextInput, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 
 
 import {useSelector } from "react-redux";
@@ -27,8 +27,36 @@ export default function LibraryScreen({ navigation }) {
   const [readingBooks, setReadingBooks] = useState([]);
   const [completedBooks, setCompletedBooks] = useState([]);
   const [wantToReadBooks, setWantToReadBooks] = useState([]);
+  const [myBooks, setMyBooks] = useState([]);
   const books = useSelector((state) => state.books.value);
   console.log("ok",books);
+
+  useEffect(() => {
+    setReadingBooks(books.books.filter(e => e.status === "En cours de lecture").map(e =>e.cover));
+    setCompletedBooks(books.books.filter(e => e.status === "Terminé").map(e =>e.cover));
+    setWantToReadBooks(books.books.filter(e => e.status === "A lire").map(e =>e.cover));
+    setMyBooks(books.books.map(e => e.cover));
+  }, [books]); // 🔥 Exécuté une seule fois au montage
+  
+  console.log("readingBooks",readingBooks);
+  console.log("completedBooks",completedBooks);
+   console.log("wantToReadBooks",wantToReadBooks);
+   console.log("myBooks",myBooks);
+
+   const groupByGenre = (books) => {
+    if (!Array.isArray(books)) {
+      console.error("La variable 'books' n'est pas un tableau.");
+      return {};
+    }
+  
+    return books.reduce((acc, book) => {
+      acc[book.genre] = acc[book.genre] || [];
+      acc[book.genre].push(book.cover);
+      return acc;
+    }, {});
+  };
+  
+  const booksByGenre = groupByGenre(books.books);
   const handleClickGenre = () =>{
     setGenreCliked(true);
     setStatusCliked(false);
@@ -75,10 +103,10 @@ export default function LibraryScreen({ navigation }) {
 
           {/* Sections des livres */}
           {!genreCliked && [
-            { title: "En cours", images: ['book1', 'book2', 'book3'] },
-            { title: "Livres lus", images: ['book4', 'book5', 'book6'] },
-            { title: "Livre à lire", images: ['book7', 'book8', 'book9'] },
-            { title: "Tous mes livres", images: ['book10', 'book11', 'book12'] },
+            { title: "En cours", images: readingBooks },
+            { title: "Livres lus", images: completedBooks},
+            { title: "Livre à lire", images: wantToReadBooks},
+            { title: "Tous mes livres", images: myBooks },
           ].map((section, index) => (
             <View key={index} className="flex flex-col gap-4 ">
               <Text className="text-gray-800 font-nunitoRegular text-lg">{section.title}</Text>
@@ -87,27 +115,23 @@ export default function LibraryScreen({ navigation }) {
                   <Image
                     key={imgIndex}
                     className="w-40 h-56 object-cover rounded-lg mr-2"
-                    source={imageMap[img]} // Utilisation de l'objet imageMap
+                    // source={imageMap[img]} // Utilisation de l'objet imageMap
+                    source={{uri: img}}
                   />
                 ))}
               </ScrollView>
             </View>
           ))}
 
-{genreCliked && [
-            { title: "Comédie", images: ['book1', 'book2', 'book3'] },
-            { title: "Drame", images: ['book4', 'book5', 'book6'] },
-            { title: "Horreur", images: ['book7', 'book8', 'book9'] },
-            { title: "Fantastique", images: ['book10', 'book11', 'book12'] },
-          ].map((section, index) => (
-            <View key={index} className="flex flex-col gap-4 ">
-              <Text className="text-gray-800 font-nunitoRegular text-lg">{section.title}</Text>
+{genreCliked && Object.entries(booksByGenre).map(([genre, covers]) => (
+            <View key={genre} className="flex flex-col gap-4 ">
+              <Text className="text-gray-800 font-nunitoRegular text-lg">{genre}</Text>
               <ScrollView horizontal={true} className="flex-row">
-                {section.images.map((img, imgIndex) => (
+              {covers.map((cover, index) => (
                   <Image
-                    key={imgIndex}
+                    key={index}
                     className="w-40 h-56 object-cover rounded-lg mr-2"
-                    source={imageMap[img]} // Utilisation de l'objet imageMap
+                    source={{uri: cover}} // Utilisation de l'objet imageMap
                   />
                 ))}
               </ScrollView>

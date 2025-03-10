@@ -25,7 +25,7 @@ const booksSlice = createSlice({
     },
 
     updateStatusBook: (state, action) => {
-      const { id, status, title, author, year, genre, tome, pages } =
+      const { id, status, title, author, year, genre, tome, pages,cover } =
         action.payload;
 
       // 🔍 Vérifie si le livre existe déjà
@@ -45,6 +45,7 @@ const booksSlice = createSlice({
           tome,
           pages,
           status,
+          cover,
         });
       }
       console.log(state.value.books);
