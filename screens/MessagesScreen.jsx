@@ -7,6 +7,7 @@ export default function MessageScreen({ navigation }) {
   const IpAdress = process.env.IP_ADDRESS;
   const[username,setUsername] = useState('');
   const[userId,setUserId] = useState('');
+  const [challengeId, setChallengeId] = useState('');
   const user = useSelector((state) => state.user.value);
   
     const handleSendMessage = () => {
@@ -21,7 +22,7 @@ export default function MessageScreen({ navigation }) {
         });
         setUsername(user.username.charAt(0).toUpperCase() + user.username.slice(1));
 
-        navigation.navigate('Chat', { username, conversationId : "67c9c14804b42ddf121de680", userId: userId});
+        navigation.navigate('Chat', { username, conversationId : "67cb22282ece12a2b9fbb437", userId: userId, challengeId:"67cb22282ece12a2b9fbb435"});
       };
 
       const handlecreateConv =() =>{
