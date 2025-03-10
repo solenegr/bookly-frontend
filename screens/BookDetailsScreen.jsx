@@ -22,7 +22,7 @@ const BookDetailsScreen = () => {
   const [isLike, setIsLike] = useState([]);
   const [hideComment, setHideComment] = useState([]);
   const [avis, setAvis] = useState([]);
-  const bookId = avis.length > 0 ? avis[0].book : null;
+  const bookId = "67cef04710c8cdf4ae0941ee";
 
   useEffect(() => {
     (async () => {
@@ -47,7 +47,7 @@ const BookDetailsScreen = () => {
     (async () => {
       try {
         const response = await fetch(
-          `http://${process.env.IP_ADDRESS}:3000/reviews?book=67cac5d43c863c3b4229f5d6`
+          `http://${process.env.IP_ADDRESS}:3000/reviews?book=67cef04710c8cdf4ae0941ee`
         );
         const data = await response.json();
         if (data.result) setAvis(data.reviews);
@@ -57,8 +57,8 @@ const BookDetailsScreen = () => {
     })();
 
     // 🔥 Initialisation de Pusher (une seule fois)
-    const pusher = new Pusher("e4c7e7952526934727f8", {
-      cluster: "eu",
+    const pusher = new Pusher(process.env.PUSHER_KEY, {
+      cluster: process.env.PUSHER_CLUSTER,
     });
     const channel = pusher.subscribe("book-reviews");
 
@@ -76,7 +76,9 @@ const BookDetailsScreen = () => {
   }, []);
 
   useEffect(() => {
-    const pusher = new Pusher("e4c7e7952526934727f8", { cluster: "eu" });
+    const pusher = new Pusher(process.env.PUSHER_KEY, {
+      cluster: process.env.PUSHER_CLUSTER,
+    });
     const channel = pusher.subscribe("book-reviews");
 
     // 🔥 Écoute les nouveaux likes

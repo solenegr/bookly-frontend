@@ -3,31 +3,40 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateStatusBook, addBookLibrary } from "../../reducers/books";
 
-// empty: "Ajouter un status",
-// reading: "En cours de lecture",
-// "want to read": "A lire",
-// completed: "Terminé",
 const Status = () => {
   const id = 1;
   const [isOpen, setIsOpen] = useState(false);
 
-  const books = useSelector((state) => state.books.value.status);
+  const books = useSelector((state) => state.books.value.books);
   const dispatch = useDispatch();
-  const bookStatus = new Map(books.map((book) => [book.id, book]));
-  const isExist = bookStatus.has(id);
+
+  // ✅ Vérifie si le livre existe déjà dans `books`
+  const bookStatus = books.find((book) => book.id === id);
+  const isExist = !!bookStatus; // Convertit en boolean
 
   const inputs = [
     { text: "A lire" },
     { text: "En cours de lecture" },
     { text: "Terminé" },
   ];
+
   const openStatus = () => {
     setIsOpen((oldState) => !oldState);
   };
 
   const handleSelectStatus = (text) => {
-    dispatch(updateStatusBook({ id, status: text }));
-    dispatch(addBookLibrary({ id }));
+    dispatch(
+      updateStatusBook({
+        id: 1,
+        status: text,
+        title: "Terremer (Édition intégrale)",
+        author: "Ursula K. Le Guin",
+        year: 2017,
+        genre: "Fantasy",
+        tome: 1,
+        pages: 992,
+      })
+    );
     setIsOpen(false);
   };
 
@@ -41,10 +50,10 @@ const Status = () => {
         >
           <Text
             className={
-              "w-44 py-2  bg-light_purple text-[#5D3A9B] font-nunitoBold rounded-lg text-center"
+              "w-44 py-2 bg-light_purple text-[#5D3A9B] font-nunitoBold rounded-lg text-center"
             }
           >
-            {isExist ? bookStatus.get(id).status : "Suivi de lecture"}
+            {isExist ? bookStatus.status : "Suivi de lecture"}
           </Text>
         </TouchableOpacity>
       ) : (
@@ -58,7 +67,7 @@ const Status = () => {
             >
               <Text
                 className={
-                  "w-44 py-2  bg-light_purple text-[#5D3A9B] font-nunitoBold rounded-lg text-center"
+                  "w-44 py-2 bg-light_purple text-[#5D3A9B] font-nunitoBold rounded-lg text-center"
                 }
               >
                 {text}

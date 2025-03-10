@@ -3,12 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   value: {
     books: [],
-    status: [], //{id : jfdslkfj, status : ""}
   },
 };
-{
-  /* reading", "completed", "want to read */
-}
+
 const booksSlice = createSlice({
   name: "books",
   initialState,
@@ -17,27 +14,40 @@ const booksSlice = createSlice({
     addBookLibrary: (state, action) => {
       state.value.books.push(action.payload);
       console.log(state.value.books);
-      console.log(state.value.status);
     },
 
     removeBookLibrary: (state, action) => {
       state.value.books = state.value.books.filter(
         (book) => book.id !== action.payload
       );
+
+      console.log(state.value.books);
     },
 
     updateStatusBook: (state, action) => {
-      // J'ai mis un Map, c'est plus optimisé qu'un findIndex
-      //Avec un Map on doit pas iterrer sur chaque element du tableau il arrive à retrouver directement l'element
-      const bookStatusMap = new Map(
-        state.value.status.map((item) => [item.id, item])
-      );
+      const { id, status, title, author, year, genre, tome, pages } =
+        action.payload;
 
-      if (bookStatusMap.has(action.payload.id)) {
-        bookStatusMap.get(action.payload.id).status = action.payload.status;
+      // 🔍 Vérifie si le livre existe déjà
+      const bookIndex = state.value.books.findIndex((book) => book.id === id);
+
+      if (bookIndex !== -1) {
+        // ✅ Si le livre existe déjà → on met juste à jour le statut
+        state.value.books[bookIndex].status = status;
       } else {
-        state.value.status.push(action.payload);
+        // ✅ Si le livre n'existe pas → on l'ajoute avec toutes ses infos
+        state.value.books.push({
+          id,
+          title,
+          author,
+          year,
+          genre,
+          tome,
+          pages,
+          status,
+        });
       }
+      console.log(state.value.books);
     },
   },
 });
