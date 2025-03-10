@@ -9,7 +9,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 const EMAIL_REGEX= /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 //pour modifier l'adresse IP et mettre la votre -> créer fichier .env.local
-const IpAdress = process.env.IP_ADDRESS
+
 
 export default function SignUpScreen({ navigation }) {
 
@@ -21,6 +21,7 @@ export default function SignUpScreen({ navigation }) {
   const user = useSelector((state) => state.user.value)
 
   const [emailError, setEmailError] = useState(false);
+  const IpAdress = process.env.IP_ADDRESS
 
   const handleRegister = () => {
     if (EMAIL_REGEX.test(email)) {
