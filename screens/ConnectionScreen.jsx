@@ -3,26 +3,26 @@ import { Text, View, TextInput, TouchableOpacity, Image } from "react-native";
 useState;
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from '../reducers/user';
+import { login, logout } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import {IP_ADDRESS} from "@env";
+import { IP_ADDRESS } from "@env";
 
 // Grabbed from emailregex.com
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 //pour modifier l'adresse IP et mettre la votre -> créer fichier .env.local
-const IpAdress = process.env.IP_ADDRESS;
 
 export default function ConnectionScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
-  
-  const user = useSelector((state) => state.user.value)
+  const IpAdress = process.env.IP_ADDRESS;
+
+  const user = useSelector((state) => state.user.value);
 
   const [emailError, setEmailError] = useState(false);
-  
+
   const handleConnection = () => {
     if (EMAIL_REGEX.test(email)) {
       console.log("test env", IpAdress);
@@ -38,7 +38,7 @@ export default function ConnectionScreen({ navigation }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.user)
+          console.log(data.user);
           if (data.result) {
             dispatch(
               login({

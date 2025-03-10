@@ -6,4 +6,5 @@ export { default as Bookmark } from "./Bookmark";
 export { default as Status } from "./Status";
 export { default as Genres } from "./Genres";
 export { default as Synopsis } from "./Synopsis";
-export { default as Commentaires } from "./Commentaires";
+export { default as Commentaire } from "./Commentaire";
+export { default as AddReview } from "./AddReview";
