@@ -1,62 +1,35 @@
 [
   {
-    "id": 1,
-    "name": "Léo",
-    "note": 4.5,
-    "commentaire": "Un chef-d'œuvre absolu ! L'écriture est fluide et captivante, et les personnages sont incroyablement bien développés. Je le relirai sans hésiter tant il m'a transporté dans un autre monde."
+    "_id": { "$oid": "67caf0013c863c3b4229f5d7" },
+    "content": "J'ai adoré ce livre, une vraie immersion !",
+    "book": { "$oid": "67cac5d43c863c3b4229f5d6" },
+    "user": { "$oid": "67cb1234abcd56789e01f234" },
+    "note": 5,
+    "likes": [
+      { "$oid": "67cb5678abcd56789e02f345" },
+      { "$oid": "67cb6789abcd56789e03f456" }
+    ],
+    "createdAt": { "$date": "2024-03-13T10:00:00Z" },
+    "updatedAt": { "$date": "2024-03-13T10:00:00Z" }
   },
   {
-    "id": 2,
-    "name": "Sophie",
-    "note": 3.8,
-    "commentaire": "L'histoire est globalement intéressante avec des moments très immersifs, mais certaines longueurs ralentissent le rythme. Malgré tout, la plume de l'auteur est agréable, et je suis contente d'avoir découvert ce livre."
+    "_id": { "$oid": "67caf0023c863c3b4229f5d8" },
+    "content": "Très intéressant, mais un peu lent à mon goût.",
+    "book": { "$oid": "67cac5d43c863c3b4229f5d6" },
+    "user": { "$oid": "67cb5678abcd56789e02f345" },
+    "note": 3,
+    "likes": [],
+    "createdAt": { "$date": "2024-03-13T12:30:00Z" },
+    "updatedAt": { "$date": "2024-03-13T12:30:00Z" }
   },
   {
-    "id": 3,
-    "name": "Maxime",
-    "note": 5.0,
-    "commentaire": "Ce livre est une véritable pépite ! Une intrigue prenante du début à la fin, un univers fascinant et une tension bien maîtrisée. Une fois commencé, il est presque impossible de le lâcher tant il est addictif."
-  },
-  {
-    "id": 4,
-    "name": "Emma",
-    "note": 2.7,
-    "commentaire": "Je m'attendais à quelque chose de plus profond, mais j'ai trouvé l'intrigue un peu plate et les personnages assez clichés. L'ensemble reste correct, mais j'avoue avoir eu du mal à rentrer dedans."
-  },
-  {
-    "id": 5,
-    "name": "Nathan",
-    "note": 1.9,
-    "commentaire": "Franchement déçu. L'histoire manque d'originalité et j'ai deviné la fin bien avant d'y arriver. J'aurais aimé des rebondissements plus marquants pour me surprendre davantage."
-  },
-  {
-    "id": 6,
-    "name": "Alice",
-    "note": 4.2,
-    "commentaire": "J'ai beaucoup aimé l'intrigue, même si j'ai trouvé que certains passages traînaient en longueur. L'univers est bien construit et le style d'écriture m'a particulièrement plu. Un bon moment de lecture malgré quelques petites lenteurs."
-  },
-  {
-    "id": 7,
-    "name": "Lucas",
-    "note": 3.0,
-    "commentaire": "Le style de l'auteur est vraiment agréable et fluide, mais l'histoire en elle-même ne m'a pas totalement convaincu. Je pense que certains aspects auraient pu être plus développés pour apporter plus de profondeur aux personnages."
-  },
-  {
-    "id": 8,
-    "name": "Manon",
-    "note": 4.8,
-    "commentaire": "J'ai été totalement absorbée par cette lecture ! L'histoire est fascinante, pleine d'émotions et de rebondissements inattendus. Je recommande ce livre à tous ceux qui aiment les récits riches et bien construits."
-  },
-  {
-    "id": 9,
-    "name": "Hugo",
-    "note": 2.3,
-    "commentaire": "Un livre correct, mais qui ne restera pas gravé dans ma mémoire. L'intrigue est assez classique, et les personnages ne sont pas très attachants. C'est le genre de livre qu'on lit pour passer le temps, mais sans grande émotion."
-  },
-  {
-    "id": 10,
-    "name": "Camille",
-    "note": 3.6,
-    "commentaire": "Une lecture agréable avec des personnages attachants et une intrigue bien ficelée. J'ai apprécié les différentes thématiques abordées, même si j'aurais aimé une fin un peu plus développée."
+    "_id": { "$oid": "67caf0033c863c3b4229f5d9" },
+    "content": "Un chef-d'œuvre, je le recommande à tous !",
+    "book": { "$oid": "67cac5d43c863c3b4229f5d6" },
+    "user": { "$oid": "67cb6789abcd56789e03f456" },
+    "note": 4,
+    "likes": [{ "$oid": "67cb1234abcd56789e01f234" }],
+    "createdAt": { "$date": "2024-03-13T14:45:00Z" },
+    "updatedAt": { "$date": "2024-03-13T14:45:00Z" }
   }
 ]
