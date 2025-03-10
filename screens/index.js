@@ -8,4 +8,4 @@ export { default as ScanScreen } from "./ScanScreen";
 export { default as SignUpScreen } from "./SignUpScreen";
 export { default as WelcomeScreen } from "./WelcomeScreen";
 export { default as ChatScreen } from "./ChatScreen";
-export { default as Challenge } from "./Challenge";
+export { default as ChallengeScreen } from "./ChallengeScreen";

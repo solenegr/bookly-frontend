@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -29,7 +29,10 @@ const Challenge = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white border" edges={["top"]}>
-      <View className={"p-10 gap-10"}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
+        keyboardShouldPersistTaps="handled"
+      >
         <Text className="text-center font-nunitoBold text-2xl">
           Creer un coin lecture
         </Text>
@@ -109,7 +112,7 @@ const Challenge = () => {
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
