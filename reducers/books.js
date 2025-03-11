@@ -11,8 +11,19 @@ const booksSlice = createSlice({
   initialState,
 
   reducers: {
+
+    updateLibrary: (state, action) => {
+       state.value.books = action.payload; // Remplace entièrement la bibliothèque par les nouvelles données
+    },
     addBookLibrary: (state, action) => {
-      state.value.books.push(action.payload);
+      const { id } = action.payload;
+    
+      const bookIndex = state.value.books.findIndex((book) => book.id === id);
+    
+      if (bookIndex === -1) {
+        // ✅ Si le livre n'existe pas → on l'ajoute avec toutes ses infos
+        state.value.books.push(action.payload);
+      }
       console.log(state.value.books);
     },
 
@@ -53,6 +64,6 @@ const booksSlice = createSlice({
   },
 });
 
-export const { addBookLibrary, removeBookLibrary, updateStatusBook } =
+export const { addBookLibrary, removeBookLibrary, updateStatusBook ,updateLibrary} =
   booksSlice.actions;
 export default booksSlice.reducer;
