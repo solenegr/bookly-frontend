@@ -85,11 +85,10 @@ export default function HomeScreen({ navigation }) {
           {/*>>>>>> Input et bouton de mise à jour */}
           <View className="flex-row justify-start items-center">
             <TextInput
-              placeholder="Nombre de pages lues aujourd'hui"
               keyboardType="numeric"
               onChangeText={(value) => setPagesReadToDay(parseInt(value) || 0)}
               value={pagesReadToDay.toString()}
-              className="border-navy_blue border w-20 h-8 rounded-md p-2 "
+              className="border-navy_blue border w-20 h-10 rounded-md p-2 "
             />
           <TouchableOpacity onPress={() => handleClick()}>
               <MaterialIcons 
