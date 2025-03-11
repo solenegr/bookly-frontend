@@ -15,6 +15,7 @@ import {
   WelcomeScreen,
   ChatScreen,
   ChallengeScreen,
+  ResearchScreen
 } from "./screens";
 //navigate imoports
 import { NavigationContainer } from "@react-navigation/native";
@@ -103,7 +104,7 @@ export default function App() {
       >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Library" component={LibraryScreen} />
-        <Tab.Screen name="Search" component={ScanScreen} />
+        <Tab.Screen name="Search" component={ResearchScreen} />
         <Tab.Screen name="Messages" component={MessagesScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
         <Tab.Screen
@@ -125,6 +126,7 @@ export default function App() {
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="BookDetails" component={BookDetailsScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} />
+          <Stack.Screen name="Scan" component={ScanScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -9,3 +9,4 @@ export { default as SignUpScreen } from "./SignUpScreen";
 export { default as WelcomeScreen } from "./WelcomeScreen";
 export { default as ChatScreen } from "./ChatScreen";
 export { default as ChallengeScreen } from "./ChallengeScreen";
+export { default as ResearchScreen } from "./ResearchScreen";

@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableOpacity, Text } from "react-native";
 
-const Tome = () => {
+const Tome = ({tome}) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
