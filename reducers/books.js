@@ -11,6 +11,9 @@ const booksSlice = createSlice({
   initialState,
 
   reducers: {
+    updateLibrary: (state, action) => {
+      state.value.books = action.payload; // Remplace entièrement la bibliothèque par les nouvelles données
+    },
     addBookLibrary: (state, action) => {
       const { id } = action.payload;
 
@@ -60,6 +63,10 @@ const booksSlice = createSlice({
   },
 });
 
-export const { addBookLibrary, removeBookLibrary, updateStatusBook } =
-  booksSlice.actions;
+export const {
+  addBookLibrary,
+  removeBookLibrary,
+  updateStatusBook,
+  updateLibrary,
+} = booksSlice.actions;
 export default booksSlice.reducer;

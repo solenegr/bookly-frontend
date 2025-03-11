@@ -1,42 +1,52 @@
 import { Text, View, TouchableOpacity, TextInput, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState ,useEffect} from 'react';
+import { updateLibrary } from "../reducers/books";
+import {useSelector,useDispatch } from "react-redux";
 
 
-import {useSelector } from "react-redux";
-// Table de correspondance des images
-const imageMap = {
-  book1: require('../assets/temp/terremer.webp'),
-  book2: require('../assets/temp/terremer.webp'),
-  book3: require('../assets/temp/terremer.webp'),
-  book4: require('../assets/temp/terremer.webp'),
-  book5: require('../assets/temp/terremer.webp'),
-  book6: require('../assets/temp/terremer.webp'),
-  book7: require('../assets/temp/terremer.webp'),
-  book8: require('../assets/temp/terremer.webp'),
-  book9: require('../assets/temp/terremer.webp'),
-  book10: require('../assets/temp/terremer.webp'),
-  book11: require('../assets/temp/terremer.webp'),
-  book12: require('../assets/temp/terremer.webp'),
-};
 
 export default function LibraryScreen({ navigation }) {
   const [search, setSearch] = useState('');
+  const dispatch = useDispatch();
+  const IpAdress = process.env.IP_ADDRESS;
   const [genreCliked, setGenreCliked] = useState(false);
   const [statusCliked, setStatusCliked] = useState(true);
-  const [readingBooks, setReadingBooks] = useState([]);
-  const [completedBooks, setCompletedBooks] = useState([]);
-  const [wantToReadBooks, setWantToReadBooks] = useState([]);
-  const [myBooks, setMyBooks] = useState([]);
   const books = useSelector((state) => state.books.value);
-  console.log("ok",books);
-
+  const user = useSelector((state) => state.user.value);
+  
+  const [library, setLibrary] = useState(books);
+  const readingBooks=books.books.filter(e => e.status === "En cours de lecture").map(e =>e.cover);
+  const completedBooks = books.books.filter(e => e.status === "Terminé").map(e =>e.cover);
+  const wantToReadBooks = books.books.filter(e => e.status === "A lire").map(e =>e.cover);
+  const myBooks = books.books.map(e => e.cover);
+  console.log("reduce",books);
   useEffect(() => {
-    setReadingBooks(books.books.filter(e => e.status === "En cours de lecture").map(e =>e.cover));
-    setCompletedBooks(books.books.filter(e => e.status === "Terminé").map(e =>e.cover));
-    setWantToReadBooks(books.books.filter(e => e.status === "A lire").map(e =>e.cover));
-    setMyBooks(books.books.map(e => e.cover));
-  }, [books]); // 🔥 Exécuté une seule fois au montage
+    if (!user?.token) return; // Vérifier si le token existe
+  
+    fetch(`http://${IpAdress}:3000/users/${user.token}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.result && data.user?._id) {
+          return fetch(`http://${IpAdress}:3000/libraries/user/${data.user._id}`);
+        } else {
+          throw new Error("Utilisateur non trouvé");
+        }
+      })
+      .then(res => res?.json())
+      .then(data => {
+        if (data?.success) {
+          console.log("Données de la bibliothèque :", data.books);
+          dispatch(updateLibrary(data.books)); // Mise à jour du Redux Store
+        } else {
+          console.error("Erreur : bibliothèque non trouvée");
+        }
+      })
+      .catch(error => console.error("Erreur lors du fetch :", error));
+  
+  }, [dispatch, user.token]); // Ajout des dépendances correctes
+  
+
   
   console.log("readingBooks",readingBooks);
   console.log("completedBooks",completedBooks);
@@ -48,15 +58,26 @@ export default function LibraryScreen({ navigation }) {
       console.error("La variable 'books' n'est pas un tableau.");
       return {};
     }
-  
+
     return books.reduce((acc, book) => {
-      acc[book.genre] = acc[book.genre] || [];
-      acc[book.genre].push(book.cover);
-      return acc;
+        // Assurer que book.genre est un tableau
+        const genres = Array.isArray(book.genre) 
+          ? book.genre 
+          : book.genre ? book.genre.split(",") : [];
+
+        genres.forEach((genre) => {
+            genre = genre.trim(); // Supprimer les espaces inutiles
+            acc[genre] = acc[genre] || [];
+            acc[genre].push(book.cover);
+        });
+
+        return acc;
     }, {});
-  };
+};
+
   
   const booksByGenre = groupByGenre(books.books);
+  console.log("length",booksByGenre)
   const handleClickGenre = () =>{
     setGenreCliked(true);
     setStatusCliked(false);

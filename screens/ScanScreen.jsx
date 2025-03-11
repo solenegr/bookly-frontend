@@ -1,10 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Linking, AppState ,Image} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Linking, AppState ,Image,SafeAreaView} from 'react-native';
 import { Overlay } from 'react-native-elements';
 import { CameraView, CameraType, FlashMode ,Camera} from 'expo-camera';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+import { useIsFocused } from "@react-navigation/native";
+import { addBookLibrary, removeBookLibrary } from "../reducers/books";
+import { useDispatch, useSelector } from "react-redux";
 export default function ScanScreen({ navigation }) {
+  const [bookData, setBookData] = useState(null);
+  const[userId,setUserId] = useState('');
+  const books = useSelector((state) => state.books.value.books);
+  const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
+  const IpAdress = process.env.IP_ADDRESS;
   const qrLock = useRef(false);
   const appState = useRef(AppState.currentState);
   const [dataScanned, setDataScanned] = useState('');
@@ -12,8 +20,9 @@ export default function ScanScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(false);
   const cameraRef = useRef(null); // Utilisation de CameraView
   const [facing, setFacing] = useState('back'); // Type pour la caméra
-  const [flash, setFlash] = useState('off'); // Type pour le flash
+  const [flashStatus, setFlashStatus] = useState("off");
   const [isVisible, setIsVisible] = useState(false);
+  const isFocused = useIsFocused();
   // Gestion de l'état de l'application
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
@@ -21,12 +30,15 @@ export default function ScanScreen({ navigation }) {
         qrLock.current = false;
       }
       appState.current = nextAppState;
+     
     });
 
     return () => {
       subscription.remove();
     };
+   
   }, []);
+
 
   // Demande de permission pour accéder à la caméra
   useEffect(() => {
@@ -36,22 +48,19 @@ export default function ScanScreen({ navigation }) {
     })();
   }, []);
 
-  if (!hasPermission) {
-    return <View />;
-  }
+  if (!hasPermission || !isFocused) {
+		return <View />;
+	}
 
-  // Prendre une photo
-  const takePicture = async () => {
-    const photo = await cameraRef.current?.takePictureAsync({ quality: 0.3 });
-    if (photo) {
-      console.log(photo);
-    }
-  };
+
 
   // Activer/désactiver le flash
-  const flashPicture = () => {
-    setFlash((current) => (current === "off" ? "on" : "off")); 
-  };
+ 
+  const toggleFlashStatus = () => {
+    setFlashStatus((prev) => (prev === "on" ? "off" : "on"));
+
+	};
+
 
   // Changer de type de caméra (avant/arrière)
   const toggleCameraFacing = () => {
@@ -65,17 +74,74 @@ export default function ScanScreen({ navigation }) {
     setIsVisible(false);
   };
 const handleclickOver =()=>{
+setFlashStatus("off");
 setIsVisible(false);
 setScanned(true);
+fetch(`http://${IpAdress}:3000/users/${user.token}`)
+  .then(response => response.json())
+  .then(data => {
+    if (data.result) {
+      setUserId(data.user._id);
+    }
+  });
+if (dataScanned) {
+  console.log(dataScanned);
+  fetch(`http://${IpAdress}:3000/books/isbn/${dataScanned}`)
+  .then(response => response.json())
+  .then(data => {
+    
+    if (data.result) {
+      console.log("depuis apit",data.book)
+      setBookData(data.book);
+    }
+    else{
+      console.log("Livre non existe");
+    }
+  }
+  
+).catch(error => console.error("Erreur lors de la récupération du livre :", error));
+  // navigation.navigate("BookDetails"); // Naviguer vers l'écran "Search"
+} else {
+  console.log("No data scanned");
+}
+
 }
   // Ajouter un book
   const handleAddBook = () => {
-    console.log("yeeeeessss");
-    console.log("code:", dataScanned);
     
     if (dataScanned) {
-        console.log("Scanned data is available, navigating...");
-        // navigation.navigate("BookDetails"); // Naviguer vers l'écran "Search"
+        console.log(dataScanned);
+        fetch(`http://${IpAdress}:3000/books/isbn/${dataScanned}`)
+        .then(response => response.json())
+        .then(data => {
+          
+          if (data.result) {
+            dispatch(addBookLibrary({ 
+              title: data.book.title,
+              author:data.book.author,
+              volume: data.book.volume,
+              summary: data.book.summary,
+              publisher: data.book.publisher,
+              pages:data.book.pages, 
+              cover: data.book.cover,
+              publicationYear: data.book.publicationYear,
+              genres: data.book.genres,
+              rating: data.book.rating ,
+              reviewCount: data.book.reviewCount,
+              isbn: data.book.isbn }));
+            console.log("depuis store",books)
+            console.log("user:", userId);
+            console.log("book:", data.book._id);
+            console.log("status:", books.status);
+            fetch(`http://${IpAdress}:3000/libraries/add-to-library`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ userId :userId,bookId:data.book._id ,status: books.status||"none" , genres:data.book.genres||[]}),
+            });
+          }
+        });
+       
+
     } else {
         console.log("No data scanned");
     }
@@ -89,25 +155,29 @@ setScanned(true);
       </TouchableOpacity>
       
       <View style={styles.containerCamera}>
-        {/* {!scanned &&( */}
-          <CameraView
-          style={{ width: 400, height : scanned ?200:700}}
-          ref={(ref) => (cameraRef.current = ref)} // Référence de CameraView
-          enableTorch={scanned}
-          facing={facing}
-          flash={flash}
-          onBarcodeScanned={({ data }) => {
-            setTimeout(() => {
-              setDataScanned(data);
-              setIsVisible(true);
-            },500);
-          }}
-        />
-        
-      </View>
+  <CameraView
+    style={{ width: 400, height: scanned ? 200 : 700 }}
+    ref={(ref) => (cameraRef.current = ref)} // Référence de CameraView
+    enableTorch={flashStatus === "on"}
+    onBarcodeScanned={({ data }) => {
+      setTimeout(() => {
+        setDataScanned(data);
+        setIsVisible(true);
+      }, 500);
+    }}
+  >
+   <SafeAreaView className="flex-row items-end justify-end m-3">
+      <TouchableOpacity onPress={toggleFlashStatus} style={styles.settingButton} >
+        <FontAwesome name="flash" size={24} color={flashStatus === "on" ? "#e8be4b" : "white"} />
+      </TouchableOpacity>
+    </SafeAreaView>
+   
+  </CameraView>
+</View>
+
       
       <Overlay
-        isVisible={dataScanned.length!=0 && isVisible}
+        isVisible={dataScanned.length!=0 && isVisible || dataScanned}
         onBackdropPress={() =>  handleclickOver()}
         overlayStyle={styles.overlay} // Application du style personnalisé pour positionner l'Overlay
       >
@@ -116,17 +186,17 @@ setScanned(true);
       
       
 
-      {scanned&& (
+      {scanned&& bookData &&(
         <View style={styles.containerBook} className="bg-light_purple ">
      
             <Image
               style={styles.imageBook}
-              source={require('../assets/temp/terremer.webp')}
+              source={{uri: bookData.cover}}
               onTouchEnd={() => { navigation.navigate("Details", { id: "456" }) }}
             />            
-            <Text className="font-nunitoExtraBold text-lg text-black ml-10">title</Text>
-            <Text className="font- nunitoRegular text-lg text-black ml-10">Auteur</Text>
-            <Text className="font-nunitoBlack text-lg text-black ml-10">4.5/5</Text>
+            <Text className="font-nunitoExtraBold text-lg text-black ml-32">{bookData.title}</Text>
+            <Text className="font- nunitoRegular text-lg text-black ml-32">{bookData.author}</Text>
+            <Text className="font-nunitoBlack text-lg text-black ml-32">{bookData.rating}/5</Text>
             <TouchableOpacity style={styles.buttonAdd} className=" bg-button_purple" onPress={handleAddBook}>
             <Text style={styles.buttonTextAdd}>Add book</Text>
             </TouchableOpacity>
@@ -160,11 +230,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonAdd:{
-    width:'90%',
+    width:'50%',
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft:20,
+    marginLeft:90,
   },
   buttonTextAdd: {
     margin: 10,
@@ -179,7 +249,7 @@ const styles = StyleSheet.create({
     borderRadius:20,
     flexDirection: 'flex',
     alignItems: 'flex-start',
-    gap: 10,
+    gap: 2,
     height:500,
   },
   cameraIcon: {
@@ -205,9 +275,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     zIndex: 1, // S'assurer que l'overlay est au-dessus des autres éléments
   },
-//   detailsBook:{
-//     flexDirection: 'column',
-//     justifyContent:'center',
-//     alignItems:'center',
-//   }
+  settingButton: {
+		width: 40,
+		aspectRatio: 1,
+		alignItems: "center",
+		justifyContent: "center",
+	}
 });
