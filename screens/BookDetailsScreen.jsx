@@ -13,7 +13,7 @@ import {
   Commentaire,
   AddReview,
 } from "../components/book_details";
-import Pusher from "pusher-js";
+import Pusher from "pusher-js/react-native";
 import { useSelector } from "react-redux";
 
 const BookDetailsScreen = () => {
@@ -31,6 +31,7 @@ const BookDetailsScreen = () => {
           `http://${process.env.IP_ADDRESS}:3000/users/${token}`
         );
         const data = await response.json();
+        console.log(data);
         if (data.result) {
           setUserId(data.user._id);
         }

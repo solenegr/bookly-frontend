@@ -12,7 +12,14 @@ const booksSlice = createSlice({
 
   reducers: {
     addBookLibrary: (state, action) => {
-      state.value.books.push(action.payload);
+      const { id } = action.payload;
+
+      const bookIndex = state.value.books.findIndex((book) => book.id === id);
+
+      if (bookIndex === -1) {
+        // ✅ Si le livre n'existe pas → on l'ajoute avec toutes ses infos
+        state.value.books.push(action.payload);
+      }
       console.log(state.value.books);
     },
 
@@ -25,7 +32,7 @@ const booksSlice = createSlice({
     },
 
     updateStatusBook: (state, action) => {
-      const { id, status, title, author, year, genre, tome, pages,cover } =
+      const { id, status, title, author, year, genre, tome, pages, cover } =
         action.payload;
 
       // 🔍 Vérifie si le livre existe déjà
