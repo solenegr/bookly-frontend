@@ -16,7 +16,21 @@ import {
 import Pusher from "pusher-js";
 import { useSelector } from "react-redux";
 
-const BookDetailsScreen = () => {
+const BookDetailsScreen = ({route}) => {
+  const [book, setBook] = useState(null)
+  const {isbn} = route.params;
+  console.log("isbn", isbn)
+
+  useEffect(() => {
+    (async () =>  {
+      const res = await fetch(`http://${process.env.IP_ADDRESS}:3000/books/isbn/${isbn}`)
+    
+    const data = await res.json()
+    console.log(data.book)
+    setBook(data.book)
+    })()
+  }, [isbn])
+
   const token = useSelector((state) => state.user.value.token);
   const [userId, setUserId] = useState(null);
   const [isLike, setIsLike] = useState([]);
@@ -47,7 +61,7 @@ const BookDetailsScreen = () => {
     (async () => {
       try {
         const response = await fetch(
-          `http://${process.env.IP_ADDRESS}:3000/reviews?book=67cef04710c8cdf4ae0941ee`
+          `http://${process.env.IP_ADDRESS}:3000/reviews?book=${book._id}`
         );
         const data = await response.json();
         if (data.result) setAvis(data.reviews);
@@ -124,32 +138,32 @@ const BookDetailsScreen = () => {
       prev.includes(id) ? prev.filter((pId) => pId !== id) : [...prev, id]
     );
   };
-
+if(book === null && !book.cover) return
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <FlatList
         ListHeaderComponent={
           <View className={"flex-1"}>
-            <Background />
+            <Background cover={book.cover}/>
             <View className="w-full bg-white rounded-t-[2rem] p-5 -mt-10 gap-5">
-              <TitleAuthorBook />
+              <TitleAuthorBook title={book.title} author={book.author}/>
               <Status />
               <View className="flex flex-row items-center justify-center gap-2 mt-3">
                 <Note averageNote={averageNote} />
-                <Tome />
+                <Tome tome={book.volume}/>
                 <Bookmark
-                  id={1}
-                  title={"Terremer (Édition intégrale)"}
-                  author={"Ursula K. Le Guin"}
-                  year={2017}
-                  genre={"Fantasy"}
-                  tome={1}
+                  id={book._id}
+                  title={book.title}
+                  author={book.author}
+                  year={book.publicationYear}
+                  genre={book.genres}
+                  tome={book.volume}
                   pages={992}
-                  status={"reading"}
+                  status={"none"}
                 />
               </View>
-              <Genres />
-              <Synopsis />
+              <Genres genres={book.genres}/>
+              <Synopsis summary={book.summary} />
               <Text className="text-gray-800 font-nunitoExtraBold text-xl mt-6">
                 Commentaires
               </Text>

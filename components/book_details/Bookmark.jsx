@@ -4,7 +4,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
 import { addBookLibrary, removeBookLibrary } from "../../reducers/books";
 
-const Bookmark = ({ id, title, author, year, genre, tome }) => {
+const Bookmark = ({ id, title, author, year, genre,pages, tome,status }) => {
   const books = useSelector((state) => state.books.value.books);
   const dispatch = useDispatch();
   const bookIds = new Set(books.map((book) => book.id));
