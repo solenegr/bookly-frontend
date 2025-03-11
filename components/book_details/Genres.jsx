@@ -10,7 +10,8 @@ const genres = [
   { name: "Mythologie", color: "#FFD700" },
 ];
 
-const Genres = () => {
+const Genres = ({genres}) => {
+  
   return (
     <View className="flex-row flex-wrap gap-2 justify-center -mt-1">
       {genres.map((genre, index) => (
@@ -28,7 +29,7 @@ const Genres = () => {
           }}
         >
           <Text className="text-gray-800 text-base font-nunitoBold">
-            {genre.name}
+            {genre}
           </Text>
         </TouchableOpacity>
       ))}

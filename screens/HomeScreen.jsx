@@ -54,6 +54,7 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView className="flex-1 flex-col justify-start mt-5 gap-4">
+      <ScrollView>
       {/* Header */}
       <View className="flex-row justify-evenly">
         <Text className="font-nunitoBold text-lg">Hello {firstname}</Text>
@@ -160,12 +161,20 @@ export default function HomeScreen({ navigation }) {
       {/* Bouton pour ajouter un livre */}
       <TouchableOpacity
         className="w-64 h-12 bg-button_purple rounded-3xl items-center justify-center mx-auto"
-        onPress={() => navigation.navigate("Search")}
+        onPress={() => navigation.navigate("Scan")}
       >
         <Text className="text-white">Add Book</Text>
       </TouchableOpacity>
 
-      {/* Bouton pour voir les détails */}
+      {/* Bouton test à supprimer */}
+
+      {/* <TouchableOpacity
+        className="w-64 h-12 bg-button_purple rounded-3xl items-center justify-center mx-auto"
+        onPress={() => navigation.navigate("Scan")}
+      >
+        <Text className="text-white">Research</Text>
+      </TouchableOpacity> */}
+      </ScrollView>
     </SafeAreaView>
   );
 }
