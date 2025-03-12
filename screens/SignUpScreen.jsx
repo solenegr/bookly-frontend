@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
+import { IP_ADDRESS } from "@env";
 // Grabbed from emailregex.com
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -26,7 +26,7 @@ export default function SignUpScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
-  const IpAdress = process.env.IP_ADDRESS;
+ 
   const user = useSelector((state) => state.user.value);
 
   const [emailError, setEmailError] = useState(false);
@@ -34,7 +34,7 @@ export default function SignUpScreen({ navigation }) {
 
   const handleRegister = () => {
     if (EMAIL_REGEX.test(email)) {
-      fetch(`http://${process.env.IP_ADDRESS}:3000/users/signup`, {
+      fetch(`http://${IP_ADDRESS}:3000/users/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

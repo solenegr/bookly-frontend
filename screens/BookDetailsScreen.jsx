@@ -33,6 +33,7 @@ const BookDetailsScreen = ({ route }) => {
     })();
   }, [isbn]);
 
+
   const token = useSelector((state) => state.user.value.token);
   const [userId, setUserId] = useState(null);
   const [isLike, setIsLike] = useState([]);
@@ -44,7 +45,7 @@ const BookDetailsScreen = ({ route }) => {
     (async () => {
       try {
         const response = await fetch(
-          `http://${process.env.IP_ADDRESS}:3000/users/${token}`
+          `http://${IP_ADDRESS}:3000/users/${token}`
         );
         const data = await response.json();
         console.log(data);
@@ -65,7 +66,7 @@ const BookDetailsScreen = ({ route }) => {
     (async () => {
       try {
         const response = await fetch(
-          `http://${process.env.IP_ADDRESS}:3000/reviews?book=${book._id}`
+          `http://${IP_ADDRESS}:3000/reviews?book=${book._id}`
         );
         const data = await response.json();
         if (data.result) setAvis(data.reviews);
@@ -142,7 +143,9 @@ const BookDetailsScreen = ({ route }) => {
       prev.includes(id) ? prev.filter((pId) => pId !== id) : [...prev, id]
     );
   };
+
   if (book === null && !book?.cover) return;
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <FlatList
