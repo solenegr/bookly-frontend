@@ -20,6 +20,7 @@ export default function LibrarySearch() {
       .then((response) => response.json())
       .then((data) => {
         console.log("recup data user library search", data);
+        
         // fetch(`http://${process.env.IP_ADDRESS}/libraries/user/${data.}`)
       });
   };
