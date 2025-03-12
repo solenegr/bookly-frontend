@@ -3,6 +3,7 @@ import { View, TouchableOpacity,Text ,SafeAreaView,Image} from 'react-native';
 import { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { addUserConversation, removeUserConversation } from "../reducers/conversations";
+import { IP_ADDRESS } from "@env";
 export default function MessageScreen({ navigation }) {
   const IpAdress = process.env.IP_ADDRESS;
   const[username,setUsername] = useState('');
@@ -11,7 +12,7 @@ export default function MessageScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   
     const handleSendMessage = () => {
-        fetch(`http://${IpAdress}:3000/users/${user.token}`)
+        fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
         .then(response => response.json())
         .then(data => {
           if (data.result) {
@@ -27,7 +28,7 @@ export default function MessageScreen({ navigation }) {
 
       const handlecreateConv =() =>{
         console.log("ok");
-        fetch(`http://${IpAdress}:3000/conversations`, {
+        fetch(`http://${IP_ADDRESS}:3000/conversations`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ users :["67cad0df83c4dbc6e60de21f","67caffbfdc6a7955b63a1c5b"], challengeId : "67c985d2d9437c138e7b22fb"}),

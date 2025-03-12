@@ -14,6 +14,7 @@ import * as Progress from "react-native-progress";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useSelector } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { IP_ADDRESS } from "@env";
 // import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 const imageMap = {
   book1: require("../assets/temp/terremer.webp"),
@@ -43,6 +44,7 @@ export default function HomeScreen({ navigation }) {
   const plusAjoutes = [
     { title: "Les plus ajoutés", images: ["book1", "book2", "book3"] },
   ];
+  
 
   useEffect(() => {
     setProgress(pagesRead / totalPages);
@@ -81,7 +83,7 @@ export default function HomeScreen({ navigation }) {
             className="w-32 h-52 mb-5"
             resizeMode="contain"
             source={require("../assets/temp/terremer.webp")}
-            onTouchEnd={() => navigation.navigate("Details", { id: "456" })}
+            onTouchEnd={() => navigation.navigate("Details", { isbn: "9781546154419" })}
           />
           <View className="flex-col gap-1 pt-7">
             <Text className="font-nunitoBold text-lg">

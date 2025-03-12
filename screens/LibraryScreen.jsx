@@ -9,7 +9,7 @@ import LibrarySearch from "../components/LibrarySearch"
 export default function LibraryScreen({ navigation }) {
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
-  const IpAdress = process.env.IP_ADDRESS;
+  
   const [genreCliked, setGenreCliked] = useState(false);
   const [statusCliked, setStatusCliked] = useState(true);
   const books = useSelector((state) => state.books.value);
@@ -24,11 +24,11 @@ export default function LibraryScreen({ navigation }) {
   useEffect(() => {
     if (!user?.token) return; // Vérifier si le token existe
   
-    fetch(`http://${IpAdress}:3000/users/${user.token}`)
+    fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
       .then(response => response.json())
       .then(data => {
         if (data.result && data.user?._id) {
-          return fetch(`http://${IpAdress}:3000/libraries/user/${data.user._id}`);
+          return fetch(`http://${IP_ADDRESS}:3000/libraries/user/${data.user._id}`);
         } else {
           throw new Error("Utilisateur non trouvé");
         }
