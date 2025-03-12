@@ -9,10 +9,12 @@ import {
   TextInput,
   Keyboard,
 } from "react-native";
+import { updateLibrary } from "../reducers/books";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { IP_ADDRESS } from "@env";
 // import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
@@ -25,14 +27,15 @@ const imageMap = {
 
 const genres = [
   { name: "Fantasy", color: "#74C0FC" },
-  { name: "Aventure", color: "#FFB347" },
-  { name: "Roman initiatique", color: "#FF85A2" },
-  { name: "Magie", color: "#C792EA" },
-  { name: "High Fantasy", color: "#77DD77" },
-  { name: "Mythologie", color: "#FFD700" },
+  { name: "Action & Adventure", color: "#FFB347" },
+  { name: "Genre Fiction", color: "#FF85A2" },
+  { name: "Literature & Fiction", color: "#C792EA" },
+  { name: "Contemporary", color: "#77DD77" },
+  { name: "Categories", color: "#FFD700" },
 ];
 
 export default function HomeScreen({ navigation }) {
+  const [updatedGenres, setUpdatedGenres] = useState([]);
   const user = useSelector((state) => state.user.value);
   const totalPages = 300; // Nombre total de pages du livre
   const [pagesRead, setPagesRead] = useState(50); // Pages déjà lues
@@ -41,10 +44,67 @@ export default function HomeScreen({ navigation }) {
   const [firstname, setFirstname] = useState("");
   const [plusClicked, setPlusClicked] = useState(false);
   const [sauvegardeNumberPage, setSauvegardeNumberPage] = useState(false);
+  const [readinBooks, setReadinBooks] = useState([]);
+  const [allGenreLabrary, setAllGenreLabrary ] = useState([]);
+  const library = useSelector((state) => state.books.value);
+  const dispatch = useDispatch();
   const plusAjoutes = [
     { title: "Les plus ajoutés", images: ["book1", "book2", "book3"] },
   ];
   
+  useEffect(() => {
+    if (allGenreLabrary.length > 0) {
+      const defaultColor = "#D3D3D3";
+      const newGenres = allGenreLabrary.map((genre) => {
+        const existingGenre = genres.find((g) => g.name === genre);
+        return existingGenre ? existingGenre : { name: genre, color: defaultColor };
+      });
+  
+      setUpdatedGenres(newGenres);
+    }
+  }, [allGenreLabrary]);
+
+  
+  useEffect(() => {
+    if (!user?.token) return; // Vérifier si le token existe
+  
+    const fetchLibraryBooks = () => {
+      fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.result && data.user?._id) {
+            return fetch(`http://${IP_ADDRESS}:3000/libraries/user/${data.user._id}`);
+          } else {
+            throw new Error("Utilisateur non trouvé");
+          }
+        })
+        .then(res => res?.json())
+        .then(data => {
+          if (data?.success) {
+            dispatch(updateLibrary(data.books)); // Mise à jour du Redux Store
+            setReadinBooks(data.books.filter((e) => e.status === "En cours de lecture"));
+            const uniqueGenres = [...new Set(data.books.flatMap(e => e.genre))];
+            setAllGenreLabrary(uniqueGenres);
+            
+          } else {
+            console.error("Erreur : bibliothèque non trouvée");
+          }
+        })
+        .catch(error => console.error("Erreur lors du fetch :", error));
+    };
+  
+    // Appel initial pour récupérer la bibliothèque de l'utilisateur
+    fetchLibraryBooks();
+  
+    // Surveiller les changements de statut des livres en utilisant un intervalle
+    const interval = setInterval(() => {
+      fetchLibraryBooks(); // Vérification périodique de la bibliothèque
+    }, 1000); // Vérifier toutes les 10 secondes (ajuster ce délai si nécessaire)
+  
+    // Nettoyage de l'intervalle lorsque le composant est démonté ou que l'effet est réinitialisé
+    return () => clearInterval(interval);
+  
+  }, [dispatch, user?.token]); // Ajout de 'user?.token' dans les dépendances  
 
   useEffect(() => {
     setProgress(pagesRead / totalPages);
@@ -78,21 +138,24 @@ export default function HomeScreen({ navigation }) {
         </View>
 
         {/* Livre en cours de lecture */}
-        <View className="flex-row gap-2 pt-4 bg-light_purple rounded-xl">
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row">
+        {readinBooks.map((book) => (
+         
+          <View key={book.isbn || book._id} className="flex-row gap-2 pt-4 bg-light_purple rounded-xl w-auto">
           <Image
             className="w-32 h-52 mb-5"
             resizeMode="contain"
-            source={require("../assets/temp/terremer.webp")}
-            onTouchEnd={() => navigation.navigate("Details", { isbn: "9781546154419" })}
+            source={{uri:book.cover}}
+            onTouchEnd={() => navigation.navigate("Details", { isbn: book.isbn })}
           />
           <View className="flex-col gap-1 pt-7">
             <Text className="font-nunitoBold text-lg">
-              Terremer (Edition intégrale)
+              {book.title}
             </Text>
-            <Text className="font-medium text-sm">Ursula Le Guin</Text>
+            <Text className="font-medium text-sm">{book.author}</Text>
             {/* Barre de progression */}
             <Text>
-              Pages lues : {pagesRead}/ {totalPages}
+              Pages lues : {pagesRead}/ {book.pages}
             </Text>
             <Progress.Bar
               progress={progress}
@@ -125,7 +188,9 @@ export default function HomeScreen({ navigation }) {
             </View>
           </View>
         </View>
-
+        
+        ))}
+        </ScrollView>
         {/* Genres */}
         <View className="flex-row justify-between px-5">
           <Text className="text-navy_blue text-[1rem] font-nunitoBold">
@@ -142,8 +207,8 @@ export default function HomeScreen({ navigation }) {
         </View>
 
         <View className="flex-row flex-wrap gap-2 justify-center mt-2">
-          {genres
-            .slice(0, plusClicked ? genres.length : 4)
+          {updatedGenres
+            .slice(0, plusClicked ? updatedGenres.length : 4)
             .map((genre, index) => (
               <TouchableOpacity
                 activeOpacity={0.7}
