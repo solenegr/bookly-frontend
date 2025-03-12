@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, FlatList, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import {
   Background,
   TitleAuthorBook,
@@ -15,7 +16,7 @@ import {
 } from "../components/book_details";
 import Pusher from "pusher-js";
 import { useSelector } from "react-redux";
-
+import { IP_ADDRESS } from "@env";
 const BookDetailsScreen = ({route}) => {
   const [book, setBook] = useState(null)
   const {isbn} = route.params;
@@ -23,7 +24,7 @@ const BookDetailsScreen = ({route}) => {
 
   useEffect(() => {
     (async () =>  {
-      const res = await fetch(`http://${process.env.IP_ADDRESS}:3000/books/isbn/${isbn}`)
+      const res = await fetch(`http://${IP_ADDRESS}:3000/books/isbn/${isbn}`)
     
     const data = await res.json()
     console.log(data.book)
@@ -42,7 +43,7 @@ const BookDetailsScreen = ({route}) => {
     (async () => {
       try {
         const response = await fetch(
-          `http://${process.env.IP_ADDRESS}:3000/users/${token}`
+          `http://${IP_ADDRESS}:3000/users/${token}`
         );
         const data = await response.json();
         if (data.result) {
@@ -61,7 +62,7 @@ const BookDetailsScreen = ({route}) => {
     (async () => {
       try {
         const response = await fetch(
-          `http://${process.env.IP_ADDRESS}:3000/reviews?book=${book._id}`
+          `http://${IP_ADDRESS}:3000/reviews?book=${book._id}`
         );
         const data = await response.json();
         if (data.result) setAvis(data.reviews);
@@ -138,7 +139,7 @@ const BookDetailsScreen = ({route}) => {
       prev.includes(id) ? prev.filter((pId) => pId !== id) : [...prev, id]
     );
   };
-if(book === null && !book.cover) return
+  if (!book) return null;
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <FlatList
