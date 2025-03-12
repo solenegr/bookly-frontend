@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, FlatList, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import {
   Background,
   TitleAuthorBook,
@@ -14,23 +13,26 @@ import {
   Commentaire,
   AddReview,
 } from "../components/book_details";
-import Pusher from "pusher-js";
+import Pusher from "pusher-js/react-native";
 import { useSelector } from "react-redux";
-import { IP_ADDRESS } from "@env";
-const BookDetailsScreen = ({route}) => {
-  const [book, setBook] = useState(null)
-  const {isbn} = route.params;
-  console.log("isbn", isbn)
+
+const BookDetailsScreen = ({ route }) => {
+  const [book, setBook] = useState(null);
+  const { isbn } = route.params;
+  console.log("isbn", isbn);
 
   useEffect(() => {
-    (async () =>  {
-      const res = await fetch(`http://${IP_ADDRESS}:3000/books/isbn/${isbn}`)
-    
-    const data = await res.json()
-    console.log(data.book)
-    setBook(data.book)
-    })()
-  }, [isbn])
+    (async () => {
+      const res = await fetch(
+        `http://${process.env.IP_ADDRESS}:3000/books/isbn/${isbn}`
+      );
+
+      const data = await res.json();
+      console.log(data.book);
+      setBook(data.book);
+    })();
+  }, [isbn]);
+
 
   const token = useSelector((state) => state.user.value.token);
   const [userId, setUserId] = useState(null);
@@ -46,6 +48,7 @@ const BookDetailsScreen = ({route}) => {
           `http://${IP_ADDRESS}:3000/users/${token}`
         );
         const data = await response.json();
+        console.log(data);
         if (data.result) {
           setUserId(data.user._id);
         }
@@ -59,6 +62,7 @@ const BookDetailsScreen = ({route}) => {
   }, [token]);
 
   useEffect(() => {
+    if (!book) return;
     (async () => {
       try {
         const response = await fetch(
@@ -88,7 +92,7 @@ const BookDetailsScreen = ({route}) => {
       channel.unsubscribe();
       pusher.disconnect();
     };
-  }, []);
+  }, [book]);
 
   useEffect(() => {
     const pusher = new Pusher(process.env.PUSHER_KEY, {
@@ -139,31 +143,49 @@ const BookDetailsScreen = ({route}) => {
       prev.includes(id) ? prev.filter((pId) => pId !== id) : [...prev, id]
     );
   };
-  if (!book) return null;
+
+  if (book === null && !book?.cover) return;
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <FlatList
         ListHeaderComponent={
           <View className={"flex-1"}>
-            <Background cover={book.cover}/>
+            <Background cover={book.cover} />
             <View className="w-full bg-white rounded-t-[2rem] p-5 -mt-10 gap-5">
-              <TitleAuthorBook title={book.title} author={book.author}/>
+              <TitleAuthorBook title={book.title} author={book.author} />
               <Status />
               <View className="flex flex-row items-center justify-center gap-2 mt-3">
                 <Note averageNote={averageNote} />
-                <Tome tome={book.volume}/>
+                <Tome tome={book.volume} />
                 <Bookmark
-                  id={book._id}
+                  _id={book._id}
                   title={book.title}
                   author={book.author}
-                  year={book.publicationYear}
-                  genre={book.genres}
-                  tome={book.volume}
+                  volume={book.volume}
+                  summary={book.summary}
+                  publisher={book.publisher}
                   pages={992}
+                  cover={book.cover}
+                  year={book.publicationYear}
+                  genres={book.genres}
                   status={"none"}
+                  isbn={book.isbn}
                 />
+                {/* _id,
+        title,
+        author,
+        volume,
+        summary,
+        publisher,
+        pages,
+        cover,
+        year,
+        genres,
+        status,
+        isbn, */}
               </View>
-              <Genres genres={book.genres}/>
+              <Genres genres={book.genres} />
               <Synopsis summary={book.summary} />
               <Text className="text-gray-800 font-nunitoExtraBold text-xl mt-6">
                 Commentaires
