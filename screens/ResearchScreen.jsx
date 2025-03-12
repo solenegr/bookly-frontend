@@ -91,7 +91,7 @@ export default function ResearchHome({navigation}) {
         </View>
         {/* Affichage du chargement */}
         {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#9F5DD8" />
         ) : (
           <FlatList
             data={books}
