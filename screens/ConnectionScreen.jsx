@@ -24,7 +24,7 @@ export default function ConnectionScreen({ navigation }) {
 
   const handleConnection = () => {
     if (EMAIL_REGEX.test(email)) {
-      fetch(`http://${process.env.IP_ADDRESS}:3000/users/signin`, {
+      fetch(`http://192.168.1.17:3000/users/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,14 +36,14 @@ export default function ConnectionScreen({ navigation }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.user);
+          // console.log(data.user);
           if (data.result) {
             dispatch(
               login({
                 username: data.user.username,
                 firstname: data.user.firstname,
                 email: data.user.email,
-                password: data.user.password,
+                // password: data.user.password,
                 token: data.user.token,
               })
             );

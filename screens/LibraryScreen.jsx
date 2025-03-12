@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { updateLibrary } from "../reducers/books";
 import { useSelector, useDispatch } from "react-redux";
 import LibrarySearch from "../components/LibrarySearch";
+import { IP_ADDRESS } from "@env";
 
 export default function LibraryScreen({ navigation }) {
   const [search, setSearch] = useState("");
