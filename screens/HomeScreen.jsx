@@ -43,11 +43,10 @@ export default function HomeScreen({ navigation }) {
   const plusAjoutes = [
     { title: "Les plus ajoutés", images: ["book1", "book2", "book3"] },
   ];
-  const IpAdress = process.env.IP_ADDRESS;
 
   useEffect(() => {
     setProgress(pagesRead / totalPages);
-    fetch(`http://${IpAdress}:3000/users/${user.token}`)
+    fetch(`http://${process.env.IP_ADDRESS}:3000/users/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {

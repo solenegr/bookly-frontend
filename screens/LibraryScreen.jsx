@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState ,useEffect} from 'react';
 import { updateLibrary } from "../reducers/books";
 import {useSelector,useDispatch } from "react-redux";
-
+import LibrarySearch from "../components/LibrarySearch"
 
 
 export default function LibraryScreen({ navigation }) {
@@ -99,12 +99,13 @@ export default function LibraryScreen({ navigation }) {
         <View className="flex flex-col gap-4 p-4">
           {/* Barre de recherche */}
           <View className="flex flex-row justify-center">
-            <TextInput
+          <LibrarySearch />
+            {/* <TextInput
               className="border-2 border-button_purple p-4 rounded-lg w-80 bg-light_gray text-center"
               placeholder="Chercher sur ma biblio"
               value={search}
               onChangeText={setSearch}
-            />
+            /> */}
           </View>
 
           {/* Boutons de filtre */}

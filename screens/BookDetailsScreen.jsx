@@ -138,7 +138,7 @@ const BookDetailsScreen = ({route}) => {
       prev.includes(id) ? prev.filter((pId) => pId !== id) : [...prev, id]
     );
   };
-if(book === null && !book.cover) return
+if(book === null) return
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <FlatList

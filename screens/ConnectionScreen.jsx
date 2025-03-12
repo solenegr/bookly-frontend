@@ -15,7 +15,6 @@ export default function ConnectionScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
-  const IpAdress = process.env.IP_ADDRESS;
   const user = useSelector((state) => state.user.value)
 
 
@@ -23,8 +22,7 @@ export default function ConnectionScreen({ navigation }) {
 
   const handleConnection = () => {
     if (EMAIL_REGEX.test(email)) {
-      console.log("test env", IpAdress);
-      fetch(`http://${IpAdress}:3000/users/signin`, {
+      fetch(`http://${process.env.IP_ADDRESS}:3000/users/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
