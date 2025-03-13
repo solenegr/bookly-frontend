@@ -19,7 +19,7 @@ import Pusher from 'pusher-js/react-native';
 import { Audio } from 'expo-av';
 const pusher = new Pusher('PUSHER_KEY', { cluster: 'PUSHER_CLUSTER' });
 
- const BACKEND_ADDRESS = 'http://192.168.1.152:3000';
+ const BACKEND_ADDRESS = 'http://10.0.0.105:3000';
 export default function ChatScreen({ navigation, route: { params } }) {
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
