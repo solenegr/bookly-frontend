@@ -24,6 +24,7 @@ const BookDetailsScreen = ({ route }) => {
   const [isLike, setIsLike] = useState([]);
   const [hideComment, setHideComment] = useState([]);
   const [avis, setAvis] = useState([]);
+  const [libraryId, setLibraryId] = useState(null);
 
   const { isbn } = route.params;
 
@@ -45,12 +46,6 @@ const BookDetailsScreen = ({ route }) => {
     })();
   }, [isbn]);
 
-  const token = useSelector((state) => state.user.value.token);
-  const [userId, setUserId] = useState(null);
-  const [libraryId, setLibraryId] = useState(null);
-  const [isLike, setIsLike] = useState([]);
-  const [hideComment, setHideComment] = useState([]);
-  const [avis, setAvis] = useState([]);
   useEffect(() => {
     (async () => {
       try {
