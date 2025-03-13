@@ -2,8 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   value: {
-    messages: [{content: null, user:null, conversation:null}],
-    users: [], //contient les id des users qui participe a cette conversation
+    messagesByConversation: {}, // Clé = conversationId, Valeur = tableau de messages
+    users: [], // ID des utilisateurs de la conversation
+    conversations: [], // Toutes les conversations avec leurs challenges
   },
 };
 
@@ -12,32 +13,48 @@ const conversationsSlice = createSlice({
   initialState,
 
   reducers: {
-    addMessageConversation: (state, action) => {
-      state.value.messages.push(action.payload);
-      console.log(state.value.messages);
-      console.log(state.value.users);
-    },
+    addMessagesToConversation: (state, action) => {
+      const { conversationId, messages } = action.payload;
 
-    removeMessageConversation: (state, action) => {
-      state.value.messages = state.value.messages.filter(
-        (message) => message.id !== action.payload
+      if (!state.value.messagesByConversation[conversationId]) {
+        state.value.messagesByConversation[conversationId] = [];
+      }
+
+      const existingIds = new Set(
+        state.value.messagesByConversation[conversationId].map((msg) => msg._id)
       );
-    },
-    addUserConversation: (state, action) => {
-      state.value.users.push(action.payload);
-      console.log(state.value.users);
+
+      const newMessages = messages.filter((msg) => !existingIds.has(msg._id));
+
+      state.value.messagesByConversation[conversationId].push(...newMessages);
     },
 
-    removeUserConversation: (state, action) => {
-      state.value.users = state.value.users.filter(
-        (user) => user.id !== action.payload
+    addMessageToConversation: (state, action) => {
+      const { conversationId, message } = action.payload;
+
+      if (!state.value.messagesByConversation[conversationId]) {
+        state.value.messagesByConversation[conversationId] = [];
+      }
+
+      const exists = state.value.messagesByConversation[conversationId].some(
+        (msg) => msg._id === message._id
       );
+
+      if (!exists) {
+        state.value.messagesByConversation[conversationId].push(message);
+      }
     },
 
-   
+    setConversations: (state, action) => {
+      state.value.conversations = action.payload;
+    },
   },
 });
 
-export const { addMessageConversation, removeMessageConversation, addUserConversation, removeUserConversation} =
-conversationsSlice.actions;
+export const {
+  addMessagesToConversation,
+  addMessageToConversation,
+  setConversations,
+} = conversationsSlice.actions;
+
 export default conversationsSlice.reducer;

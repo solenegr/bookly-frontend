@@ -19,27 +19,30 @@ import { useSelector } from "react-redux";
 const BookDetailsScreen = ({ route }) => {
   const [book, setBook] = useState(null);
   const { isbn } = route.params;
-  console.log("isbn", isbn);
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(
-        `http://${process.env.IP_ADDRESS}:3000/books/isbn/${isbn}`
-      );
+      try {
+        const cleanIsbn = isbn.replace(/\s+/g, "").replace(/-/g, "");
+        console.log("clean", cleanIsbn);
+        const res = await fetch(
+          `http://${process.env.IP_ADDRESS}:3000/books/isbn/${cleanIsbn}`
+        );
 
-      const data = await res.json();
-      console.log(data.book);
-      setBook(data.book);
+        const data = await res.json();
+
+        setBook(data.book);
+      } catch (error) {
+        console.log(error);
+      }
     })();
   }, [isbn]);
-
 
   const token = useSelector((state) => state.user.value.token);
   const [userId, setUserId] = useState(null);
   const [isLike, setIsLike] = useState([]);
   const [hideComment, setHideComment] = useState([]);
   const [avis, setAvis] = useState([]);
-  const bookId = "67cef04710c8cdf4ae0941ee"; //à modifier pour dynamique(avis.length > 0 ? avis[0].book : null)
 
   useEffect(() => {
     (async () => {
@@ -62,7 +65,7 @@ const BookDetailsScreen = ({ route }) => {
   }, [token]);
 
   useEffect(() => {
-    if (!book) return;
+    if (!!book === false) return;
     (async () => {
       try {
         const response = await fetch(
@@ -79,7 +82,7 @@ const BookDetailsScreen = ({ route }) => {
     const pusher = new Pusher(process.env.PUSHER_KEY, {
       cluster: "eu", // Remplace par ton vrai cluster
     });
-    const channel = pusher.subscribe("book-reviews");
+    const channel = pusher.subscribe(`book-reviews-${book._id}`);
 
     channel.bind("new-review", (data) => {
       console.log("Nouvelle review reçue :", data);
@@ -143,9 +146,7 @@ const BookDetailsScreen = ({ route }) => {
       prev.includes(id) ? prev.filter((pId) => pId !== id) : [...prev, id]
     );
   };
-
-  if (book === null && !book?.cover) return;
-
+  if (!!book === false) return;
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <FlatList
@@ -172,18 +173,6 @@ const BookDetailsScreen = ({ route }) => {
                   status={"none"}
                   isbn={book.isbn}
                 />
-                {/* _id,
-        title,
-        author,
-        volume,
-        summary,
-        publisher,
-        pages,
-        cover,
-        year,
-        genres,
-        status,
-        isbn, */}
               </View>
               <Genres genres={book.genres} />
               <Synopsis summary={book.summary} />
@@ -191,7 +180,7 @@ const BookDetailsScreen = ({ route }) => {
                 Commentaires
               </Text>
             </View>
-            <AddReview bookId={bookId} userId={userId} />
+            <AddReview bookId={book._id} userId={userId} />
           </View>
         }
         data={avis} // Utilisation des avis en temps réel

@@ -1,405 +1,178 @@
-
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { IP_ADDRESS } from "@env";
-import { addMessageConversation, removeMessageConversation } from "../reducers/conversations";
 import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
+  addMessagesToConversation,
+  addMessageToConversation,
+} from "../reducers/conversations";
+import Pusher from "pusher-js/react-native";
+import {
+  View,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
-} from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Pusher from 'pusher-js/react-native';
-import { Audio } from 'expo-av';
-const pusher = new Pusher('PUSHER_KEY', { cluster: 'PUSHER_CLUSTER' });
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
- const BACKEND_ADDRESS = 'http://192.168.1.152:3000';
-export default function ChatScreen({ navigation, route: { params } }) {
-  const [recording, setRecording] = useState();
-  const [permissionResponse, requestPermission] = Audio.usePermissions();
-  const [messages, setMessages] = useState([]);
-  const [messageText, setMessageText] = useState('');
-  const [audioText, setAudioText] = useState('');
-  const user = useSelector((state) => state.user.value);
-  const [tabMessages, setTabMessages] = useState([])
+const ChatScreen = ({ route: { params } }) => {
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.user.value._id);
+
+  // ✅ Mémorisation des messages par conversation pour éviter les rerenders inutiles
+  const messages = useSelector(
+    (state) =>
+      state.conversations.value.messagesByConversation[params.conversationId] ||
+      []
+  );
+
+  const memoizedMessages = useMemo(() => messages, [messages]);
+
+  const [newMessage, setNewMessage] = useState("");
+
+  // 🔥 Fetch des messages uniquement si `conversationId` est valide
   useEffect(() => {
-    (() => {
-      
-      fetch(`${BACKEND_ADDRESS}/conversations/${params.conversationId}/add-user/${params.userId}`, { method: 'PUT' });
-      // fetch(`${BACKEND_ADDRESS}/conversations/users/${params.username}`, { method: 'PUT' });
+    if (!params.conversationId || !userId) return;
 
-      const subscription = pusher.subscribe('chat');
-      subscription.bind('pusher:subscription_succeeded', () => {
-        subscription.bind('message', handleReceiveMessage);
-      });
-      
-      fetch(`${BACKEND_ADDRESS}/challenges/${params.challengeId}/messages`)
-    .then(response => response.json()).then(data => {
-      if(data.result){
-        console.log(data.messages);
-          setTabMessages(data.messages);
-          
-      }
+    fetch(
+      `http://${process.env.IP_ADDRESS}:3000/messages/${userId}/${params.conversationId}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(
+            addMessagesToConversation({
+              conversationId: params.conversationId,
+              messages: data.messages,
+            })
+          );
+        } else {
+          console.error("❌ Erreur récupération messages :", data.error);
+        }
+      })
+      .catch((error) => console.error("❌ Erreur fetch messages :", error));
+  }, [params.conversationId, userId]); // 🔥 Ajoute `userId` en dépendance
 
-    })
-    }
-  
-    
-  )();
+  // 🔥 Connexion à Pusher pour mise à jour en temps réel
+  useEffect(() => {
+    if (!params.conversationId) return;
 
-    return () => fetch(`${BACKEND_ADDRESS}/conversations/${params.conversationId}/remove-user/${params.userId}`, { method: 'DELETE' });
-  }, [params.username]);
-
-  const handleReceiveMessage = (data) => {
-    console.log("okkkkkkkkkkkkkkkkkkkkkkkk",messages)
-    setMessages(prevMessages => [...prevMessages, data]);
-  };
-
-  const handleSendMessage = () => {
-
-    
-    if (!messageText && !audioText) {
-      return;
-    }
-    let payload;
-    if (audioText.includes('file://')) {
-      //dispatch(addMessageConversation({ audioText,user.id }));
-
-      payload = {
-        content: audioText,
-        type: 'audio',
-        username: params.username,
-        createdAt: new Date(),
-        id: Math.floor(Math.random() * 100000),
-      };
-    }else{
-      payload = {
-        content: messageText,
-        type: 'text',
-        username: params.username,
-        createdAt: new Date(),
-        id: Math.floor(Math.random() * 100000),
-      };
-
-    }
-    
-    
-    handleReceiveMessage(payload);
-    
-    fetch(`${BACKEND_ADDRESS}/messages/${params.userId}/conv/${params.conversationId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ payload,content:payload.content , user : params.userId}),
+    const pusher = new Pusher(process.env.PUSHER_KEY, {
+      cluster: process.env.PUSHER_CLUSTER,
+      forceTLS: false,
+      authEndpoint: `http://${process.env.IP_ADDRESS}:3000/pusher/auth`,
     });
 
-    // fetch(`${BACKEND_ADDRESS}/messages/message`, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(payload),
-    // });
-    setAudioText('');
-    setMessageText('');
-  };
+    const channel = pusher.subscribe(`private-chat-${params.conversationId}`);
 
-
-  async function startRecording() {
-    try {
-      if (permissionResponse.status !== 'granted') {
-        console.log('Requesting permission..');
-        await requestPermission();
-      }
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
-
-      console.log('Starting recording..');
-      const { recording } = await Audio.Recording.createAsync( Audio.RecordingOptionsPresets.HIGH_QUALITY
-      );
-      setRecording(recording);
-
-      console.log('Recording started'); 
-      setMessageText("recording...");
-    } catch (err) {
-      console.error('Failed to start recording', err);
-    }
-  }
-  async function stopRecording() {
-    console.log('Stopping recording..');
-    setRecording(undefined);
-    await recording.stopAndUnloadAsync();
-    await Audio.setAudioModeAsync(
-      {
-        allowsRecordingIOS: false,
-      }
-    );
-    const uri = recording.getURI();
-    setAudioText(uri);
-    setMessageText("");
-    console.log('Recording stopped and stored at', uri);
-  }
-  const [currentSound, setCurrentSound] = useState(null);
-
-  const playAudio = async (uri) => {
-    try {
-      // Si un son est déjà en cours de lecture, on l'arrête
-      if (currentSound) {
-        await currentSound.stopAsync();
-        await currentSound.unloadAsync();
-        setCurrentSound(null);
+    channel.bind("message", (data) => {
+      if (!data.content || !data.user) {
+        console.error("❌ Erreur : Message mal structuré :", data);
         return;
       }
-  
-      // On charge et on joue le nouvel audio
-      const { sound } = await Audio.Sound.createAsync({ uri });
-      setCurrentSound(sound);
-      await sound.playAsync();
-      
-      // On écoute la fin de la lecture pour réinitialiser le state
-      sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.didJustFinish) {
-          setCurrentSound(null);
+
+      dispatch(
+        addMessageToConversation({
+          conversationId: params.conversationId,
+          message: data,
+        })
+      );
+    });
+
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+      pusher.disconnect();
+    };
+  }, [params.conversationId]);
+
+  // 🔥 Envoi d'un message au backend
+  const sendMessage = () => {
+    if (!newMessage.trim()) return;
+
+    fetch(
+      `http://${process.env.IP_ADDRESS}:3000/messages/${userId}/conv/${params.conversationId}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: newMessage }),
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP ${response.status}`);
         }
-      });
-    } catch (error) {
-      console.error('Erreur lors de la lecture de l\'audio', error);
-    }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.result) {
+          setNewMessage("");
+        }
+      })
+      .catch((error) => console.error("❌ Erreur envoi message :", error));
   };
-  
-  
+
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <View style={styles.banner}>
-        <MaterialIcons name="keyboard-backspace" color="gray" size={24} onPress={() => navigation.goBack()} />
-        <Text style={styles.greetingText}>Welcome {user.username.charAt(0).toUpperCase() + user.username.slice(1)} 👋</Text>
-      </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1"
+    >
+      <SafeAreaView className="flex-1 bg-white">
+        <FlatList
+          data={memoizedMessages}
+          inverted={true} // ✅ Affiche le dernier message en bas
+          keyExtractor={(item) => item._id.toString()}
+          contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 20 }}
+          keyboardShouldPersistTaps="handled"
+          renderItem={({ item }) => {
+            const isMe = item.user._id === userId;
 
-      <View style={styles.inset}>
-        <ScrollView style={styles.scroller}>
-            {tabMessages.map((message, i) => (
-              <View key={i} style={[styles.messageWrapper, { ...(message.user.username === user.username ? styles.messageSent : styles.messageRecieved) }]}>
-                <View style={[styles.message, { ...(message.user.username === user.username ? styles.messageSentBg : styles.messageRecievedBg) }]}>
-                <Text  style={styles.usernameText}>{message.user.username}</Text>
-
-                {message.content.includes('file://') ? (
-                <TouchableOpacity onPress={() => playAudio(message.content)}>
-                <MaterialIcons 
-                  name={currentSound ? "stop-circle" : "play-circle-fill"} 
-                  color="#506568" 
-                  size={24} 
-                />
-                </TouchableOpacity>
-                ) : (
-                <Text style={styles.messageText}> {message.content}</Text>
-                )}
+            return (
+              <View
+                className={`flex-row ${
+                  isMe ? "justify-end" : "justify-start"
+                } mb-2`}
+              >
+                <View
+                  className={`max-w-[75%] px-4 py-3 rounded-full ${
+                    isMe ? "bg-blue-500" : "bg-gray-300"
+                  }`}
+                >
+                  {!isMe && (
+                    <Text className="text-xs font-bold text-gray-700">
+                      {item.user.username}
+                    </Text>
+                  )}
+                  <Text
+                    className={`text-sm ${isMe ? "text-white" : "text-black"}`}
+                  >
+                    {item.content}
+                  </Text>
                 </View>
-              
-                <Text style={styles.timeText}>{new Date(message.createdAt).getHours()}:{String(new Date(message.createdAt).getMinutes()).padStart(2, '0')}</Text>
-                
-
-              </View>             
-            ))}
-          {  
-           
-            messages.map((message, i) => (
-              <View key={i} style={[styles.messageWrapper, { ...(message.username === params.username ? styles.messageSent : styles.messageRecieved) }]}>
-                <View style={[styles.message, { ...(message.username === params.username ? styles.messageSentBg : styles.messageRecievedBg) }]}>
-                  
-                {message.type === 'audio' ? (
-                <TouchableOpacity onPress={() => playAudio(message.content)}>
-                <MaterialIcons 
-                  name={currentSound ? "stop-circle" : "play-circle-fill"} 
-                  color="#506568" 
-                  size={24} 
-                />
-                </TouchableOpacity>
-                ) : (
-                <Text style={styles.messageText}> {message.content}</Text>
-                )}
-               </View>
-                <Text style={styles.timeText}>{new Date(message.createdAt).getHours()}:{String(new Date(message.createdAt).getMinutes()).padStart(2, '0')}</Text>
               </View>
-            ))
-          }
-        </ScrollView>
+            );
+          }}
+        />
 
-        <View style={styles.inputContainer}>
-          <TextInput onChangeText={(value) => setMessageText(value)} value={messageText} style={styles.input} autoFocus />
-          <TouchableOpacity style={[styles.recordButton , recording && {backgroundColor: 'rgba(248, 83, 83, 0.5)'}]}
-          title={recording ? 'Stop Recording' : 'Start Recording'}
-          onPress={recording ? stopRecording : startRecording}>
-            <MaterialIcons name="mic" color="#ffffff" size={24} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleSendMessage()} className="bg-button_purple" style={styles.sendButton}>
-            <MaterialIcons name="send" color="#ffffff" size={24} />
+        {/* 🔥 Input + Bouton d'envoi */}
+        <View className="flex-row items-center p-2 border-t border-gray-300 bg-white">
+          <TextInput
+            className="flex-1 border border-gray-400 rounded-lg px-3 py-2"
+            placeholder="Écrire un message..."
+            value={newMessage}
+            onChangeText={setNewMessage}
+          />
+          <TouchableOpacity
+            onPress={sendMessage}
+            className="ml-2 px-4 py-2 bg-blue-500 rounded-lg"
+          >
+            <Text className="text-white font-bold">Envoyer</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </KeyboardAvoidingView>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#000',
-  },
-  inset: {
-    flex: 1,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    backgroundColor: 'white',
-    width: '100%',
-    paddingTop: 20,
-    position: 'relative',
-    borderTopColor: '#B59DD0',
-    borderLeftColor: '#B59DD0',
-    borderRightColor: '#B59DD0',
-    borderTopWidth: 4,
-    borderRightWidth: 0.1,
-    borderLeftWidth: 0.1,
-  },
-  banner: {
-    width: '100%',
-    height: '15%',
-    paddingTop: 20,
-    paddingLeft: 20,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  greetingText: {
-    color: 'gray',
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginLeft: 15,
-  },
-  message: {
-    paddingTop: 12,
-    paddingBottom: 12,
-    paddingRight: 20,
-    paddingLeft: 20,
-    borderRadius: 24,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    maxWidth: '65%',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.20,
-    shadowRadius: 6.41,
-    elevation: 1.2,
-  },
-  messageWrapper: {
-    alignItems: 'flex-end',
-    marginBottom: 20,
-  },
-  messageRecieved: {
-    alignSelf: 'flex-end',
-    alignItems: 'flex-end'
-  },
-  messageSent: {
-    alignSelf: 'flex-start',
-    alignItems: 'flex-start'
-  },
-  messageSentBg: {
-    backgroundColor: '#B59DD0',
-  },
-  messageRecievedBg: {
-    backgroundColor: '#d6fff9'
-  },
-  messageText: {
-    color: 'black',
-    fontWeight: '400',
-  },
-  timeText: {
-    color: '#506568',
-    opacity: 0.5,
-    fontSize: 10,
-    marginTop: 2,
-  },
-  inputContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    justifySelf: 'flex-end',
-    alignContent: 'flex-start',
-    marginBottom: 30,
-    marginTop: 'auto',
-    background: 'transparent',
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  input: {
-    backgroundColor: '#f0f0f0',
-    width: '60%',
-    padding: 14,
-    borderRadius: 30,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.20,
-    shadowRadius: 6.41,
-    elevation: 1.2,
-  },
-  recordButton: {
-    borderRadius: 50,
-    padding: 16,
-    backgroundColor: '#FF85A2',
-    marginLeft: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.20,
-    shadowRadius: 6.41,
-    elevation: 1.2,
-  },
-  sendButton: {
-    borderRadius: 50,
-    padding: 16,
-    
-    marginLeft: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.20,
-    shadowRadius: 6.41,
-    elevation: 1.2,
-  },
-  buttonText: {
-    color: '#ffffff',
-    fontWeight: '800',
-    textTransform: 'uppercase'
-  },
-  scroller: {
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  usernameText: {
-    
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333', // Pour afficher le nom de l'utilisateur
-    
-  },
-});
+export default ChatScreen;
