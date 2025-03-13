@@ -1,93 +1,51 @@
 import { Text, View, TouchableOpacity, TextInput, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState ,useEffect} from 'react';
-import { updateLibrary } from "../reducers/books";
+import { useState} from 'react';
 import {useSelector,useDispatch } from "react-redux";
-import LibrarySearch from "../components/LibrarySearch"
-
 
 export default function LibraryScreen({ navigation }) {
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
-  
   const [genreCliked, setGenreCliked] = useState(false);
   const [statusCliked, setStatusCliked] = useState(true);
   const books = useSelector((state) => state.books.value);
-  const user = useSelector((state) => state.user.value);
-  
-  const [library, setLibrary] = useState(books);
-  const readingBooks=books.books.filter(e => e.status === "En cours de lecture").map(e =>e.cover);
-  const completedBooks = books.books.filter(e => e.status === "Terminé").map(e =>e.cover);
-  const wantToReadBooks = books.books.filter(e => e.status === "A lire").map(e =>e.cover);
-  const myBooks = books.books.map(e => e.cover);
-  console.log("reduce",books);
-  useEffect(() => {
-    if (!user?.token) return; // Vérifier si le token existe
-  
-    fetch(`http://${process.env.IP_ADDRESS}:3000/users/${user.token}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.result && data.user?._id) {
-          return fetch(`http://${process.env.IP_ADDRESS}:3000/libraries/user/${data.user._id}`);
-        } else {
-          throw new Error("Utilisateur non trouvé");
-        }
-      })
-      .then(res => res?.json())
-      .then(data => {
-        if (data?.success) {
-          console.log("Données de la bibliothèque :", data.books);
-          dispatch(updateLibrary(data.books)); // Mise à jour du Redux Store
-        } else {
-          console.error("Erreur : bibliothèque non trouvée");
-        }
-      })
-      .catch(error => console.error("Erreur lors du fetch :", error));
-  
-  }, [dispatch, user.token]); // Ajout des dépendances correctes
-  
+  const readingBooks = books.books.filter(e => e.status === "En cours de lecture").map(e => ({ cover: e.cover, isbn: e.isbn }));
+  const completedBooks = books.books.filter(e => e.status === "Terminé").map(e => ({ cover: e.cover, isbn: e.isbn }));
+  const wantToReadBooks = books.books.filter(e => e.status === "A lire").map(e => ({ cover: e.cover, isbn: e.isbn }));
+  const myBooks = books.books.map(e => ({ cover: e.cover, isbn: e.isbn }));
 
-  
-  console.log("readingBooks",readingBooks);
-  console.log("completedBooks",completedBooks);
-   console.log("wantToReadBooks",wantToReadBooks);
-   console.log("myBooks",myBooks);
-
-   const groupByGenre = (books) => {
+  const groupByGenre = (books) => {
     if (!Array.isArray(books)) {
       console.error("La variable 'books' n'est pas un tableau.");
       return {};
     }
 
     return books.reduce((acc, book) => {
-        // Assurer que book.genre est un tableau
-        const genres = Array.isArray(book.genre) 
-          ? book.genre 
-          : book.genre ? book.genre.split(",") : [];
+      const genres = Array.isArray(book.genre) 
+        ? book.genre 
+        : book.genre ? book.genre.split(",") : [];
 
-        genres.forEach((genre) => {
-            genre = genre.trim(); // Supprimer les espaces inutiles
-            acc[genre] = acc[genre] || [];
-            acc[genre].push(book.cover);
-        });
+      genres.forEach((genre) => {
+        genre = genre.trim();
+        acc[genre] = acc[genre] || [];
+        acc[genre].push({ cover: book.cover, isbn: book.isbn });
+      });
 
-        return acc;
+      return acc;
     }, {});
-};
+  };
 
-  
   const booksByGenre = groupByGenre(books.books);
-  console.log("length",booksByGenre)
-  const handleClickGenre = () =>{
+
+  const handleClickGenre = () => {
     setGenreCliked(true);
     setStatusCliked(false);
-    console.log(genreCliked);
-  }
-  const handleClickStatus = () =>{
+  };
+  
+  const handleClickStatus = () => {
     setGenreCliked(false);
     setStatusCliked(true);
-    console.log(statusCliked);
-  }
+  };
 
   return (
     <SafeAreaView className="flex-1" edges={["top"]}>
@@ -130,30 +88,31 @@ export default function LibraryScreen({ navigation }) {
             { title: "Livre à lire", images: wantToReadBooks},
             { title: "Tous mes livres", images: myBooks },
           ].map((section, index) => (
-            <View key={index} className="flex flex-col gap-4 ">
+            <View key={index} className="flex flex-col gap-4">
               <Text className="text-gray-800 font-nunitoRegular text-lg">{section.title}</Text>
               <ScrollView horizontal={true} className="flex-row">
-                {section.images.map((img, imgIndex) => (
+                {section.images.map((book, imgIndex) => (
                   <Image
                     key={imgIndex}
                     className="w-40 h-56 object-cover rounded-lg mr-2"
-                    // source={imageMap[img]} // Utilisation de l'objet imageMap
-                    source={{uri: img}}
+                    source={{uri: book.cover}} // Utilisation de la couverture
+                    onTouchEnd={() => navigation.navigate("Details", { isbn: book.isbn })} // Passage de l'ISBN
                   />
                 ))}
               </ScrollView>
             </View>
           ))}
 
-{genreCliked && Object.entries(booksByGenre).map(([genre, covers]) => (
-            <View key={genre} className="flex flex-col gap-4 ">
+          {genreCliked && Object.entries(booksByGenre).map(([genre, booksList]) => (
+            <View key={genre} className="flex flex-col gap-4">
               <Text className="text-gray-800 font-nunitoRegular text-lg">{genre}</Text>
               <ScrollView horizontal={true} className="flex-row">
-              {covers.map((cover, index) => (
+                {booksList.map((book, index) => (
                   <Image
                     key={index}
                     className="w-40 h-56 object-cover rounded-lg mr-2"
-                    source={{uri: cover}} // Utilisation de l'objet imageMap
+                    source={{uri: book.cover}} // Utilisation de la couverture
+                    onTouchEnd={() => navigation.navigate("Details", { isbn: book.isbn })} // Passage de l'ISBN
                   />
                 ))}
               </ScrollView>
