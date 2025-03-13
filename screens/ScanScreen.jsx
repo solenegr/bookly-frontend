@@ -6,13 +6,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useIsFocused } from "@react-navigation/native";
 import { addBookLibrary, removeBookLibrary } from "../reducers/books";
 import { useDispatch, useSelector } from "react-redux";
+import { IP_ADDRESS } from "@env";
 export default function ScanScreen({ navigation }) {
   const [bookData, setBookData] = useState(null);
   const[userId,setUserId] = useState('');
   const books = useSelector((state) => state.books.value.books);
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
-  const IpAdress = process.env.IP_ADDRESS;
+ 
   const qrLock = useRef(false);
   const appState = useRef(AppState.currentState);
   const [dataScanned, setDataScanned] = useState('');
@@ -77,7 +78,7 @@ const handleclickOver =()=>{
 setFlashStatus("off");
 setIsVisible(false);
 setScanned(true);
-fetch(`http://${IpAdress}:3000/users/${user.token}`)
+fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
   .then(response => response.json())
   .then(data => {
     if (data.result) {
@@ -86,7 +87,7 @@ fetch(`http://${IpAdress}:3000/users/${user.token}`)
   });
 if (dataScanned) {
   console.log(dataScanned);
-  fetch(`http://${IpAdress}:3000/books/isbn/${dataScanned}`)
+  fetch(`http://${IP_ADDRESS}:3000/books/isbn/${dataScanned}`)
   .then(response => response.json())
   .then(data => {
     
@@ -111,7 +112,7 @@ if (dataScanned) {
     
     if (dataScanned) {
         console.log(dataScanned);
-        fetch(`http://${IpAdress}:3000/books/isbn/${dataScanned}`)
+        fetch(`http://${IP_ADDRESS}:3000/books/isbn/${dataScanned}`)
         .then(response => response.json())
         .then(data => {
           
@@ -133,7 +134,7 @@ if (dataScanned) {
             console.log("user:", userId);
             console.log("book:", data.book._id);
             console.log("status:", books.status);
-            fetch(`http://${IpAdress}:3000/libraries/add-to-library`, {
+            fetch(`http://${IP_ADDRESS}:3000/libraries/add-to-library`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ userId :userId,bookId:data.book._id ,status: books.status||"none" , genres:data.book.genres||[]}),

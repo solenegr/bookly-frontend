@@ -3,13 +3,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState ,useEffect} from 'react';
 import { updateLibrary } from "../reducers/books";
 import {useSelector,useDispatch } from "react-redux";
-
+import LibrarySearch from "../components/LibrarySearch"
 
 
 export default function LibraryScreen({ navigation }) {
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
-  const IpAdress = process.env.IP_ADDRESS;
+  
   const [genreCliked, setGenreCliked] = useState(false);
   const [statusCliked, setStatusCliked] = useState(true);
   const books = useSelector((state) => state.books.value);
@@ -24,11 +24,11 @@ export default function LibraryScreen({ navigation }) {
   useEffect(() => {
     if (!user?.token) return; // Vérifier si le token existe
   
-    fetch(`http://${IpAdress}:3000/users/${user.token}`)
+    fetch(`http://${process.env.IP_ADDRESS}:3000/users/${user.token}`)
       .then(response => response.json())
       .then(data => {
         if (data.result && data.user?._id) {
-          return fetch(`http://${IpAdress}:3000/libraries/user/${data.user._id}`);
+          return fetch(`http://${process.env.IP_ADDRESS}:3000/libraries/user/${data.user._id}`);
         } else {
           throw new Error("Utilisateur non trouvé");
         }
@@ -99,12 +99,13 @@ export default function LibraryScreen({ navigation }) {
         <View className="flex flex-col gap-4 p-4">
           {/* Barre de recherche */}
           <View className="flex flex-row justify-center">
-            <TextInput
+          <LibrarySearch />
+            {/* <TextInput
               className="border-2 border-button_purple p-4 rounded-lg w-80 bg-light_gray text-center"
               placeholder="Chercher sur ma biblio"
               value={search}
               onChangeText={setSearch}
-            />
+            /> */}
           </View>
 
           {/* Boutons de filtre */}

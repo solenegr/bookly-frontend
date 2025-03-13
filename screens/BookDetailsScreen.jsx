@@ -48,7 +48,7 @@ const BookDetailsScreen = ({ route }) => {
     (async () => {
       try {
         const response = await fetch(
-          `http://${process.env.IP_ADDRESS}:3000/users/${token}`
+          `http://${IP_ADDRESS}:3000/users/${token}`
         );
         const data = await response.json();
         console.log(data);
@@ -69,7 +69,7 @@ const BookDetailsScreen = ({ route }) => {
     (async () => {
       try {
         const response = await fetch(
-          `http://${process.env.IP_ADDRESS}:3000/reviews?book=${book._id}`
+          `http://${IP_ADDRESS}:3000/reviews?book=${book._id}`
         );
         const data = await response.json();
         if (data.result) setAvis(data.reviews);

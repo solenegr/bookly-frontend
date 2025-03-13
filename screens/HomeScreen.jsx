@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Button, TouchableOpacity, ScrollView, Image, TextInput,Keyboard} from "react-native";
+import {
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  TextInput,
+  Keyboard,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useSelector } from 'react-redux';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faSquareCheck } from '@fortawesome/free-solid-svg-icons'; 
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useSelector } from "react-redux";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { IP_ADDRESS } from "@env";
+// import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 const imageMap = {
   book1: require("../assets/temp/terremer.webp"),
   book2: require("../assets/temp/terremer.webp"),
@@ -28,152 +38,161 @@ export default function HomeScreen({ navigation }) {
   const [pagesRead, setPagesRead] = useState(50); // Pages déjà lues
   const [progress, setProgress] = useState(pagesRead / totalPages);
   const [pagesReadToDay, setPagesReadToDay] = useState(0);
-  const [firstname,setFirstname]=useState('');
+  const [firstname, setFirstname] = useState("");
   const [plusClicked, setPlusClicked] = useState(false);
   const [sauvegardeNumberPage, setSauvegardeNumberPage] = useState(false);
-  const plusAjoutes = [{ title: "Les plus ajoutés", images: ["book1", "book2", "book3"] }];
-  const IpAdress = process.env.IP_ADDRESS;
+  const plusAjoutes = [
+    { title: "Les plus ajoutés", images: ["book1", "book2", "book3"] },
+  ];
   
+
   useEffect(() => {
     setProgress(pagesRead / totalPages);
-    fetch(`http://${IpAdress}:3000/users/${user.token}`)
-    .then(response => response.json())
-    .then(data => {
-      if (data.result) {
-        setFirstname(data.user.firstname.charAt(0).toUpperCase() + data.user.firstname.slice(1));
-      }
-    });
+    fetch(`http://${process.env.IP_ADDRESS}:3000/users/${user.token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          setFirstname(
+            data.user.firstname.charAt(0).toUpperCase() +
+              data.user.firstname.slice(1)
+          );
+        }
+      });
   }, [pagesRead]);
 
-  
-  const handleClick =() =>{
+  const handleClick = () => {
     setPagesRead((prev) => Math.min(pagesReadToDay, totalPages));
     setSauvegardeNumberPage(true);
     Keyboard.dismiss();
-  }
+  };
 
   return (
     <SafeAreaView className="flex-1 flex-col justify-start mt-5 gap-4">
       <ScrollView>
-      {/* Header */}
-      <View className="flex-row justify-evenly">
-        <Text className="font-nunitoBold text-lg">Hello {firstname}</Text>
-        <Text className="font-nunitoBold text-lg bg-light_purple">Livre en cours</Text>
-      </View>
+        {/* Header */}
+        <View className="flex-row justify-evenly">
+          <Text className="font-nunitoBold text-lg">Hello {firstname}</Text>
+          <Text className="font-nunitoBold text-lg bg-light_purple">
+            Livre en cours
+          </Text>
+        </View>
 
-      {/* Livre en cours de lecture */}
-      <View className="flex-row gap-2 pt-4 bg-light_purple rounded-xl">
-        <Image
-          className="w-32 h-52 mb-5"
-          resizeMode="contain"
-          source={require("../assets/temp/terremer.webp")}
-          onTouchEnd={() => navigation.navigate("Details", { id: "456" })}
-        />
-        <View className="flex-col gap-1 pt-7">
-          <Text className="font-nunitoBold text-lg">
-            Terremer (Edition intégrale)
-          </Text>
-          <Text className="font-medium text-sm">Ursula Le Guin</Text>
-          {/* Barre de progression */}
-          <Text >
-            Pages lues : {pagesRead}/ {totalPages}
-          </Text>
-          <Progress.Bar progress={progress} width={220} height={15} color="#2960A1" />
-          <Text >
-            Ajouter un marque-page
-          </Text>
-          {/*>>>>>> Input et bouton de mise à jour */}
-          <View className="flex-row justify-start items-center">
-            <TextInput
-              keyboardType="numeric"
-              onChangeText={(value) => setPagesReadToDay(parseInt(value) || 0)}
-              value={pagesReadToDay.toString()}
-              className="border-navy_blue border w-20 h-10 rounded-md p-2 "
+        {/* Livre en cours de lecture */}
+        <View className="flex-row gap-2 pt-4 bg-light_purple rounded-xl">
+          <Image
+            className="w-32 h-52 mb-5"
+            resizeMode="contain"
+            source={require("../assets/temp/terremer.webp")}
+            onTouchEnd={() => navigation.navigate("Details", { isbn: "9781546154419" })}
+          />
+          <View className="flex-col gap-1 pt-7">
+            <Text className="font-nunitoBold text-lg">
+              Terremer (Edition intégrale)
+            </Text>
+            <Text className="font-medium text-sm">Ursula Le Guin</Text>
+            {/* Barre de progression */}
+            <Text>
+              Pages lues : {pagesRead}/ {totalPages}
+            </Text>
+            <Progress.Bar
+              progress={progress}
+              width={220}
+              height={15}
+              color="#2960A1"
             />
-          <TouchableOpacity onPress={() => handleClick()}>
-              <MaterialIcons 
-                name={"check"} 
-                color={sauvegardeNumberPage && pagesReadToDay != 0? "green" : "gray"} 
-                size={24} 
+            <Text>Ajouter un marque-page</Text>
+            {/*>>>>>> Input et bouton de mise à jour */}
+            <View className="flex-row justify-start items-center">
+              <TextInput
+                keyboardType="numeric"
+                onChangeText={(value) =>
+                  setPagesReadToDay(parseInt(value) || 0)
+                }
+                value={pagesReadToDay.toString()}
+                className="border-navy_blue border w-20 h-10 rounded-md p-2 "
               />
-          </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleClick()}>
+                <MaterialIcons
+                  name={"check"}
+                  color={
+                    sauvegardeNumberPage && pagesReadToDay != 0
+                      ? "green"
+                      : "gray"
+                  }
+                  size={24}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
 
-      {/* Genres */}
-      <View className="flex-row justify-between px-5">
-        <Text className="text-navy_blue text-[1rem] font-nunitoBold">
-          Genres
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => setPlusClicked(!plusClicked)}
-        >
+        {/* Genres */}
+        <View className="flex-row justify-between px-5">
           <Text className="text-navy_blue text-[1rem] font-nunitoBold">
-            {plusClicked ? "Voir Moins" : "Voir Plus"}
+            Genres
           </Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => setPlusClicked(!plusClicked)}
+          >
+            <Text className="text-navy_blue text-[1rem] font-nunitoBold">
+              {plusClicked ? "Voir Moins" : "Voir Plus"}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-      <View className="flex-row flex-wrap gap-2 justify-center -mt-2">
-        {genres
-          .slice(0, plusClicked ? genres.length : 4)
-          .map((genre, index) => (
-            <TouchableOpacity
-              activeOpacity={0.7}
-              key={index}
-              className="px-3.5 py-1 rounded-full"
-              style={{
-                backgroundColor: genre.color,
-                shadowColor: genre.color,
-                shadowOpacity: 0.5,
-                shadowRadius: 2.62,
-                shadowOffset: { width: 500, height: 3 },
-                elevation: 4,
-              }}
-            >
-              <Text className="text-gray-800 text-base font-nunitoBold">
-                {genre.name}
-              </Text>
-            </TouchableOpacity>
+        <View className="flex-row flex-wrap gap-2 justify-center mt-2">
+          {genres
+            .slice(0, plusClicked ? genres.length : 4)
+            .map((genre, index) => (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                key={index}
+                className="px-3.5 py-1 rounded-full"
+                style={{
+                  backgroundColor: genre.color,
+                  shadowColor: genre.color,
+                  shadowOpacity: 0.5,
+                  shadowRadius: 2.62,
+                  shadowOffset: { width: 500, height: 3 },
+                  elevation: 4,
+                }}
+              >
+                <Text className="text-gray-800 text-base font-nunitoBold">
+                  {genre.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+        </View>
+
+        {/* Les plus ajoutés */}
+        <View className="px-5">
+          {plusAjoutes.map((section, index) => (
+            <View key={index} className="flex flex-col gap-4">
+              <Text className="font-nunitoBold text-lg">{section.title}</Text>
+              <ScrollView horizontal className="flex-row">
+                {section.images.map((img, imgIndex) => (
+                  <Image
+                    key={imgIndex}
+                    className="w-40 h-56 object-cover rounded-lg mr-2"
+                    source={imageMap[img]}
+                  />
+                ))}
+              </ScrollView>
+            </View>
           ))}
-      </View>
+        </View>
 
-      {/* Les plus ajoutés */}
-      <View className="px-5">
-        {plusAjoutes.map((section, index) => (
-          <View key={index} className="flex flex-col gap-4">
-            <Text className="font-nunitoBold text-lg">{section.title}</Text>
-            <ScrollView horizontal className="flex-row">
-              {section.images.map((img, imgIndex) => (
-                <Image
-                  key={imgIndex}
-                  className="w-40 h-56 object-cover rounded-lg mr-2"
-                  source={imageMap[img]}
-                />
-              ))}
-            </ScrollView>
+        {/* Bouton pour ajouter un livre */}
+        <TouchableOpacity
+          className="w-64 h-12 bg-button_purple rounded-3xl items-center justify-center mx-auto my-8"
+          onPress={() => navigation.navigate("Scan")}
+        >
+          <View className="flex-row gap-3">
+            <Text className="text-white">Add Book </Text>
+            <FontAwesome name="barcode" size={24} color="#fff" />
           </View>
-        ))}
-      </View>
-
-      {/* Bouton pour ajouter un livre */}
-      <TouchableOpacity
-        className="w-64 h-12 bg-button_purple rounded-3xl items-center justify-center mx-auto"
-        onPress={() => navigation.navigate("Scan")}
-      >
-        <Text className="text-white">Add Book</Text>
-      </TouchableOpacity>
-
-      {/* Bouton test à supprimer */}
-
-      {/* <TouchableOpacity
-        className="w-64 h-12 bg-button_purple rounded-3xl items-center justify-center mx-auto"
-        onPress={() => navigation.navigate("Scan")}
-      >
-        <Text className="text-white">Research</Text>
-      </TouchableOpacity> */}
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
