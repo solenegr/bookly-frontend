@@ -27,8 +27,9 @@ export default function ProfileScreen({ navigation }) {
     .then((response) => response.json())
     .then((dataUser) => {
       if (dataUser.result) {
-        console.log("fetch dataUser", dataUser);
-      fetch(`http://${IP_ADDRESS}:3000/reviews/${dataUser.user._id}`).then(response => response.json()).then(data => {
+      fetch(`http://${IP_ADDRESS}:3000/reviews/${dataUser.user._id}`)
+      .then(response => response.json())
+      .then(data => {
         if(data.result){
           console.log(data)
           setUserReviews(data.reviews)
@@ -77,7 +78,7 @@ export default function ProfileScreen({ navigation }) {
               {/* Liens à faire */}
               <View className="flex flex-row items-center justify-center gap-2">
                 <GrayBlock mainText={completedBooks.length} subText="livres lus" />
-                <GrayBlock mainText="35" subText="avis publiés" />
+                <GrayBlock mainText={userReviews.length} subText="avis publiés" />
                 <GrayBlock mainText="234" subText="avis likés" />
               </View>
             </View>
