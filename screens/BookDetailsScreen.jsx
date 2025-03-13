@@ -15,6 +15,7 @@ import {
 } from "../components/book_details";
 import Pusher from "pusher-js/react-native";
 import { useSelector } from "react-redux";
+import { IP_ADDRESS} from "@env";
 
 const BookDetailsScreen = ({ route }) => {
   const [book, setBook] = useState(null);
@@ -26,7 +27,7 @@ const BookDetailsScreen = ({ route }) => {
         const cleanIsbn = isbn.replace(/\s+/g, "").replace(/-/g, "");
         console.log("clean", cleanIsbn);
         const res = await fetch(
-          `http://${process.env.IP_ADDRESS}:3000/books/isbn/${cleanIsbn}`
+          `http://${IP_ADDRESS}:3000/books/isbn/${cleanIsbn}`
         );
 
         const data = await res.json();

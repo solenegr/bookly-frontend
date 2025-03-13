@@ -1,68 +1,78 @@
-import React from 'react';
-import { View, TouchableOpacity,Text ,SafeAreaView,Image} from 'react-native';
-import { useState } from 'react';
+import React, { useEffect } from "react";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  SafeAreaView,
+  Image,
+  FlatList,
+} from "react-native";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addUserConversation, removeUserConversation } from "../reducers/conversations";
+import { setConversations } from "../reducers/conversations";
 import { IP_ADDRESS } from "@env";
+
 export default function MessageScreen({ navigation }) {
-  const IpAdress = process.env.IP_ADDRESS;
-  const[username,setUsername] = useState('');
-  const[userId,setUserId] = useState('');
-  const [challengeId, setChallengeId] = useState('');
-  const user = useSelector((state) => state.user.value);
-  
-    const handleSendMessage = () => {
-        fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.result) {
-            setUserId(data.user._id);
-            // setUsername(data.user.username.charAt(0).toUpperCase() + data.user.username.slice(1));
-            //useDispatch(addUserConversation(data.user._id));
-          }
-        });
-        setUsername(user.username.charAt(0).toUpperCase() + user.username.slice(1));
+  const userId = useSelector((state) => state.user.value._id);
+  const conversations = useSelector(
+    (state) => state.conversations.value.conversations
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(
+          `http://${IP_ADDRESS}:3000/conversations/user/${userId}`
+        );
 
-        navigation.navigate('Chat', { username, conversationId : "67cb22282ece12a2b9fbb437", userId: userId, challengeId:"67cb22282ece12a2b9fbb435"});
-      };
-
-      const handlecreateConv =() =>{
-        console.log("ok");
-        fetch(`http://${IP_ADDRESS}:3000/conversations`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ users :["67cad0df83c4dbc6e60de21f","67caffbfdc6a7955b63a1c5b"], challengeId : "67c985d2d9437c138e7b22fb"}),
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.result) {
-            console.log("Conversation créée :", data.conversation);
-          } else {
-            console.log("Erreur côté serveur :", data);
-          }
-        })
-        .catch(error => console.error("Erreur fetch :", error));
+        const data = await res.json();
+        if (data.result && data.conversations.length) {
+          dispatch(setConversations(data.conversations)); // 🔥 Stocke dans Redux
+        }
+      } catch (error) {
+        console.log(error);
       }
+    })();
+  }, []);
 
   return (
+    <View style={{ flex: 1, padding: 10 }}>
+      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
+        Mes Conversations
+      </Text>
 
-    <SafeAreaView>
-            <View className="flex items-center justify-center gap-2" >
-                <Image className="w-96 h-96 mt-20 mb-20" source={require("../assets/chat.png")}></Image>
-                <TouchableOpacity  
-                    className="p-4 rounded-xl items-center bg-button_purple w-96" 
-                    onPress={handleSendMessage}>
-                    <Text className="text-white">Commencer le Chat</Text>
-              </TouchableOpacity>
-              <TouchableOpacity  
-                    className="p-4 rounded-xl items-center bg-button_purple w-96" 
-                    onPress={handlecreateConv}>
-                    <Text className="text-white">Créer une Conversation</Text>
-              </TouchableOpacity>
-            </View>
-        </SafeAreaView>
-   
-  
+      <FlatList
+        data={conversations}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Chat", {
+                conversationId: item._id,
+                users: item.users,
+                userId,
+              })
+            }
+            style={{
+              padding: 15,
+              backgroundColor: "#f0f0f0",
+              borderRadius: 8,
+              marginBottom: 10,
+            }}
+          >
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+              {item.challenge?.title || "Conversation privée"}
+            </Text>
+            <Text style={{ color: "gray" }}>
+              {item.challenge?.description || "Pas de challenge associé"}
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
+
+      <TouchableOpacity onPress={() => navigation.navigate("Challenge")}>
+        <Text>Creer un coin lecture</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
-

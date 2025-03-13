@@ -6,19 +6,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { IP_ADDRESS } from "@env";
- 
+
 // Grabbed from emailregex.com
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  
+
 export default function ConnectionScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
- 
- 
-  const user = useSelector((state) => state.user.value)
 
+  const user = useSelector((state) => state.user.value);
 
   const [emailError, setEmailError] = useState(false);
 
@@ -40,10 +38,10 @@ export default function ConnectionScreen({ navigation }) {
           if (data.result) {
             dispatch(
               login({
+                _id: data.user._id,
                 username: data.user.username,
                 firstname: data.user.firstname,
                 email: data.user.email,
-                // password: data.user.password,
                 token: data.user.token,
               })
             );

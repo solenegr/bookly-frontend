@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateStatusBook, addBookLibrary } from "../../reducers/books";
-
+import { IP_ADDRESS } from "@env";
 const Status = () => {
   const id = 1;
+  const idBook ="67d01bc991ec5b77ad196068";
+  const idLibrary = "67d0405f9e676caa7d196282";
   const [isOpen, setIsOpen] = useState(false);
 
   const books = useSelector((state) => state.books.value.books);
@@ -25,6 +27,12 @@ const Status = () => {
   };
 
   const handleSelectStatus = (text) => {
+
+     fetch(`http://${IP_ADDRESS}:3000/libraries/${idLibrary}/readings/${idBook}/status`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ newStatus : text}),
+            })
     dispatch(
       updateStatusBook({
         id: 1,
