@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 import Modal from "react-native-modal";
+import { IP_ADDRESS } from "@env";
 
 export default function LibrarySearch({ navigation }) {
   const user = useSelector((state) => state.user.value);
@@ -17,13 +18,13 @@ export default function LibrarySearch({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleSubmitSearch = () => {
-    fetch(`http://192.168.1.17:3000/users/${user.token}`)
+    fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
       .then((response) => response.json())
       .then((dataUser) => {
         if (dataUser.result) {
           console.log("fetch dataUser", dataUser);
           fetch(
-            `http://192.168.1.17:3000/libraries/user/${dataUser.user._id}?search=${query}`
+            `http://${IP_ADDRESS}:3000/libraries/user/${dataUser.user._id}?search=${query}`
           )
             .then((response) => response.json())
             .then((data) => {

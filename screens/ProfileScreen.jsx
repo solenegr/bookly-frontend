@@ -7,16 +7,44 @@ import {
   UserReview,
 } from "../components/profile_details";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
+import { IP_ADDRESS } from "@env";
 import userAvis from "../data/userAvis.json";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+
 
 export default function ProfileScreen({ navigation }) {
+  const user = useSelector((state) => state.user.value);
+
+  const [userReviews, setUserReviews] = useState([]);
+  console.log("userReview", userReviews)
+
+  const [userGenres, setUserGenres] = useState([]);
+
+  useEffect (() => {
+    fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
+    .then((response) => response.json())
+    .then((dataUser) => {
+      if (dataUser.result) {
+        console.log("fetch dataUser", dataUser);
+      fetch(`http://${IP_ADDRESS}:3000/reviews/${dataUser.user._id}`).then(response => response.json()).then(data => {
+        if(data.result){
+          console.log(data)
+          setUserReviews(data.reviews)
+          setUserGenres(data.reviews.book.genre)
+        }
+      })
+      }
+      })
+  }, [])
+  
+
   const imageMap = {
-    book1: require("../assets/temp/terremer.webp"),
-    book2: require("../assets/temp/terremer.webp"),
-    book3: require("../assets/temp/terremer.webp"),
-    book4: require('../assets/temp/terremer.webp'),
-    book5: require('../assets/temp/terremer.webp'),
+    book1: require("../assets/temp/354.jpg"),
+    book2: require("../assets/temp/9782246831464.jpg"),
+    book3: require("../assets/temp/Gone-baby-gone.jpg"),
+    book4: require('../assets/temp/les_guerriers_du_silence_tome_1.jpg'),
+    book5: require('../assets/temp/Preference-systeme.jpg'),
     book6: require('../assets/temp/terremer.webp'),
   };
 
@@ -96,12 +124,12 @@ export default function ProfileScreen({ navigation }) {
             </View>
           </View>
         }
-        data={userAvis}
-        keyExtractor={(item) => item.id.toString()}
+        data={userReviews}
+        keyExtractor={(item) => item._id.toString()}
         contentContainerStyle={{ paddingBottom: 20 }}
         renderItem={({ item }) => {
           // console.log(item)
-          return <UserReview {...item} />; //<UserReview book={item.book}... />
+          return <UserReview cover={item.book.cover} title={item.book.title} author={item.book.author} commentaire={item.content} isbn={item.book.isbn} note={item.note} navigation={navigation}/>; //ou <UserReview {...item} />
         }}
       />
     </SafeAreaView>
@@ -109,23 +137,5 @@ export default function ProfileScreen({ navigation }) {
 }
 
 {
-  /* <SafeAreaView edges={["top"]}>
-<View className="bg-white flex w-full h-full">
-  <Identity />
-  <View className="m-1 flex flex-row items-center justify-center gap-2">
-    <GrayBlock mainText="142" subText="livres lus" />
-    <GrayBlock mainText="35" subText="avis publiés" />
-    <GrayBlock mainText="234" subText="avis likés" />
-  </View>
-  <Text className="text-gray-800 font-nunitoExtraBold text-xl mt-5 pl-4">
-    Mes livres en cours
-  </Text>
-  <Text className="text-gray-800 font-nunitoExtraBold text-xl mt-5 pl-4">
-    Mes genres favoris
-  </Text>
-  <Text className="text-gray-800 font-nunitoExtraBold text-xl mt-5 pl-4">
-    Mes derniers avis
-  </Text>
-</View>
-</SafeAreaView> */
+
 }

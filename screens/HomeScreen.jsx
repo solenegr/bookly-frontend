@@ -48,7 +48,7 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     setProgress(pagesRead / totalPages);
-    fetch(`http://${process.env.IP_ADDRESS}:3000/users/${user.token}`)
+    fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {

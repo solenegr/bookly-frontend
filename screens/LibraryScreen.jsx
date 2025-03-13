@@ -2,7 +2,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput,
   ScrollView,
   Image,
 } from "react-native";
@@ -37,12 +36,12 @@ export default function LibraryScreen({ navigation }) {
   useEffect(() => {
     if (!user?.token) return; // Vérifier si le token existe
 
-    fetch(`http://${process.env.IP_ADDRESS}:3000/users/${user.token}`)
+    fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.result && data.user?._id) {
           return fetch(
-            `http://${process.env.IP_ADDRESS}:3000/libraries/user/${data.user._id}`
+            `http://${IP_ADDRESS}:3000/libraries/user/${data.user._id}`
           );
         } else {
           throw new Error("Utilisateur non trouvé");
