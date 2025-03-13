@@ -14,10 +14,10 @@ import { updateLibrary } from "../reducers/books";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { IP_ADDRESS, PUSHER_KEY, PUSHER_CLUSTER} from "@env";
+import { IP_ADDRESS, PUSHER_KEY, PUSHER_CLUSTER } from "@env";
 // import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 const imageMap = {
   book1: require("../assets/temp/terremer.webp"),
@@ -42,12 +42,12 @@ export default function HomeScreen({ navigation }) {
   const [firstname, setFirstname] = useState("");
   const [plusClicked, setPlusClicked] = useState(false);
   const [readinBooks, setReadinBooks] = useState([]);
-  const [allGenreLabrary, setAllGenreLabrary ] = useState([]);
+  const [allGenreLabrary, setAllGenreLabrary] = useState([]);
   const dispatch = useDispatch();
   const plusAjoutes = [
     { title: "Les plus ajoutés", images: ["book1", "book2", "book3"] },
   ];
-  
+
   useEffect(() => {
     // Initialiser Pusher avec la clé de votre application
     const pusher = new Pusher(PUSHER_KEY, {
@@ -55,11 +55,11 @@ export default function HomeScreen({ navigation }) {
     });
 
     // S'abonner au canal
-    const channel = pusher.subscribe('book-channel');
+    const channel = pusher.subscribe(`book-channel-${user._id}`);
 
     // Lier l'événement pour la mise à jour des livres
-    channel.bind('update-books', (data) => {
-      console.log('Mise à jour des livres reçue :', data.books);
+    channel.bind("update-books", (data) => {
+      console.log("Mise à jour des livres reçue :", data.books);
       setReadinBooks(data.books); // Mettre à jour les livres dans l'état
     });
 
@@ -70,53 +70,69 @@ export default function HomeScreen({ navigation }) {
       pusher.disconnect();
     };
   }, []);
-  
-
-
 
   useEffect(() => {
-
     if (allGenreLabrary.length > 0) {
       const defaultColor = "#D3D3D3";
       const newGenres = allGenreLabrary.map((genre) => {
         const existingGenre = genres.find((g) => g.name === genre);
-        return existingGenre ? existingGenre : { name: genre, color: defaultColor };
+        return existingGenre
+          ? existingGenre
+          : { name: genre, color: defaultColor };
       });
-  
+
       setUpdatedGenres(newGenres);
     }
   }, [allGenreLabrary]);
 
-  
   useEffect(() => {
-    if (!user?.token) return; // Vérifier si le token existe
-      fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.result && data.user?._id) {
-            return fetch(`http://${IP_ADDRESS}:3000/libraries/user/${data.user._id}`);
-          } else {
-            throw new Error("Utilisateur non trouvé");
-          }
-        })
-        .then(res => res?.json())
-        .then(data => {
-          if (data?.success) {
-            dispatch(updateLibrary(data.books)); // Mise à jour du Redux Store
-            setReadinBooks(data.books.filter((e) => e.status === "En cours de lecture"));
-            const uniqueGenres = [...new Set(data.books.flatMap(e => e.genre))];
-            setAllGenreLabrary(uniqueGenres);
-            
-          } else {
-            console.error("Erreur : bibliothèque non trouvée");
-          }
-        })
-        .catch(error => console.error("Erreur lors du fetch :", error));
-    
-      
-  
-  }, [readinBooks]); // Ajout de 'user?.token' dans les dépendances  
+    if (!user._id) return; // Vérifier si l'id existe
+    async () => {
+      try {
+        const res = await fetch(
+          `http://${IP_ADDRESS}:3000/libraries/user/${user._id}`
+        );
 
+        const data = await res.json();
+
+        if (data.result) {
+          console.log("DATA", data);
+          dispatch(updateLibrary(data.books)); // Mise à jour du Redux Store
+          setReadinBooks(
+            data.books.filter((e) => e.status === "En cours de lecture")
+          );
+          const uniqueGenres = [...new Set(data.books.flatMap((e) => e.genre))];
+          setAllGenreLabrary(uniqueGenres);
+        } else {
+          console.error("erreur data library");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    // fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     if (data.result && data.user?._id) {
+    //       return fetch(`http://${IP_ADDRESS}:3000/libraries/user/${data.user._id}`);
+    //     } else {
+    //       throw new Error("Utilisateur non trouvé");
+    //     }
+    //   })
+    //   .then(res => res?.json())
+    //   .then(data => {
+    //     if (data?.success) {
+    //       dispatch(updateLibrary(data.books)); // Mise à jour du Redux Store
+    //       setReadinBooks(data.books.filter((e) => e.status === "En cours de lecture"));
+    //       const uniqueGenres = [...new Set(data.books.flatMap(e => e.genre))];
+    //       setAllGenreLabrary(uniqueGenres);
+
+    //     } else {
+    //       console.error("Erreur : bibliothèque non trouvée");
+    //     }
+    //   })
+    //   .catch(error => console.error("Erreur lors du fetch :", error));
+  }, [readinBooks]); // Ajout de 'user?.token' dans les dépendances
 
   const handlePageChange = (isbn, value) => {
     setPagesReadForBooks((prev) => ({
@@ -125,10 +141,7 @@ export default function HomeScreen({ navigation }) {
     }));
   };
 
- 
   useEffect(() => {
-   
-    
     fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
@@ -140,8 +153,6 @@ export default function HomeScreen({ navigation }) {
         }
       });
   }, []);
-
-
 
   return (
     <SafeAreaView className="flex-1 flex-col justify-start mt-5 gap-4">
@@ -155,52 +166,63 @@ export default function HomeScreen({ navigation }) {
         </View>
 
         {/* Livre en cours de lecture */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row">
-      {readinBooks.map((book) => (
-        <View key={book.isbn || book._id} className="flex-row gap-2 pt-4 bg-light_purple rounded-xl w-auto">
-          <Image
-            className="w-32 h-52 mb-5"
-            resizeMode="contain"
-            source={{ uri: book.cover }}
-            onTouchEnd={() => navigation.navigate('Details', { isbn: book.isbn })}
-          />
-          <View className="flex-col gap-1 pt-7">
-            <Text className="font-nunitoBold text-lg">{book.title}</Text>
-            <Text className="font-medium text-sm">{book.author}</Text>
-            {/* Afficher la progression des pages lues */}
-            <Text>Pages lues : {pagesReadForBooks[book.isbn] || 0} / {book.pages}</Text>
-            <Progress.Bar
-              progress={(pagesReadForBooks[book.isbn] || 0) / book.pages}
-              width={220}
-              height={15}
-              color="#2960A1"
-            />
-            <Text>Ajouter un marque-page</Text>
-            {/* Input et bouton pour modifier les pages lues */}
-            <View className="flex-row justify-start items-center">
-              <TextInput
-                keyboardType="numeric"
-                onChangeText={(value) =>
-                  handlePageChange(book.isbn, parseInt(value) || 0)
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className="flex-row"
+        >
+          {readinBooks.map((book) => (
+            <View
+              key={book.isbn || book._id}
+              className="flex-row gap-2 pt-4 bg-light_purple rounded-xl w-auto"
+            >
+              <Image
+                className="w-32 h-52 mb-5"
+                resizeMode="contain"
+                source={{ uri: book.cover }}
+                onTouchEnd={() =>
+                  navigation.navigate("Details", { isbn: book.isbn })
                 }
-                value={(pagesReadForBooks[book.isbn] || 0).toString()}
-                className="border-navy_blue border w-20 h-10 rounded-md p-2 "
               />
-              <TouchableOpacity>
-                <MaterialIcons
-                  name={"check"}
-                  color={
-                    pagesReadForBooks[book.isbn] !== 0 ? "green" : "gray"
-                  }
-                  size={24}
+              <View className="flex-col gap-1 pt-7">
+                <Text className="font-nunitoBold text-lg">{book.title}</Text>
+                <Text className="font-medium text-sm">{book.author}</Text>
+                {/* Afficher la progression des pages lues */}
+                <Text>
+                  Pages lues : {pagesReadForBooks[book.isbn] || 0} /{" "}
+                  {book.pages}
+                </Text>
+                <Progress.Bar
+                  progress={(pagesReadForBooks[book.isbn] || 0) / book.pages}
+                  width={220}
+                  height={15}
+                  color="#2960A1"
                 />
-              </TouchableOpacity>
+                <Text>Ajouter un marque-page</Text>
+                {/* Input et bouton pour modifier les pages lues */}
+                <View className="flex-row justify-start items-center">
+                  <TextInput
+                    keyboardType="numeric"
+                    onChangeText={(value) =>
+                      handlePageChange(book.isbn, parseInt(value) || 0)
+                    }
+                    value={(pagesReadForBooks[book.isbn] || 0).toString()}
+                    className="border-navy_blue border w-20 h-10 rounded-md p-2 "
+                  />
+                  <TouchableOpacity>
+                    <MaterialIcons
+                      name={"check"}
+                      color={
+                        pagesReadForBooks[book.isbn] !== 0 ? "green" : "gray"
+                      }
+                      size={24}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
-      ))}
-    </ScrollView>
-
+          ))}
+        </ScrollView>
 
         {/* Genres */}
         <View className="flex-row justify-between px-5">

@@ -15,10 +15,16 @@ import {
 } from "../components/book_details";
 import Pusher from "pusher-js/react-native";
 import { useSelector } from "react-redux";
-import { IP_ADDRESS} from "@env";
+import { IP_ADDRESS } from "@env";
 
 const BookDetailsScreen = ({ route }) => {
   const [book, setBook] = useState(null);
+  const token = useSelector((state) => state.user.value.token);
+  const [userId, setUserId] = useState(null);
+  const [isLike, setIsLike] = useState([]);
+  const [hideComment, setHideComment] = useState([]);
+  const [avis, setAvis] = useState([]);
+
   const { isbn } = route.params;
 
   useEffect(() => {
@@ -38,12 +44,6 @@ const BookDetailsScreen = ({ route }) => {
       }
     })();
   }, [isbn]);
-
-  const token = useSelector((state) => state.user.value.token);
-  const [userId, setUserId] = useState(null);
-  const [isLike, setIsLike] = useState([]);
-  const [hideComment, setHideComment] = useState([]);
-  const [avis, setAvis] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -156,7 +156,7 @@ const BookDetailsScreen = ({ route }) => {
             <Background cover={book.cover} />
             <View className="w-full bg-white rounded-t-[2rem] p-5 -mt-10 gap-5">
               <TitleAuthorBook title={book.title} author={book.author} />
-              <Status />
+              <Status bookId={book._id} />
               <View className="flex flex-row items-center justify-center gap-2 mt-3">
                 <Note averageNote={averageNote} />
                 <Tome tome={book.volume} />
