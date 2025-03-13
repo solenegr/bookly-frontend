@@ -7,10 +7,11 @@ import {
   UserReview,
 } from "../components/profile_details";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+
+import {useSelector,useDispatch } from "react-redux";
 import { IP_ADDRESS } from "@env";
 import userAvis from "../data/userAvis.json";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 
 
 export default function ProfileScreen({ navigation }) {
@@ -57,7 +58,11 @@ export default function ProfileScreen({ navigation }) {
     { name: "High Fantasy", color: "#77DD77" },
     { name: "Mythologie", color: "#FFD700" },
   ];
+  const books = useSelector((state) => state.books.value);
+  const readingBooks = books.books.filter(e => e.status === "En cours de lecture").map(e => ({ cover: e.cover, isbn: e.isbn }));
+  const completedBooks = books.books.filter(e => e.status === "Terminé").map(e => ({ cover: e.cover, isbn: e.isbn }));
 
+  
   return (
     <SafeAreaView edges={["top"]} className="bg-white flex-1 w-full h-full">
       <FlatList
@@ -72,7 +77,7 @@ export default function ProfileScreen({ navigation }) {
               <Bio />
               {/* Liens à faire */}
               <View className="flex flex-row items-center justify-center gap-2">
-                <GrayBlock mainText="142" subText="livres lus" />
+                <GrayBlock mainText={completedBooks.length} subText="livres lus" />
                 <GrayBlock mainText={userReviews.length} subText="avis publiés" />
                 <GrayBlock mainText="234" subText="avis likés" />
               </View>
@@ -83,15 +88,24 @@ export default function ProfileScreen({ navigation }) {
                   Mes livres en cours
                 </Text>
                 {/* A rendre dynamique avec BDD */}
-                <ScrollView horizontal={true} className="flex-row pl-6">
-                  {Object.keys(imageMap).map((img, imgIndex) => (
-                    <Image
-                      key={imgIndex}
-                      className="w-24 h-36 object-scale-down mr-2"
-                      source={imageMap[img]}
-                    />
-                  ))}
-                </ScrollView>
+                {readingBooks.length > 0 && (
+                  <View className="flex flex-col gap-4">
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row px-4">
+                      {readingBooks.map((book, index) => (
+                        <TouchableOpacity 
+                          key={book.isbn || index} 
+                          onPress={() => navigation.navigate("Details", { isbn: book.isbn })}
+                        >
+                          <Image
+                            className="w-40 h-56 object-cover rounded-lg mr-2"
+                            source={{ uri: book.cover }}
+                          />
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
+
               </View>
               <View className="mb-5">
                 <Text className="text-gray-800 font-nunitoExtraBold text-xl mt-5 mb-2 pl-6">
