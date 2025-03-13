@@ -15,16 +15,14 @@ export default function ConnectionScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
-  const IpAdress = process.env.IP_ADDRESS;
-  const user = useSelector((state) => state.user.value)
 
+  const user = useSelector((state) => state.user.value);
 
   const [emailError, setEmailError] = useState(false);
 
   const handleConnection = () => {
     if (EMAIL_REGEX.test(email)) {
-      console.log("test env", IpAdress);
-      fetch(`http://${IpAdress}:3000/users/signin`, {
+      fetch(`http://${IP_ADDRESS}:3000/users/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,14 +34,13 @@ export default function ConnectionScreen({ navigation }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.user);
           if (data.result) {
             dispatch(
               login({
+                _id: data.user._id,
                 username: data.user.username,
                 firstname: data.user.firstname,
                 email: data.user.email,
-                password: data.user.password,
                 token: data.user.token,
               })
             );

@@ -15,20 +15,25 @@ import {
   WelcomeScreen,
   ChatScreen,
   ChallengeScreen,
-  ResearchScreen
+  ResearchScreen,
 } from "./screens";
 //navigate imoports
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 //redux imports
-import { Provider, useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { persistStore, persistReducer } from "redux-persist";
+import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
+import { PersistGate } from "redux-persist/integration/react";
+
 import user from "./reducers/user";
 import books from "./reducers/books";
 import challenge from "./reducers/challenge";
+import conversations from "./reducers/conversations";
 
-//design imports
+//font imports
 import {
   Nunito_200ExtraLight,
   Nunito_300Light,
@@ -46,9 +51,21 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 SplashScreen.preventAutoHideAsync(); // Empêche l'écran de chargement de disparaître avant le chargement des polices
 
+const persistConfig = {
+  key: "user",
+  storage: AsyncStorage,
+};
+const persistedUserReducer = persistReducer(persistConfig, user);
+
 const store = configureStore({
-  reducer: { user, books, challenge },
+  reducer: { user: persistedUserReducer, books, challenge, conversations },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // ✅ Empêche les erreurs de Redux Persist sur des valeurs non sérialisables
+    }),
 });
+
+const persistor = persistStore(store);
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -118,17 +135,20 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Welcome" component={ChallengeScreen} />
-          <Stack.Screen name="Connection" component={ConnectionScreen} />
-          <Stack.Screen name="SignUp" component={SignUpScreen} />
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen name="BookDetails" component={BookDetailsScreen} />
-          <Stack.Screen name="Chat" component={ChatScreen} />
-          <Stack.Screen name="Scan" component={ScanScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Welcome" component={WelcomeScreen} />
+            <Stack.Screen name="Connection" component={ConnectionScreen} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
+            <Stack.Screen name="BookDetails" component={BookDetailsScreen} />
+            <Stack.Screen name="Chat" component={ChatScreen} />
+            <Stack.Screen name="Scan" component={ScanScreen} />
+            <Stack.Screen name="Challenge" component={ChallengeScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }
