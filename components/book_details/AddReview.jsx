@@ -1,4 +1,3 @@
-import Pusher from "pusher-js/react-native";
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -21,18 +20,19 @@ const AddReview = ({ bookId, userId }) => {
     setLoading(true);
 
     try {
+      const postData = {
+        content: comment,
+        book: bookId,
+        user: userId,
+        note: rating,
+      };
       // 🔥 On envoie la review au BACKEND, qui lui va utiliser Pusher
       const response = await fetch(
         `http://${process.env.IP_ADDRESS}:3000/reviews`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            content: comment,
-            book: bookId,
-            user: userId,
-            note: rating,
-          }),
+          body: JSON.stringify(postData),
         }
       );
 
@@ -71,7 +71,7 @@ const AddReview = ({ bookId, userId }) => {
 
       {/* 📝 Input du commentaire */}
       <TextInput
-        placeholder="Écris ton avis ici..."
+        placeholder="ajouter un commentaire"
         value={comment}
         onChangeText={setComment}
         className="border p-3 rounded-md bg-white"
