@@ -20,10 +20,11 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { IP_ADDRESS, PUSHER_KEY, PUSHER_CLUSTER} from "@env";
 // import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 const imageMap = {
-  book1: require("../assets/temp/terremer.webp"),
-  book2: require("../assets/temp/terremer.webp"),
-  book3: require("../assets/temp/terremer.webp"),
-  book4: require("../assets/temp/terremer.webp"),
+  book1: require("../assets/temp/354.jpg"),
+  book2: require("../assets/temp/9782246831464.jpg"),
+  book3: require("../assets/temp/Preference-systeme.jpg"),
+  book4: require("../assets/temp/Gone-baby-gone.jpg"),
+  book5: require("../assets/temp/Un-pays-a-l-aube.jpg")
 };
 
 const genres = [
@@ -115,7 +116,7 @@ export default function HomeScreen({ navigation }) {
     
       
   
-  }, [readinBooks]); // Ajout de 'user?.token' dans les dépendances  
+  }, []); // Ajout de 'user?.token' dans les dépendances  
 
 
   const handlePageChange = (isbn, value) => {

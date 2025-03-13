@@ -79,7 +79,7 @@ export default function SignUpScreen({ navigation }) {
               autoCapitalize="none"
               onChangeText={(value) => setFirstname(value)}
               value={firstname}
-              className="border-button_purple border w-64 h-12 m-3 rounded-md"
+              className="border-button_purple border w-64 h-12 m-3 rounded-md pl-2"
             ></TextInput>
             <TextInput
               placeholder="Username"
@@ -87,7 +87,7 @@ export default function SignUpScreen({ navigation }) {
               textContentType="username"
               onChangeText={(value) => setUsername(value)}
               value={username}
-              className="border-button_purple border w-64 h-12 m-3 rounded-md"
+              className="border-button_purple border w-64 h-12 m-3 rounded-md pl-2"
             ></TextInput>
             <TextInput
               placeholder="Email"
@@ -96,7 +96,7 @@ export default function SignUpScreen({ navigation }) {
               textContentType="emailAddress"
               onChangeText={(value) => setEmail(value)}
               value={email}
-              className="border-button_purple border w-64 h-12 m-3 rounded-md"
+              className="border-button_purple border w-64 h-12 m-3 rounded-md pl-2"
             ></TextInput>
             <TextInput
               placeholder="Password"
@@ -106,7 +106,7 @@ export default function SignUpScreen({ navigation }) {
               secureTextEntry={true}
               onChangeText={(value) => setPassword(value)}
               value={password}
-              className="border-button_purple border w-64 h-12 m-3 rounded-md"
+              className="border-button_purple border w-64 h-12 m-3 rounded-md pl-2"
             ></TextInput>
             {emailError && (
               <Text className="mt-3 text-red-500">Invalid email adress</Text>
