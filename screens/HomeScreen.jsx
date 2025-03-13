@@ -9,7 +9,7 @@ import {
   TextInput,
   Keyboard,
 } from "react-native";
-
+import Pusher from "pusher-js";
 import { updateLibrary } from "../reducers/books";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Progress from "react-native-progress";
@@ -17,7 +17,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useSelector,useDispatch } from "react-redux";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { IP_ADDRESS} from "@env";
+import { IP_ADDRESS, PUSHER_KEY, PUSHER_CLUSTER} from "@env";
 // import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 const imageMap = {
   book1: require("../assets/temp/terremer.webp"),
@@ -48,6 +48,32 @@ export default function HomeScreen({ navigation }) {
     { title: "Les plus ajoutés", images: ["book1", "book2", "book3"] },
   ];
   
+  useEffect(() => {
+    // Initialiser Pusher avec la clé de votre application
+    const pusher = new Pusher(PUSHER_KEY, {
+      cluster: PUSHER_CLUSTER, // Assurez-vous que cela correspond à votre configuration Pusher
+    });
+
+    // S'abonner au canal
+    const channel = pusher.subscribe('book-channel');
+
+    // Lier l'événement pour la mise à jour des livres
+    channel.bind('update-books', (data) => {
+      console.log('Mise à jour des livres reçue :', data.books);
+      setReadinBooks(data.books); // Mettre à jour les livres dans l'état
+    });
+
+    // Fonction de nettoyage lors du démontage du composant
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+      pusher.disconnect();
+    };
+  }, []);
+  
+
+
+
   useEffect(() => {
 
     if (allGenreLabrary.length > 0) {
@@ -89,7 +115,7 @@ export default function HomeScreen({ navigation }) {
     
       
   
-  }, [dispatch, user?.token,readinBooks]); // Ajout de 'user?.token' dans les dépendances  
+  }, [readinBooks]); // Ajout de 'user?.token' dans les dépendances  
 
 
   const handlePageChange = (isbn, value) => {

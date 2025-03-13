@@ -2,6 +2,7 @@ import { Text, View, TouchableOpacity, TextInput, ScrollView, Image } from 'reac
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState} from 'react';
 import {useSelector,useDispatch } from "react-redux";
+import LibrarySearch from '../components/LibrarySearch';
 
 export default function LibraryScreen({ navigation }) {
   const [search, setSearch] = useState('');
