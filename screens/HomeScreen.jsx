@@ -115,7 +115,7 @@ export default function HomeScreen({ navigation }) {
     
       
   
-  }, [readinBooks]); // Ajout de 'user?.token' dans les dépendances  
+  }, []); // Ajout de 'user?.token' dans les dépendances  
 
 
   const handlePageChange = (isbn, value) => {
