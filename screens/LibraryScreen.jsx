@@ -1,11 +1,19 @@
-import { Text, View, TouchableOpacity, TextInput, ScrollView, Image } from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState} from 'react';
-import {useSelector,useDispatch } from "react-redux";
-import LibrarySearch from '../components/LibrarySearch';
+import { useState, useEffect } from "react";
+import { updateLibrary } from "../reducers/books";
+import { useSelector, useDispatch } from "react-redux";
+import LibrarySearch from "../components/LibrarySearch";
+import { IP_ADDRESS } from "@env";
 
 export default function LibraryScreen({ navigation }) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const dispatch = useDispatch();
   const [genreCliked, setGenreCliked] = useState(false);
   const [statusCliked, setStatusCliked] = useState(true);
@@ -50,15 +58,15 @@ export default function LibraryScreen({ navigation }) {
 
   return (
     <SafeAreaView className="flex-1" edges={["top"]}>
-      <ScrollView 
-        className="flex-1" 
+      <ScrollView
+        className="flex-1"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingBottom: 20 }}
       >
         <View className="flex flex-col gap-4 p-4">
           {/* Barre de recherche */}
           <View className="flex flex-row justify-center">
-          <LibrarySearch />
+            <LibrarySearch navigation={navigation}/>
             {/* <TextInput
               className="border-2 border-button_purple p-4 rounded-lg w-80 bg-light_gray text-center"
               placeholder="Chercher sur ma biblio"
@@ -69,16 +77,34 @@ export default function LibraryScreen({ navigation }) {
 
           {/* Boutons de filtre */}
           <View className="flex flex-row gap-4 justify-center">
-            <TouchableOpacity  
-              className={`p-4 rounded-xl w-32 items-center ${statusCliked ? 'bg-button_purple' : 'bg-white'}`} 
-              onPress={handleClickStatus}>
-              <Text className={`${statusCliked ? 'text-white' : 'text-button_purple'}`}>Status</Text>
+            <TouchableOpacity
+              className={`p-4 rounded-xl w-32 items-center ${
+                statusCliked ? "bg-button_purple" : "bg-white"
+              }`}
+              onPress={handleClickStatus}
+            >
+              <Text
+                className={`${
+                  statusCliked ? "text-white" : "text-button_purple"
+                }`}
+              >
+                Status
+              </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity  
-              className={`p-4 rounded-xl w-32 items-center ${genreCliked ? 'bg-button_purple' : 'bg-white'}`} 
-              onPress={handleClickGenre}>
-              <Text className={`${genreCliked ? 'text-white' : 'text-button_purple'}`}>Genre</Text>
+            <TouchableOpacity
+              className={`p-4 rounded-xl w-32 items-center ${
+                genreCliked ? "bg-button_purple" : "bg-white"
+              }`}
+              onPress={handleClickGenre}
+            >
+              <Text
+                className={`${
+                  genreCliked ? "text-white" : "text-button_purple"
+                }`}
+              >
+                Genre
+              </Text>
             </TouchableOpacity>
           </View>
 

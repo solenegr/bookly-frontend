@@ -3,8 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateStatusBook, addBookLibrary } from "../../reducers/books";
 import { IP_ADDRESS } from "@env";
-const Status = ({ bookId }) => {
-  const idLibrary = "67d177f18dc2d2bfeab9d7ed";
+const Status = ({ bookId, libraryId }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const books = useSelector((state) => state.books.value.books);
@@ -24,35 +23,30 @@ const Status = ({ bookId }) => {
     setIsOpen((oldState) => !oldState);
   };
 
-  const handleSelectStatus = async (text) => {
-    try {
-      fetch(
-        `http://${IP_ADDRESS}:3000/libraries/${idLibrary}/readings/${bookId}/status`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ newStatus: text }),
-        }
-      );
-
-      dispatch(
-        updateStatusBook({
-          id: 1,
-          status: text,
-          title: "Terremer (Édition intégrale)",
-          author: "Ursula K. Le Guin",
-          year: 2017,
-          genre: "Fantasy",
-          tome: 1,
-          pages: 992,
-          cover:
-            "http://books.google.com/books/content?id=LjRjDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-        })
-      );
-      setIsOpen(false);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleSelectStatus = (text) => {
+    fetch(
+      `http://${IP_ADDRESS}:3000/libraries/${libraryId}/readings/${bookId}/status`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newStatus: text }),
+      }
+    );
+    dispatch(
+      updateStatusBook({
+        id: bookId,
+        status: text,
+        title: "Terremer (Édition intégrale)",
+        author: "Ursula K. Le Guin",
+        year: 2017,
+        genre: "Fantasy",
+        tome: 1,
+        pages: 992,
+        cover:
+          "http://books.google.com/books/content?id=LjRjDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+      })
+    );
+    setIsOpen(false);
   };
 
   return (
