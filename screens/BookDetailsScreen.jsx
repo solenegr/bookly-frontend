@@ -141,7 +141,7 @@ const BookDetailsScreen = ({ route }) => {
                 volume={book.volume}
                 summary={book.summary}
                 publisher={book.publisher}
-                pages={992}
+                pages={book.pages}
                 cover={book.cover}
                 year={book.publicationYear}
                 genres={book.genres}
@@ -149,7 +149,7 @@ const BookDetailsScreen = ({ route }) => {
               />
               <View className="flex flex-row items-center justify-center gap-2 mt-3">
                 <Note averageNote={averageNote} />
-                <Tome tome={book.volume} />
+                <Tome tome={book.volume} pages={book.pages}/>
                 <Bookmark
                   _id={book._id}
                   title={book.title}
@@ -157,7 +157,7 @@ const BookDetailsScreen = ({ route }) => {
                   volume={book.volume}
                   summary={book.summary}
                   publisher={book.publisher}
-                  pages={992}
+                  pages={book.pages}
                   cover={book.cover}
                   year={book.publicationYear}
                   genres={book.genres}
