@@ -58,11 +58,12 @@ export default function ProfileScreen({ navigation }) {
     { name: "High Fantasy", color: "#77DD77" },
     { name: "Mythologie", color: "#FFD700" },
   ];
+ 
   const books = useSelector((state) => state.books.value);
   const readingBooks = books.books.filter(e => e.status === "En cours de lecture").map(e => ({ cover: e.cover, isbn: e.isbn }));
   const completedBooks = books.books.filter(e => e.status === "Terminé").map(e => ({ cover: e.cover, isbn: e.isbn }));
 
-  
+ 
   return (
     <SafeAreaView edges={["top"]} className="bg-white flex-1 w-full h-full">
       <FlatList
