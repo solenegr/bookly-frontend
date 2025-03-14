@@ -36,40 +36,17 @@ const genres = [
 ];
 
 export default function HomeScreen({ navigation }) {
+  const books = useSelector((state) => state.books.value.books);
+
   const [pagesReadForBooks, setPagesReadForBooks] = useState({});
   const [updatedGenres, setUpdatedGenres] = useState([]);
   const user = useSelector((state) => state.user.value);
-  const [firstname, setFirstname] = useState("");
   const [plusClicked, setPlusClicked] = useState(false);
-  const [readinBooks, setReadinBooks] = useState([]);
   const [allGenreLabrary, setAllGenreLabrary] = useState([]);
   const dispatch = useDispatch();
   const plusAjoutes = [
     { title: "Les plus ajoutés", images: ["book1", "book2", "book3"] },
   ];
-
-  useEffect(() => {
-    // Initialiser Pusher avec la clé de votre application
-    const pusher = new Pusher(PUSHER_KEY, {
-      cluster: PUSHER_CLUSTER, // Assurez-vous que cela correspond à votre configuration Pusher
-    });
-
-    // S'abonner au canal
-    const channel = pusher.subscribe(`book-channel-${user._id}`);
-
-    // Lier l'événement pour la mise à jour des livres
-    channel.bind("update-books", (data) => {
-      console.log("Mise à jour des livres reçue :", data.books);
-      setReadinBooks(data.books); // Mettre à jour les livres dans l'état
-    });
-
-    // Fonction de nettoyage lors du démontage du composant
-    return () => {
-      channel.unbind_all();
-      channel.unsubscribe();
-      pusher.disconnect();
-    };
-  }, []);
 
   useEffect(() => {
     if (allGenreLabrary.length > 0) {
@@ -86,53 +63,31 @@ export default function HomeScreen({ navigation }) {
   }, [allGenreLabrary]);
 
   useEffect(() => {
-    if (!user._id) return; // Vérifier si l'id existe
-    async () => {
+    if (!user._id && !books.length) return; // Vérifier si l'id existe
+    (async () => {
       try {
         const res = await fetch(
-          `http://${IP_ADDRESS}:3000/libraries/user/${user._id}`
+          `http://${IP_ADDRESS}:3000/libraries/user/${user._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
         );
 
         const data = await res.json();
 
         if (data.result) {
-          console.log("DATA", data);
           dispatch(updateLibrary(data.books)); // Mise à jour du Redux Store
-          setReadinBooks(
-            data.books.filter((e) => e.status === "En cours de lecture")
-          );
+          console.log("MAJ REDUX BOOKS", books);
           const uniqueGenres = [...new Set(data.books.flatMap((e) => e.genre))];
           setAllGenreLabrary(uniqueGenres);
-        } else {
-          console.error("erreur data library");
         }
       } catch (error) {
         console.log(error);
       }
-    };
-    // fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     if (data.result && data.user?._id) {
-    //       return fetch(`http://${IP_ADDRESS}:3000/libraries/user/${data.user._id}`);
-    //     } else {
-    //       throw new Error("Utilisateur non trouvé");
-    //     }
-    //   })
-    //   .then(res => res?.json())
-    //   .then(data => {
-    //     if (data?.success) {
-    //       dispatch(updateLibrary(data.books)); // Mise à jour du Redux Store
-    //       setReadinBooks(data.books.filter((e) => e.status === "En cours de lecture"));
-    //       const uniqueGenres = [...new Set(data.books.flatMap(e => e.genre))];
-    //       setAllGenreLabrary(uniqueGenres);
-
-    //     } else {
-    //       console.error("Erreur : bibliothèque non trouvée");
-    //     }
-    //   })
-    //   .catch(error => console.error("Erreur lors du fetch :", error));
-  }, [readinBooks]); // Ajout de 'user?.token' dans les dépendances
+    })();
+  }, [user._id]); // Ajout de 'user?.token' dans les dépendances
 
   const handlePageChange = (isbn, value) => {
     setPagesReadForBooks((prev) => ({
@@ -141,26 +96,15 @@ export default function HomeScreen({ navigation }) {
     }));
   };
 
-  useEffect(() => {
-    fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          setFirstname(
-            data.user.firstname.charAt(0).toUpperCase() +
-              data.user.firstname.slice(1)
-          );
-        }
-      });
-  }, []);
-
   return (
-    <SafeAreaView className="flex-1 flex-col justify-start mt-5 gap-4">
+    <SafeAreaView className="flex-1 flex-col justify-start mt-5 gap-4  px-5">
       <ScrollView>
         {/* Header */}
         <View className="flex-row justify-evenly">
-          <Text className="font-nunitoBold text-lg">Hello {firstname}</Text>
-          <Text className="font-nunitoBold text-lg bg-light_purple">
+          <Text className="font-nunitoBold text-lg">
+            Hello {user.firstname}
+          </Text>
+          <Text className="font-nunitoBold text-lg bg-light_purple ">
             Livre en cours
           </Text>
         </View>
@@ -169,59 +113,61 @@ export default function HomeScreen({ navigation }) {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          className="flex-row"
+          className="flex-row "
         >
-          {readinBooks.map((book) => (
-            <View
-              key={book.isbn || book._id}
-              className="flex-row gap-2 pt-4 bg-light_purple rounded-xl w-auto"
-            >
-              <Image
-                className="w-32 h-52 mb-5"
-                resizeMode="contain"
-                source={{ uri: book.cover }}
-                onTouchEnd={() =>
-                  navigation.navigate("Details", { isbn: book.isbn })
-                }
-              />
-              <View className="flex-col gap-1 pt-7">
-                <Text className="font-nunitoBold text-lg">{book.title}</Text>
-                <Text className="font-medium text-sm">{book.author}</Text>
-                {/* Afficher la progression des pages lues */}
-                <Text>
-                  Pages lues : {pagesReadForBooks[book.isbn] || 0} /{" "}
-                  {book.pages}
-                </Text>
-                <Progress.Bar
-                  progress={(pagesReadForBooks[book.isbn] || 0) / book.pages}
-                  width={220}
-                  height={15}
-                  color="#2960A1"
+          {books
+            .filter((e) => e.status === "En cours de lecture")
+            .map((book) => (
+              <View
+                key={book.isbn || book._id}
+                className="flex-row gap-2 pt-4 bg-light_purple rounded-xl w-auto ml-5 px-4"
+              >
+                <Image
+                  className="w-32 h-52 mb-5"
+                  resizeMode="contain"
+                  source={{ uri: book.cover }}
+                  onTouchEnd={() =>
+                    navigation.navigate("Details", { isbn: book.isbn })
+                  }
                 />
-                <Text>Ajouter un marque-page</Text>
-                {/* Input et bouton pour modifier les pages lues */}
-                <View className="flex-row justify-start items-center">
-                  <TextInput
-                    keyboardType="numeric"
-                    onChangeText={(value) =>
-                      handlePageChange(book.isbn, parseInt(value) || 0)
-                    }
-                    value={(pagesReadForBooks[book.isbn] || 0).toString()}
-                    className="border-navy_blue border w-20 h-10 rounded-md p-2 "
+                <View className="flex-col  gap-1 pt-7 ml-2">
+                  <Text className="font-nunitoBold text-lg">{book.title}</Text>
+                  <Text className="font-medium text-sm">{book.author}</Text>
+                  {/* Afficher la progression des pages lues */}
+                  <Text>
+                    Pages lues : {pagesReadForBooks[book.isbn] || 0} /{" "}
+                    {book.pages}
+                  </Text>
+                  <Progress.Bar
+                    progress={(pagesReadForBooks[book.isbn] || 0) / book.pages}
+                    width={220}
+                    height={15}
+                    color="#2960A1"
                   />
-                  <TouchableOpacity>
-                    <MaterialIcons
-                      name={"check"}
-                      color={
-                        pagesReadForBooks[book.isbn] !== 0 ? "green" : "gray"
+                  <Text>Ajouter un marque-page</Text>
+                  {/* Input et bouton pour modifier les pages lues */}
+                  <View className="flex-row justify-start items-center">
+                    <TextInput
+                      keyboardType="numeric"
+                      onChangeText={(value) =>
+                        handlePageChange(book.isbn, parseInt(value) || 0)
                       }
-                      size={24}
+                      value={(pagesReadForBooks[book.isbn] || 0).toString()}
+                      className="border-navy_blue border w-20 h-10 rounded-md p-2 "
                     />
-                  </TouchableOpacity>
+                    <TouchableOpacity>
+                      <MaterialIcons
+                        name={"check"}
+                        color={
+                          pagesReadForBooks[book.isbn] !== 0 ? "green" : "gray"
+                        }
+                        size={24}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
-          ))}
+            ))}
         </ScrollView>
 
         {/* Genres */}
