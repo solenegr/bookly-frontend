@@ -121,7 +121,7 @@ export default function LibraryScreen({ navigation }) {
                 {section.images.map((book, imgIndex) => (
                   <Image
                     key={imgIndex}
-                    className="w-40 h-56 object-cover rounded-lg mr-2"
+                    className="w-40 h-56 object-scale-down rounded-lg mr-2"
                     source={{uri: book.cover}} // Utilisation de la couverture
                     onTouchEnd={() => navigation.navigate("Details", { isbn: book.isbn })} // Passage de l'ISBN
                   />
