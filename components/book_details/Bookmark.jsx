@@ -21,51 +21,65 @@ const Bookmark = ({
   const books = useSelector((state) => state.books.value.books);
   const dispatch = useDispatch();
   const bookIds = new Set(books.map((book) => book._id));
-  const isBookmarked = bookIds.has(_id); // check si le livre est deja ajouté dans la biblio
-  const token = useSelector((state) => state.user.value.token);
-  const handleAddBook = async () => {
-    dispatch(
-      addBookLibrary({
-        _id,
-        title,
-        author,
-        volume,
-        summary,
-        publisher,
-        pages,
-        cover,
-        year,
-        genres,
-        status,
-        isbn,
-      })
-    );
+  const isBookmarked = bookIds.has(_id) || bookIds.has(isbn);
+  const { token } = useSelector((state) => state.user.value);
 
-    fetch(`http://${process.env.IP_ADDRESS}:3000/users/${token}`)
-      .then((res) => res.json())
-      .then((data) => {
+  const handleAddBook = async () => {
+    console.log(token);
+    try {
+      const userRes = await fetch(
+        `http://${process.env.IP_ADDRESS}:3000/users/${token}`
+      );
+      const userData = await userRes.json();
+
+      if (userData.result) {
+        const res = await fetch(
+          `http://${process.env.IP_ADDRESS}:3000/libraries/add-to-library`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              bookId: _id || isbn,
+              genres,
+              status: status || "A lire",
+              userId: userData.user._id,
+            }),
+          }
+        );
+
+        const data = await res.json();
+
         if (data.result) {
-          fetch(
-            `http://${process.env.IP_ADDRESS}:3000/libraries/add-to-library`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                bookId: _id,
-                genres,
-                status,
-                userId: data.user._id,
-              }),
-            }
+          dispatch(
+            addBookLibrary({
+              _id: _id || isbn,
+              title,
+              author,
+              volume,
+              summary,
+              publisher,
+              pages,
+              cover,
+              year,
+              genres,
+              status: status || "A lire",
+              isbn,
+            })
           );
+        } else {
+          console.error("Erreur API :", data);
         }
-      });
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du livre :", error);
+    }
   };
 
   const handleDeleteBook = () => {
-    dispatch(removeBookLibrary(_id));
+    dispatch(removeBookLibrary(_id || isbn));
   };
 
   return (

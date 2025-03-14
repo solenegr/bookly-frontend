@@ -1,16 +1,11 @@
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-} from "react-native";
+import { Text, View, TouchableOpacity, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect } from "react";
 import { updateLibrary } from "../reducers/books";
 import { useSelector, useDispatch } from "react-redux";
-import LibrarySearch from "../components/LibrarySearch";
+
 import { IP_ADDRESS } from "@env";
+import { LibrarySearch } from "../components/library";
 
 export default function LibraryScreen({ navigation }) {
   const [search, setSearch] = useState("");
@@ -18,10 +13,16 @@ export default function LibraryScreen({ navigation }) {
   const [genreCliked, setGenreCliked] = useState(false);
   const [statusCliked, setStatusCliked] = useState(true);
   const books = useSelector((state) => state.books.value);
-  const readingBooks = books.books.filter(e => e.status === "En cours de lecture").map(e => ({ cover: e.cover, isbn: e.isbn }));
-  const completedBooks = books.books.filter(e => e.status === "Terminé").map(e => ({ cover: e.cover, isbn: e.isbn }));
-  const wantToReadBooks = books.books.filter(e => e.status === "A lire").map(e => ({ cover: e.cover, isbn: e.isbn }));
-  const myBooks = books.books.map(e => ({ cover: e.cover, isbn: e.isbn }));
+  const readingBooks = books.books
+    .filter((e) => e.status === "En cours de lecture")
+    .map((e) => ({ cover: e.cover, isbn: e.isbn }));
+  const completedBooks = books.books
+    .filter((e) => e.status === "Terminé")
+    .map((e) => ({ cover: e.cover, isbn: e.isbn }));
+  const wantToReadBooks = books.books
+    .filter((e) => e.status === "A lire")
+    .map((e) => ({ cover: e.cover, isbn: e.isbn }));
+  const myBooks = books.books.map((e) => ({ cover: e.cover, isbn: e.isbn }));
 
   const groupByGenre = (books) => {
     if (!Array.isArray(books)) {
@@ -30,9 +31,11 @@ export default function LibraryScreen({ navigation }) {
     }
 
     return books.reduce((acc, book) => {
-      const genres = Array.isArray(book.genre) 
-        ? book.genre 
-        : book.genre ? book.genre.split(",") : [];
+      const genres = Array.isArray(book.genre)
+        ? book.genre
+        : book.genre
+        ? book.genre.split(",")
+        : [];
 
       genres.forEach((genre) => {
         genre = genre.trim();
@@ -50,7 +53,7 @@ export default function LibraryScreen({ navigation }) {
     setGenreCliked(true);
     setStatusCliked(false);
   };
-  
+
   const handleClickStatus = () => {
     setGenreCliked(false);
     setStatusCliked(true);
@@ -66,7 +69,7 @@ export default function LibraryScreen({ navigation }) {
         <View className="flex flex-col gap-4 p-4">
           {/* Barre de recherche */}
           <View className="flex flex-row justify-center">
-            <LibrarySearch navigation={navigation}/>
+            <LibrarySearch navigation={navigation} />
             {/* <TextInput
               className="border-2 border-button_purple p-4 rounded-lg w-80 bg-light_gray text-center"
               placeholder="Chercher sur ma biblio"
@@ -109,42 +112,55 @@ export default function LibraryScreen({ navigation }) {
           </View>
 
           {/* Sections des livres */}
-          {!genreCliked && [
-            { title: "En cours", images: readingBooks },
-            { title: "Livres lus", images: completedBooks},
-            { title: "Livre à lire", images: wantToReadBooks},
-            { title: "Tous mes livres", images: myBooks },
-          ].map((section, index) => (
-            <View key={index} className="flex flex-col gap-4">
-              <Text className="text-gray-800 font-nunitoRegular text-lg">{section.title}</Text>
-              <ScrollView horizontal={true} className="flex-row">
-                {section.images.map((book, imgIndex) => (
-                  <Image
-                    key={imgIndex}
-                    className="w-40 h-56 object-scale-down rounded-lg mr-2"
-                    source={{uri: book.cover}} // Utilisation de la couverture
-                    onTouchEnd={() => navigation.navigate("Details", { isbn: book.isbn })} // Passage de l'ISBN
-                  />
-                ))}
-              </ScrollView>
-            </View>
-          ))}
 
-          {genreCliked && Object.entries(booksByGenre).map(([genre, booksList]) => (
-            <View key={genre} className="flex flex-col gap-4">
-              <Text className="text-gray-800 font-nunitoRegular text-lg">{genre}</Text>
-              <ScrollView horizontal={true} className="flex-row">
-                {booksList.map((book, index) => (
-                  <Image
-                    key={index}
-                    className="w-40 h-56 object-cover rounded-lg mr-2"
-                    source={{uri: book.cover}} // Utilisation de la couverture
-                    onTouchEnd={() => navigation.navigate("Details", { isbn: book.isbn })} // Passage de l'ISBN
-                  />
-                ))}
-              </ScrollView>
-            </View>
-          ))}
+
+          {!genreCliked &&
+            [
+              { title: "En cours", images: readingBooks },
+              { title: "Livres lus", images: completedBooks },
+              { title: "Livre à lire", images: wantToReadBooks },
+              { title: "Tous mes livres", images: myBooks },
+            ].map((section, index) => (
+              <View key={index} className="flex flex-col gap-4">
+                <Text className="text-gray-800 font-nunitoRegular text-lg">
+                  {section.title}
+                </Text>
+                <ScrollView horizontal={true} className="flex-row">
+                  {section.images.map((book, imgIndex) => (
+                    <Image
+                      key={imgIndex}
+                      className="w-40 h-56 object-cover rounded-lg mr-2"
+                      source={{ uri: book.cover }} // Utilisation de la couverture
+                      onTouchEnd={() =>
+                        navigation.navigate("Details", { isbn: book.isbn })
+                      } // Passage de l'ISBN
+                    />
+                  ))}
+                </ScrollView>
+              </View>
+            ))}
+
+
+          {genreCliked &&
+            Object.entries(booksByGenre).map(([genre, booksList]) => (
+              <View key={genre} className="flex flex-col gap-4">
+                <Text className="text-gray-800 font-nunitoRegular text-lg">
+                  {genre}
+                </Text>
+                <ScrollView horizontal={true} className="flex-row">
+                  {booksList.map((book, index) => (
+                    <Image
+                      key={index}
+                      className="w-40 h-56 object-cover rounded-lg mr-2"
+                      source={{ uri: book.cover }} // Utilisation de la couverture
+                      onTouchEnd={() =>
+                        navigation.navigate("Details", { isbn: book.isbn })
+                      } // Passage de l'ISBN
+                    />
+                  ))}
+                </ScrollView>
+              </View>
+            ))}
         </View>
       </ScrollView>
     </SafeAreaView>
