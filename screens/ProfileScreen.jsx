@@ -57,6 +57,8 @@ export default function ProfileScreen({ navigation }) {
     { name: "Magie", color: "#C792EA" },
     { name: "High Fantasy", color: "#77DD77" },
     { name: "Mythologie", color: "#FFD700" },
+    
+    
   ];
  
   const books = useSelector((state) => state.books.value);
@@ -80,7 +82,7 @@ export default function ProfileScreen({ navigation }) {
               <View className="flex flex-row items-center justify-center gap-2">
                 <GrayBlock mainText={completedBooks.length} subText="livres lus" />
                 <GrayBlock mainText={userReviews.length} subText="avis publiés" />
-                <GrayBlock mainText="234" subText="avis likés" />
+                <GrayBlock mainText="24" subText="avis likés" />
               </View>
             </View>
             <View className="bg-white">
