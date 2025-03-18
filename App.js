@@ -68,6 +68,10 @@ const store = configureStore({
 const persistor = persistStore(store);
 
 export default function App() {
+  console.log = () => {};
+  console.warn = () => {};
+  console.error = () => {};
+
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
 

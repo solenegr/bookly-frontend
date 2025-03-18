@@ -1,17 +1,16 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 
-const genres = [
-  { name: "Fantasy", color: "#74C0FC" },
-  { name: "Aventure", color: "#FFB347" },
-  { name: "Roman initiatique", color: "#FF85A2" },
-  { name: "Magie", color: "#C792EA" },
-  { name: "High Fantasy", color: "#77DD77" },
-  { name: "Mythologie", color: "#FFD700" },
+const genresColor = [
+  "#74C0FC",
+  "#FFB347",
+  "#FF85A2",
+  "#C792EA",
+  "#77DD77",
+  "#FFD700",
 ];
 
-const Genres = ({genres}) => {
-  
+const Genres = ({ genres }) => {
   return (
     <View className="flex-row flex-wrap gap-2 justify-center -mt-1">
       {genres.map((genre, index) => (
@@ -20,15 +19,17 @@ const Genres = ({genres}) => {
           key={index}
           className="px-3.5 py-1 rounded-full"
           style={{
-            backgroundColor: genre.color,
-            shadowColor: genre.color,
+            backgroundColor: genresColor[index % genres.length],
+            shadowColor: genresColor[index % genres.length],
             shadowOpacity: 0.5,
             shadowRadius: 2.62,
             shadowOffset: { width: 500, height: 3 },
             elevation: 4,
           }}
         >
-          <Text className="text-gray-800 text-base font-nunitoBold">
+          <Text
+            className={`text-gray-800 text-base font-nunitoBold ${`bg-[${genres[index]}]`}`}
+          >
             {genre}
           </Text>
         </TouchableOpacity>

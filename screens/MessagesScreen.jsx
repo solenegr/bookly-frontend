@@ -70,8 +70,13 @@ export default function MessageScreen({ navigation }) {
         )}
       />
 
-      <TouchableOpacity onPress={() => navigation.navigate("Challenge")}>
-        <Text>Creer un coin lecture</Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Challenge")}
+        className={" flex items-center"}
+      >
+        <Text className="bg-light_purple p-3 rounded-full">
+          Creer un coin lecture
+        </Text>
       </TouchableOpacity>
     </View>
   );
