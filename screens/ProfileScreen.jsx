@@ -63,6 +63,7 @@ export default function ProfileScreen({ navigation }) {
     { name: "High Fantasy", color: "#77DD77" },
     { name: "Mythologie", color: "#FFD700" },
   ];
+ 
   const books = useSelector((state) => state.books.value);
   const readingBooks = books.books
     .filter((e) => e.status === "En cours de lecture")
@@ -164,7 +165,6 @@ export default function ProfileScreen({ navigation }) {
         keyExtractor={(item) => item._id.toString()}
         contentContainerStyle={{ paddingBottom: 20 }}
         renderItem={({ item }) => {
-          // console.log(item)
           if (!!item.book == false) return;
           return (
             <UserReview

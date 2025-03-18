@@ -1,6 +1,7 @@
 import React from "react";
 import { TouchableOpacity, Text } from "react-native";
 
+
 const Tome = ({ tome, pages }) => {
   return (
     <TouchableOpacity
