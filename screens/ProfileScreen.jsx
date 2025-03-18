@@ -94,7 +94,7 @@ export default function ProfileScreen({ navigation }) {
                   mainText={userReviews.length}
                   subText="avis publiés"
                 />
-                <GrayBlock mainText="24" subText="avis likés" />
+                <GrayBlock mainText="234" subText="avis likés" />
               </View>
             </View>
             <View className="bg-white">
@@ -165,8 +165,7 @@ export default function ProfileScreen({ navigation }) {
         keyExtractor={(item) => item._id.toString()}
         contentContainerStyle={{ paddingBottom: 20 }}
         renderItem={({ item }) => {
-          // console.log(item)
-          // if (!!item.book == false) return;
+          if (!!item.book == false) return;
           return (
             <UserReview
               cover={item.book.cover}

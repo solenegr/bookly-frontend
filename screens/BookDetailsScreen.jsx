@@ -16,6 +16,7 @@ import {
 import Pusher from "pusher-js/react-native";
 import { useSelector } from "react-redux";
 import { IP_ADDRESS } from "@env";
+
 const BookDetailsScreen = ({ route }) => {
   const [book, setBook] = useState(null);
   const { _id: userId, token } = useSelector((state) => state.user.value);
@@ -149,7 +150,7 @@ const BookDetailsScreen = ({ route }) => {
               />
               <View className="flex flex-row items-center justify-center gap-2 mt-3">
                 <Note averageNote={averageNote} />
-                <Tome tome={book.volume} pages={book.pages}/>
+                <Tome tome={book.volume} pages={book.pages} />
                 <Bookmark
                   _id={book._id}
                   title={book.title}

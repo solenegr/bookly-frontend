@@ -122,7 +122,6 @@ const ChatScreen = ({ route: { params } }) => {
       <SafeAreaView className="flex-1 bg-white">
         <FlatList
           data={memoizedMessages}
-          inverted={true} // ✅ Affiche le dernier message en bas
           keyExtractor={(item) => item._id.toString()}
           contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 20 }}
           keyboardShouldPersistTaps="handled"
