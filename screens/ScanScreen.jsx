@@ -84,7 +84,7 @@ export default function ScanScreen({ navigation }) {
     setFlashStatus("off");
     setIsVisible(false);
     setScanned(true);
-    fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
+    fetch(`https://bookly-backend-three.vercel.app/users/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
@@ -93,7 +93,7 @@ export default function ScanScreen({ navigation }) {
       });
     if (dataScanned) {
       console.log(dataScanned);
-      fetch(`http://${IP_ADDRESS}:3000/books/isbn/${dataScanned}`)
+      fetch(`https://bookly-backend-three.vercel.app/books/isbn/${dataScanned}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.result) {
@@ -115,7 +115,7 @@ export default function ScanScreen({ navigation }) {
   const handleAddBook = () => {
     if (dataScanned) {
       console.log(dataScanned);
-      fetch(`http://${IP_ADDRESS}:3000/books/isbn/${dataScanned}`)
+      fetch(`https://bookly-backend-three.vercel.app/books/isbn/${dataScanned}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.result) {
@@ -139,7 +139,7 @@ export default function ScanScreen({ navigation }) {
             console.log("user:", userId);
             console.log("book:", data.book._id);
             console.log("status:", books.status);
-            fetch(`http://${IP_ADDRESS}:3000/libraries/add-to-library`, {
+            fetch(`https://bookly-backend-three.vercel.app/libraries/add-to-library`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

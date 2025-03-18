@@ -102,7 +102,7 @@ export default function HomeScreen({ navigation }) {
     (async () => {
       try {
         const res = await fetch(
-          `http://${IP_ADDRESS}:3000/libraries/user/${user._id}`,
+          `https://bookly-backend-three.vercel.app/libraries/user/${user._id}`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`,

@@ -20,8 +20,8 @@ const ItemModal = ({ setter, addItem, type, label }) => {
     const timeout = setTimeout(async () => {
       let res =
         type === "users"
-          ? await fetch(`http://192.168.199.77:3000/users/all/${inputItem}`)
-          : await fetch(`http://192.168.199.77:3000/books/title/${inputItem}`);
+          ? await fetch(`https://bookly-backend-three.vercel.app/users/all/${inputItem}`)
+          : await fetch(`https://bookly-backend-three.vercel.app/books/title/${inputItem}`);
 
       const data = await res.json();
 

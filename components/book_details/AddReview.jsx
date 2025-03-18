@@ -28,7 +28,7 @@ const AddReview = ({ bookId, userId }) => {
       };
       // 🔥 On envoie la review au BACKEND, qui lui va utiliser Pusher
       const response = await fetch(
-        `http://${process.env.IP_ADDRESS}:3000/reviews`,
+        `https://bookly-backend-three.vercel.app/reviews`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

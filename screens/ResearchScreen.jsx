@@ -32,7 +32,7 @@ export default function ResearchHome({navigation}) {
     setLoading(true); // On commence à charger
 
     if(isSwitchOn){
-        fetch(`http://${IP_ADDRESS}:3000/books/author/${query}`)
+        fetch(`https://bookly-backend-three.vercel.app/books/author/${query}`)
     .then((response) => response.json())
     .then((data) => {
     // console.log('fetch test author', data);
@@ -43,7 +43,7 @@ export default function ResearchHome({navigation}) {
         setLoading(false);
     })
 } else {
-    fetch(`http://${IP_ADDRESS}:3000/books/title/${query}`)
+    fetch(`https://bookly-backend-three.vercel.app/books/title/${query}`)
     .then((response) => response.json())
     .then((data) => {
     // console.log('fetch test title', data);

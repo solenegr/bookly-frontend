@@ -22,7 +22,7 @@ export default function MessageScreen({ navigation }) {
     (async () => {
       try {
         const res = await fetch(
-          `http://${IP_ADDRESS}:3000/conversations/user/${userId}`
+          `https://bookly-backend-three.vercel.app/conversations/user/${userId}`
         );
 
         const data = await res.json();

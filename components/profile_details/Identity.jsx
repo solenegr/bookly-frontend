@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Image, View, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import ProfilePic from "./ProfilePic";
 
 export default function Identity() {
   // const [username, setUsername] = useState();
@@ -10,7 +9,7 @@ export default function Identity() {
   const user = useSelector((state) => state.user.value);
   const IpAdress = process.env.IP_ADDRESS;
 
-  fetch(`http://${IpAdress}:3000/users/${user.token}`)
+  fetch(`https://bookly-backend-three.vercel.app/users/${user.token}`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);

@@ -29,11 +29,11 @@ export default function ProfileScreen({ navigation }) {
   const [userGenres, setUserGenres] = useState([]);
 
   useEffect(() => {
-    fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
+    fetch(`https://bookly-backend-three.vercel.app/users/${user.token}`)
       .then((response) => response.json())
       .then((dataUser) => {
         if (dataUser.result) {
-          fetch(`http://${IP_ADDRESS}:3000/reviews/${dataUser.user._id}`)
+          fetch(`https://bookly-backend-three.vercel.app/reviews/${dataUser.user._id}`)
             .then((response) => response.json())
             .then((data) => {
               if (data.result) {

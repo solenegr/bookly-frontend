@@ -18,13 +18,13 @@ export default function LibrarySearch({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleSubmitSearch = () => {
-    fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
+    fetch(`https://bookly-backend-three.vercel.app/users/${user.token}`)
       .then((response) => response.json())
       .then((dataUser) => {
         if (dataUser.result) {
           console.log("fetch dataUser", dataUser);
           fetch(
-            `http://${IP_ADDRESS}:3000/libraries/user/${dataUser.user._id}?search=${query}`
+            `https://bookly-backend-three.vercel.app/libraries/user/${dataUser.user._id}?search=${query}`
           )
             .then((response) => response.json())
             .then((data) => {

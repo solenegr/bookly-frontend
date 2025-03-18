@@ -28,13 +28,13 @@ const Bookmark = ({
     console.log(token);
     try {
       const userRes = await fetch(
-        `http://${process.env.IP_ADDRESS}:3000/users/${token}`
+        `https://bookly-backend-three.vercel.app/users/${token}`
       );
       const userData = await userRes.json();
 
       if (userData.result) {
         const res = await fetch(
-          `http://${process.env.IP_ADDRESS}:3000/libraries/add-to-library`,
+          `https://bookly-backend-three.vercel.app/libraries/add-to-library`,
           {
             method: "POST",
             headers: {

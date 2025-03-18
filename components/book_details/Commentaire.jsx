@@ -16,7 +16,7 @@ const Commentaire = ({
 
     try {
       const response = await fetch(
-        `http://${process.env.IP_ADDRESS}:3000/reviews/${item._id}/like`,
+        `https://bookly-backend-three.vercel.app/reviews/${item._id}/like`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

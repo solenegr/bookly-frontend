@@ -34,7 +34,7 @@ const Status = ({
   const handleSelectStatus = async (text) => {
     try {
       const res = await fetch(
-        `http://${IP_ADDRESS}:3000/libraries/readings/${bookId}/status`,
+        `https://bookly-backend-three.vercel.app/libraries/readings/${bookId}/status`,
         {
           method: "PATCH",
           headers: {

@@ -22,7 +22,7 @@ export default function ConnectionScreen({ navigation }) {
 
   const handleConnection = () => {
     if (EMAIL_REGEX.test(email)) {
-      fetch(`http://${IP_ADDRESS}:3000/users/signin`, {
+      fetch(`https://bookly-backend-three.vercel.app/users/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
