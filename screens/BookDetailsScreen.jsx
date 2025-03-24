@@ -48,7 +48,7 @@ const BookDetailsScreen = ({ route }) => {
     (async () => {
       try {
         const response = await fetch(
-          `http://${process.env.IP_ADDRESS}:3000/reviews?book=${book._id}`
+          `http://${IP_ADDRESS}:3000/reviews?book=${book._id}`
         );
         const data = await response.json();
         if (data.result) setAvis(data.reviews);
@@ -142,7 +142,7 @@ const BookDetailsScreen = ({ route }) => {
                 volume={book.volume}
                 summary={book.summary}
                 publisher={book.publisher}
-                pages={book.page}
+                pages={book.pages}
                 cover={book.cover}
                 year={book.publicationYear}
                 genres={book.genres}
@@ -158,7 +158,7 @@ const BookDetailsScreen = ({ route }) => {
                   volume={book.volume}
                   summary={book.summary}
                   publisher={book.publisher}
-                  pages={book.page}
+                  pages={book.pages}
                   cover={book.cover}
                   year={book.publicationYear}
                   genres={book.genres}
