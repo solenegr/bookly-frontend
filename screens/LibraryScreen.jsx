@@ -112,6 +112,8 @@ export default function LibraryScreen({ navigation }) {
           </View>
 
           {/* Sections des livres */}
+
+
           {!genreCliked &&
             [
               { title: "En cours", images: readingBooks },
@@ -137,6 +139,7 @@ export default function LibraryScreen({ navigation }) {
                 </ScrollView>
               </View>
             ))}
+
 
           {genreCliked &&
             Object.entries(booksByGenre).map(([genre, booksList]) => (

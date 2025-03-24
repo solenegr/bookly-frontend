@@ -15,6 +15,7 @@ import {
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { IP_ADDRESS} from "@env";
 
 const ChatScreen = ({ route: { params } }) => {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const ChatScreen = ({ route: { params } }) => {
     if (!params.conversationId || !userId) return;
 
     fetch(
-      `http://${process.env.IP_ADDRESS}:3000/messages/${userId}/${params.conversationId}`
+      `https://bookly-backend-three.vercel.app/messages/${userId}/${params.conversationId}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -61,7 +62,7 @@ const ChatScreen = ({ route: { params } }) => {
     const pusher = new Pusher(process.env.PUSHER_KEY, {
       cluster: process.env.PUSHER_CLUSTER,
       forceTLS: false,
-      authEndpoint: `http://${process.env.IP_ADDRESS}:3000/pusher/auth`,
+      authEndpoint: `https://bookly-backend-three.vercel.app/pusher/auth`,
     });
 
     const channel = pusher.subscribe(`private-chat-${params.conversationId}`);
@@ -92,7 +93,7 @@ const ChatScreen = ({ route: { params } }) => {
     if (!newMessage.trim()) return;
 
     fetch(
-      `http://${process.env.IP_ADDRESS}:3000/messages/${userId}/conv/${params.conversationId}`,
+      `https://bookly-backend-three.vercel.app/messages/${userId}/conv/${params.conversationId}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

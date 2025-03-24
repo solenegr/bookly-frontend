@@ -11,6 +11,7 @@ import {
   setTitle,
 } from "../reducers/challenge";
 import { ItemModal, DatePicker } from "../components/challenge";
+import { IP_ADDRESS} from "@env";
 
 // white: "#FFFFFF",
 // light_gray: "#F2F2F2",
@@ -47,7 +48,7 @@ const ChallengeScreen = ({ navigation }) => {
       duration,
     };
 
-    fetch(`http://${process.env.IP_ADDRESS}:3000/conversations`, {
+    fetch(`https://bookly-backend-three.vercel.app/conversations`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(postData),

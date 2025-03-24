@@ -34,7 +34,7 @@ export default function SignUpScreen({ navigation }) {
 
   const handleRegister = () => {
     if (EMAIL_REGEX.test(email)) {
-      fetch(`http://${IP_ADDRESS}:3000/users/signup`, {
+      fetch(`https://bookly-backend-three.vercel.app/users/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

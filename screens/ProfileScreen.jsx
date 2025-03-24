@@ -29,11 +29,11 @@ export default function ProfileScreen({ navigation }) {
   const [userGenres, setUserGenres] = useState([]);
 
   useEffect(() => {
-    fetch(`http://${IP_ADDRESS}:3000/users/${user.token}`)
+    fetch(`https://bookly-backend-three.vercel.app/users/${user.token}`)
       .then((response) => response.json())
       .then((dataUser) => {
         if (dataUser.result) {
-          fetch(`http://${IP_ADDRESS}:3000/reviews/${dataUser.user._id}`)
+          fetch(`https://bookly-backend-three.vercel.app/reviews/${dataUser.user._id}`)
             .then((response) => response.json())
             .then((data) => {
               if (data.result) {
@@ -63,6 +63,7 @@ export default function ProfileScreen({ navigation }) {
     { name: "High Fantasy", color: "#77DD77" },
     { name: "Mythologie", color: "#FFD700" },
   ];
+ 
   const books = useSelector((state) => state.books.value);
   const readingBooks = books.books
     .filter((e) => e.status === "En cours de lecture")
@@ -164,7 +165,6 @@ export default function ProfileScreen({ navigation }) {
         keyExtractor={(item) => item._id.toString()}
         contentContainerStyle={{ paddingBottom: 20 }}
         renderItem={({ item }) => {
-          // console.log(item)
           if (!!item.book == false) return;
           return (
             <UserReview

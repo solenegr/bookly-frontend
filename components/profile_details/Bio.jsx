@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Image, View, Text } from "react-native";
-import { useSelector } from "react-redux";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import {  View, Text } from "react-native";
+
+
 
 export default function Bio() {
   return (

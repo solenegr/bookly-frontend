@@ -31,7 +31,7 @@ const BookDetailsScreen = ({ route }) => {
         const cleanIsbn = isbn.replace(/\s+/g, "").replace(/-/g, "");
         console.log("clean", cleanIsbn);
         const res = await fetch(
-          `http://${IP_ADDRESS}:3000/books/isbn/${cleanIsbn}`
+          `https://bookly-backend-three.vercel.app/books/isbn/${cleanIsbn}`
         );
 
         const data = await res.json();
@@ -48,7 +48,7 @@ const BookDetailsScreen = ({ route }) => {
     (async () => {
       try {
         const response = await fetch(
-          `http://${IP_ADDRESS}:3000/reviews?book=${book._id}`
+          `https://bookly-backend-three.vercel.app/reviews?book=${book._id}`
         );
         const data = await response.json();
         if (data.result) setAvis(data.reviews);
